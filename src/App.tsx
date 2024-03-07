@@ -9,11 +9,6 @@ import Emails from './views/Emails';
 
 function App() {
   return (
-    // <div className='flex flex-col h-screen'>
-    //   {Header()}
-    //   {Home()}
-    //   {Footer()}
-    // </div>
     <BrowserRouter>
       <div className='min-h-screen flex flex-col justify-between'>
         <Header />
