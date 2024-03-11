@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import api from "../services/api";
 import SearchBar from "../components/searchBar/SearchBar";
 import ValidTag from "../components/validTag/ValidTag";
@@ -9,7 +10,6 @@ interface Certificate{
     docOwner: string
     issuing: string
     valid: string
-    isValid: boolean
 }
 
 function Certificates(){
@@ -30,24 +30,31 @@ function Certificates(){
         <div className="flex flex-col justify-between h-full w-full px-20 font-thin">
             <h1 className="flex-1 text-3xl pb-10">Certificados</h1>
             
-            {SearchBar()}
+            <div className="flex flex-row justify-between pb-10 flex-wrap">
+                {SearchBar()}
+                <Link to={'/AddCertificate'} className="rounded-full bg-green-400 px-5 align-middle">
+                    <p>Adicionar Certificado</p>
+                </Link>
+            </div>
 
-            <table className="flex-1 grow w-full table-auto text-center">
+            <table className="flex-1 grow w-full table-auto text-center divide-y">
                 <thead>
                     <tr>
-                        <th className="w-3/5 text-left">Nome</th>
+                        <th className="w-3/5 text-left pl-5">Nome</th>
                         <th>Emissão</th>
                         <th>Validade</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="divide-y">
                     {arr.map((certificate: Certificate) =>{
                         return(
                             <tr>
-                                <td className="text-left flex flex-col"><div>
-                                        {certificate?.owner}
-                                        {ValidTag(certificate?.isValid)}
-                                    </div></td>
+                                <td>
+                                    <div className="text-left flex flex-row pl-5">
+                                        <p className="grow text-wrap">{certificate?.owner}</p>
+                                        <p>{ValidTag(certificate?.valid)}</p>
+                                    </div>
+                                </td>
                                 <td>{new Date(certificate?.issuing).toLocaleDateString('pt-BR')}</td>
                                 <td>{new Date(certificate?.valid).toLocaleDateString('pt-BR')}</td>
                                 <td>Editar</td>

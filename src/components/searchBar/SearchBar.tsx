@@ -2,7 +2,7 @@ import React from "react";
 
 function SearchBar(){
     return(
-        <form className="flex justify-start items-center max-w-sm pb-10">   
+        <form className="flex flex-1 justify-start items-center max-w-sm">   
             <div className="w-full">
                 <input type="text" id="simple-search" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:outline-none focus:shadow-md block w-full ps-10 p-2.5" placeholder="Buscar" required />
             </div>

@@ -6,6 +6,7 @@ import Footer from './components/Footer/Footer';
 import Home from './views/Home';
 import Certificates from './views/Certificates';
 import Emails from './views/Emails';
+import AddCertificates from './views/AddCertificates';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path='/' element={<Home/>} />
           <Route path='/Certificates' element={<Certificates/>} />
           <Route path='/Emails' element={<Emails/>} />
+          <Route path='/AddCertificate' element={<AddCertificates/>} />
         </Routes>
         <Footer/>
       </div>
