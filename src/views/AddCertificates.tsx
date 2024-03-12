@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 
 function AddCertificates(){
-    const [file, setFile] = useState()
+    const [file, setFile] = useState<File | null >(null)
 
     function handleChange(event: any) {
         setFile(event.target.files[0])
@@ -10,18 +10,23 @@ function AddCertificates(){
 
     function handleSubmit(event: any) {
         event.preventDefault()
-        const url = 'http://localhost:3000/certificate';
-        const data = {
-            file: file
-        }
+        const url = 'http://localhost:3000/certificate/file';
+        const formData = new FormData()
+        formData.append('certFile', file ? file : '')
+        formData.append('certPassword', 'Joaov.mour02')
+        // const data = {
+        //   "certPath": "C:\\Users\\Cliente\\Downloads\\CERTIFICADO_JOAO_VITOR_MOURA-SENHA_JoaovDOTmour02.p12",
+        //   "certPassword": 'Joaov.mour02'
+        // }
         const config = {
           headers: {
             'content-type': 'application/json',
           },
         };
-        axios.post(url, data, config).then((response) => {
+        axios.post(url, formData, config)
+          .then((response) => {
           console.log(response.data);
-        });
+          })
     
       }
     
