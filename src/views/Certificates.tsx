@@ -14,10 +14,11 @@ interface Certificate{
 
 function Certificates(){
     const [arr, setArr] = useState<Array<Certificate>>([])
+    const [search, setSearch] = useState('')
     
     useEffect(()=>{
         api
-            .get('/certificate')
+            .get(`/certificate/${search}`)
             .then(response => {
                 setArr(response.data)
             })
@@ -31,7 +32,7 @@ function Certificates(){
             <h1 className="flex-1 text-3xl pb-10">Certificados</h1>
             
             <div className="flex flex-row justify-between pb-10 flex-wrap">
-                {SearchBar()}
+                {SearchBar(setSearch)}
                 <Link to={'/AddCertificate'} className="rounded-full bg-green-400 px-5 align-middle">
                     <p>Adicionar Certificado</p>
                 </Link>
