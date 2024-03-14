@@ -15,9 +15,9 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Home/>} />
-          <Route path='/Certificates' element={<Certificates/>} />
+          <Route path='/Certificados' element={<Certificates/>} />
           <Route path='/Emails' element={<Emails/>} />
-          <Route path='/AddCertificate' element={<AddCertificates/>} />
+          <Route path='/AdicionarCertificado' element={<AddCertificates/>} />
         </Routes>
         <Footer/>
       </div>

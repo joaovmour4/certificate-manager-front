@@ -17,15 +17,19 @@ function Certificates(){
     const [search, setSearch] = useState('')
     
     useEffect(()=>{
-        api
-            .get(`/certificate/${search}`)
-            .then(response => {
-                setArr(response.data)
-            })
-            .catch(err => {
-                console.error('Ocorreu um erro ao processar a requisição!')
-            })
-    })
+        const delayDebounceFn = setTimeout(()=>{
+            api
+                .get(`/certificate/${search}`)
+                .then(response => {
+                    setArr(response.data)
+                })
+                .catch(err => {
+                    console.error('Ocorreu um erro ao processar a requisição!')
+                })
+        }, 300)
+
+        return ()=> clearTimeout(delayDebounceFn)
+    }, [search])
 
     return(
         <div className="flex flex-col justify-between h-full w-full px-20 font-thin">
@@ -58,7 +62,8 @@ function Certificates(){
                                 </td>
                                 <td>{new Date(certificate?.issuing).toLocaleDateString('pt-BR')}</td>
                                 <td>{new Date(certificate?.valid).toLocaleDateString('pt-BR')}</td>
-                                <td>Editar</td>
+                                <td>edt</td>
+                                <td>rmv</td>
                             </tr>
                         )
                     })}

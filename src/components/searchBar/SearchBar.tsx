@@ -1,9 +1,9 @@
 function SearchBar(setSearch: Function){
-
+    
     function handleSearch(event: any){
         setSearch(event.target.value)
     }
-
+    
     return(
         <form className="flex flex-1 justify-start items-center max-w-sm">   
             <div className="w-full">
