@@ -11,8 +11,8 @@ function Header() {
       </Link>
       <div className='flex flex-1 flex-row flex-wrap justify-end items-center justify-items-center pr-7'>
         <Link to={'/'}>{headerButton('Início')}</Link>
-        <Link to={'/Certificates'}>{headerButton('Meus Certificados')}</Link>
-        <Link to={'/Emails'}>{headerButton('E-Mails')}</Link>
+        <Link to={'/certificados'}>{headerButton('Meus Certificados')}</Link>
+        <Link to={'/emails'}>{headerButton('E-Mails')}</Link>
       </div>
     </header>
   );

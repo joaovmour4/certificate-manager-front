@@ -15,6 +15,19 @@ interface Certificate{
 function Certificates(){
     const [arr, setArr] = useState<Array<Certificate>>([])
     const [search, setSearch] = useState('')
+    const [id, setId] = useState('')
+
+    function handleRemove(_id: string){
+        setId(_id)
+        api
+            .delete(`/certificate/${_id}`)
+            .then(response => {
+                console.log(response)
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
+    }
     
     useEffect(()=>{
         const delayDebounceFn = setTimeout(()=>{
@@ -32,13 +45,13 @@ function Certificates(){
     }, [search])
 
     return(
-        <div className="flex flex-col justify-between h-full w-full px-20 font-thin">
+        <div className="flex flex-col justify-between h-full w-full px-20 py-10 font-thin">
             <h1 className="flex-1 text-3xl pb-10">Certificados</h1>
             
             <div className="flex flex-row justify-between pb-10 flex-wrap">
                 {SearchBar(setSearch)}
-                <Link to={'/AddCertificate'} className="rounded-full bg-green-400 px-5 align-middle">
-                    <p>Adicionar Certificado</p>
+                <Link to={'/adicionarCertificado'} className="rounded-full bg-green-400 px-5 place-self-center">
+                    Adicionar Certificado
                 </Link>
             </div>
 
@@ -63,7 +76,7 @@ function Certificates(){
                                 <td>{new Date(certificate?.issuing).toLocaleDateString('pt-BR')}</td>
                                 <td>{new Date(certificate?.valid).toLocaleDateString('pt-BR')}</td>
                                 <td>edt</td>
-                                <td>rmv</td>
+                                <td><button onClick={() => handleRemove(certificate?._id)}>rmv</button></td>
                             </tr>
                         )
                     })}
