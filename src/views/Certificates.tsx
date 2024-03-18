@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import api from "../services/api";
 import SearchBar from "../components/searchBar/SearchBar";
 import ValidTag from "../components/validTag/ValidTag";
+import editar from '../img/editar.png'
+import lixeira from '../img/lixeira.png'
 
 interface Certificate{
     _id: string
@@ -15,10 +17,28 @@ interface Certificate{
 function Certificates(){
     const [arr, setArr] = useState<Array<Certificate>>([])
     const [search, setSearch] = useState('')
-    const [id, setId] = useState('')
+    const [asc, setAsc] = useState(true)
+    const [filter, setFilter] = useState('all')
+
+    function ordenateArr(responseArr: Array<Certificate>, ascending: boolean){
+        responseArr.sort((a, b) => {
+            const nameA = a.owner.toUpperCase()
+            const nameB = b.owner.toUpperCase()
+            if (nameA < nameB) {
+              return ascending ? -1 : 1
+            }
+            if (nameA > nameB) {
+              return ascending ? 1 : -1
+            }
+          
+            // names must be equal
+            return 0
+          })
+
+        return responseArr
+    }
 
     function handleRemove(_id: string){
-        setId(_id)
         api
             .delete(`/certificate/${_id}`)
             .then(response => {
@@ -32,9 +52,9 @@ function Certificates(){
     useEffect(()=>{
         const delayDebounceFn = setTimeout(()=>{
             api
-                .get(`/certificate/${search}`)
+                .get(`/certificate/'${search}'&${filter}`)
                 .then(response => {
-                    setArr(response.data)
+                    setArr(ordenateArr(response.data, asc))
                 })
                 .catch(err => {
                     console.error('Ocorreu um erro ao processar a requisição!')
@@ -42,7 +62,7 @@ function Certificates(){
         }, 300)
 
         return ()=> clearTimeout(delayDebounceFn)
-    }, [search])
+    }, [search, asc, filter])
 
     return(
         <div className="flex flex-col justify-between h-full w-full px-20 py-10 font-thin">
@@ -58,7 +78,9 @@ function Certificates(){
             <table className="flex-1 grow w-full table-auto text-center divide-y">
                 <thead>
                     <tr>
-                        <th className="w-3/5 text-left pl-5">Nome</th>
+                        <button className="flex justify-self-start" onClick={()=>{asc ? setAsc(false):setAsc(true)}}>
+                            <th className="w-3/5 text-left pl-5">Nome</th>
+                        </button>
                         <th>Emissão</th>
                         <th>Validade</th>
                     </tr>
@@ -75,8 +97,12 @@ function Certificates(){
                                 </td>
                                 <td>{new Date(certificate?.issuing).toLocaleDateString('pt-BR')}</td>
                                 <td>{new Date(certificate?.valid).toLocaleDateString('pt-BR')}</td>
+                                {/* <div className="bg-blue justify-self-end">
+                                    <td><img src={editar} alt="Editar" /></td>
+                                    <td><button onClick={() => handleRemove(certificate?._id)}><img src={lixeira} alt="Excluir"/></button></td>
+                                </div> */}
                                 <td>edt</td>
-                                <td><button onClick={() => handleRemove(certificate?._id)}>rmv</button></td>
+                                <td>rmv</td>
                             </tr>
                         )
                     })}
