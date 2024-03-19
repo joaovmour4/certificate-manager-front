@@ -9,7 +9,7 @@ function Header() {
       <Link to={'/'}>
         <img className='h-auto w-36 sm:flex-none' src={logoImg} alt="Logo MG" />
       </Link>
-      <div className='flex flex-1 flex-row flex-wrap justify-end items-center justify-items-center pr-7'>
+      <div className='flex flex-1 flex-row flex-wrap justify-end items-center justify-items-center pr-7 divide-x divide-slate-300'>
         <Link to={'/'}>{headerButton('Início')}</Link>
         <Link to={'/certificados'}>{headerButton('Meus Certificados')}</Link>
         <Link to={'/emails'}>{headerButton('E-Mails')}</Link>

@@ -7,6 +7,7 @@ import Home from './views/Home';
 import Certificates from './views/Certificates';
 import Emails from './views/Emails';
 import AddCertificates from './views/AddCertificates';
+// import EditCertificate from './views/EditCertificate'
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path='/certificados' element={<Certificates/>} />
           <Route path='/emails' element={<Emails/>} />
           <Route path='/adicionarCertificado' element={<AddCertificates/>} />
+          {/* <Route path='/editarCertificado' element={<EditCertificate/>} /> */}
         </Routes>
         <Footer/>
       </div>
