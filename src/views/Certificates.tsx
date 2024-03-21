@@ -19,6 +19,7 @@ function Certificates(){
     const [arr, setArr] = useState<Array<Certificate>>([])
     const [search, setSearch] = useState('')
     const [asc, setAsc] = useState(true)
+    const [dateAsc, setDateAsc] = useState(false)
     const [filter, setFilter] = useState('all')
     const [owner, setOwner] = useState('')
     const [showModal, setShowModal] = useState(false)
@@ -36,6 +37,24 @@ function Certificates(){
               return ascending ? -1 : 1
             }
             if (nameA > nameB) {
+              return ascending ? 1 : -1
+            }
+          
+            // names must be equal
+            return 0
+          })
+
+        return responseArr
+    }
+
+    function ordenateDateArr(responseArr: Array<Certificate>, ascending: boolean){
+        responseArr.sort((a, b) => {
+            const valueA = Date.parse(a.valid)
+            const valueB = Date.parse(b.valid)
+            if (valueA < valueB) {
+              return ascending ? -1 : 1
+            }
+            if (valueA > valueB) {
               return ascending ? 1 : -1
             }
           
@@ -70,6 +89,7 @@ function Certificates(){
                 .get(`/certificate/'${search}'&${filter}`)
                 .then(response => {
                     setArr(ordenateArr(response.data, asc))
+                    setArr(ordenateDateArr(response.data, dateAsc))
                 })
                 .catch(err => {
                     console.error('Ocorreu um erro ao processar a requisição!')
@@ -77,7 +97,7 @@ function Certificates(){
         }, 300)
 
         return ()=> clearTimeout(delayDebounceFn)
-    }, [arr, search, asc, filter])
+    }, [arr, search, asc, dateAsc, filter])
 
     return(
         <div className="flex flex-col justify-between h-full w-full px-20 py-10 font-thin">
@@ -95,7 +115,9 @@ function Certificates(){
                             <th className="w-3/5 text-left pl-5">Nome</th>
                         </button>
                         <th>Emissão</th>
-                        <th>Validade</th>
+                        <button onClick={()=>{dateAsc ? setDateAsc(false):setDateAsc(true)}}>
+                            <th className="w-3/5 text-left pl-5">Validade</th>
+                        </button>
                     </tr>
                 </thead>
                 <tbody className="divide-y content-center">
