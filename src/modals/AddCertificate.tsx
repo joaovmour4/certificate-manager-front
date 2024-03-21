@@ -1,6 +1,6 @@
 import api from "../services/api";
 
-const AddCertificateModal = (setShowModal: Function, file: File | null, setFile: Function, password: string, setPassword: Function) => {
+const AddCertificateModal = (setShowModal: Function, file: File | null, setFile: Function, password: string, setPassword: Function, setResponse: Function, setShowResponseModal: Function) => {
     
 
     function handleChange(event: any) {
@@ -24,7 +24,14 @@ const AddCertificateModal = (setShowModal: Function, file: File | null, setFile:
         };
         api.post(`/certificate`, formData, config)
           .then((response) => {
+            setResponse(response)
+            setShowResponseModal(true)
             console.log(response.data.message)
+            setShowModal(false)
+          })
+          .catch((error: any)=>{
+            setResponse(error.response)
+            setShowResponseModal(true)
             setShowModal(false)
           })
     
