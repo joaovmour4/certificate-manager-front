@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import api from "../services/api";
 import SearchBar from "../components/searchBar/SearchBar";
 import ValidTag from "../components/validTag/ValidTag";
@@ -12,14 +12,13 @@ export interface Certificate{
     owner: string
     docOwner: string
     issuing: string
-    valid: string
+    [valid: string]: string
 }
 
 function Certificates(){
     const [arr, setArr] = useState<Array<Certificate>>([])
     const [search, setSearch] = useState('')
-    const [asc, setAsc] = useState(true)
-    const [dateAsc, setDateAsc] = useState(false)
+    const [sortConfig, setSortConfig] = useState({key:'owner', direction:'descending'})
     const [filter, setFilter] = useState('all')
     const [owner, setOwner] = useState('')
     const [showModal, setShowModal] = useState(false)
@@ -29,15 +28,15 @@ function Certificates(){
     const [password, setPassword] = useState('')
     const [response, setResponse] = useState<AxiosResponse | null>(null)
 
-    function ordenateArr(responseArr: Array<Certificate>, ascending: boolean){
+    function ordenateArr(responseArr: Array<Certificate>){
         responseArr.sort((a, b) => {
             const nameA = a.owner.toUpperCase()
             const nameB = b.owner.toUpperCase()
             if (nameA < nameB) {
-              return ascending ? -1 : 1
+              return -1
             }
             if (nameA > nameB) {
-              return ascending ? 1 : -1
+              return 1
             }
           
             // names must be equal
@@ -47,22 +46,31 @@ function Certificates(){
         return responseArr
     }
 
-    function ordenateDateArr(responseArr: Array<Certificate>, ascending: boolean){
-        responseArr.sort((a, b) => {
-            const valueA = Date.parse(a.valid)
-            const valueB = Date.parse(b.valid)
-            if (valueA < valueB) {
-              return ascending ? -1 : 1
-            }
-            if (valueA > valueB) {
-              return ascending ? 1 : -1
-            }
-          
-            // names must be equal
-            return 0
-          })
+    const sortArr = useCallback(()=>{
+            let responseArr = arr
+            responseArr.sort((a, b) => {
+                const valueA = sortConfig.key === 'valid' ? Date.parse(a[sortConfig.key]):a[sortConfig.key].toUpperCase()
+                const valueB = sortConfig.key === 'valid' ? Date.parse(b[sortConfig.key]):b[sortConfig.key].toUpperCase()
+                if (valueA < valueB) {
+                return sortConfig.direction === 'ascending' ? -1:1
+                }
+                if (valueA > valueB) {
+                return sortConfig.direction === 'ascending' ? 1:-1
+                }
+            
+                // names must be equal
+                return 0
+            })
 
-        return responseArr
+            return responseArr
+        }, [arr, sortConfig])
+
+    const requestSort = (key:string) => {
+        let direction = 'ascending'
+        if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+            direction = 'descending'
+        }
+        setSortConfig({ key, direction })
     }
 
     function handdleEdit(owner: string){
@@ -88,8 +96,7 @@ function Certificates(){
             api
                 .get(`/certificate/'${search}'&${filter}`)
                 .then(response => {
-                    setArr(ordenateArr(response.data, asc))
-                    setArr(ordenateDateArr(response.data, dateAsc))
+                    setArr(ordenateArr(response.data))
                 })
                 .catch(err => {
                     console.error('Ocorreu um erro ao processar a requisição!')
@@ -97,7 +104,11 @@ function Certificates(){
         }, 300)
 
         return ()=> clearTimeout(delayDebounceFn)
-    }, [arr, search, asc, dateAsc, filter])
+    }, [search, filter])
+
+    useEffect(()=>{
+        setArr(sortArr())
+    }, [arr, sortArr])
 
     return(
         <div className="flex flex-col justify-between h-full w-full px-20 py-10 font-thin">
@@ -111,13 +122,19 @@ function Certificates(){
             <table className="flex-1 grow w-full table-auto text-center divide-y">
                 <thead>
                     <tr>
-                        <button className="flex justify-self-start" onClick={()=>{asc ? setAsc(false):setAsc(true)}}>
-                            <th className="w-3/5 text-left pl-5">Nome</th>
-                        </button>
-                        <th>Emissão</th>
-                        <button onClick={()=>{dateAsc ? setDateAsc(false):setDateAsc(true)}}>
-                            <th className="w-3/5 text-left pl-5">Validade</th>
-                        </button>
+                        <th>
+                            <button className="flex justify-self-start" onClick={()=>{requestSort('owner')}}>
+                                <th className="w-3/5 text-left pl-5">Nome</th>
+                            </button>
+                        </th>
+                        <th>
+                            Emissão
+                        </th>
+                        <th>
+                            <button onClick={()=>{requestSort('valid')}}>
+                                Validade
+                            </button>
+                        </th>
                     </tr>
                 </thead>
                 <tbody className="divide-y content-center">

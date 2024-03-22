@@ -61,7 +61,7 @@ const AddCertificateModal = (setShowModal: Function, file: File | null, setFile:
                   <button
                     className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={() => {setShowModal(false)}}
                   >
                     Fechar
                   </button>
