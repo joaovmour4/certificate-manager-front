@@ -5,6 +5,7 @@ import ValidTag from "../components/validTag/ValidTag";
 import EditCertificate from '../views/EditCertificate'
 import AddCertificateModal from "../modals/AddCertificate";
 import ResponseModal from "../modals/ResponseModal";
+import SortInfo from "../components/SortInfo/SortInfor";
 import { AxiosResponse } from "axios";
 
 export interface Certificate{
@@ -18,7 +19,7 @@ export interface Certificate{
 function Certificates(){
     const [arr, setArr] = useState<Array<Certificate>>([])
     const [search, setSearch] = useState('')
-    const [sortConfig, setSortConfig] = useState({key:'owner', direction:'descending'})
+    const [sortConfig, setSortConfig] = useState({key:'owner', direction:'ascending'})
     const [filter, setFilter] = useState('all')
     const [owner, setOwner] = useState('')
     const [showModal, setShowModal] = useState(false)
@@ -28,34 +29,16 @@ function Certificates(){
     const [password, setPassword] = useState('')
     const [response, setResponse] = useState<AxiosResponse | null>(null)
 
-    function ordenateArr(responseArr: Array<Certificate>){
-        responseArr.sort((a, b) => {
-            const nameA = a.owner.toUpperCase()
-            const nameB = b.owner.toUpperCase()
-            if (nameA < nameB) {
-              return -1
-            }
-            if (nameA > nameB) {
-              return 1
-            }
-          
-            // names must be equal
-            return 0
-          })
-
-        return responseArr
-    }
-
     const sortArr = useCallback(()=>{
             let responseArr = arr
             responseArr.sort((a, b) => {
                 const valueA = sortConfig.key === 'valid' ? Date.parse(a[sortConfig.key]):a[sortConfig.key].toUpperCase()
                 const valueB = sortConfig.key === 'valid' ? Date.parse(b[sortConfig.key]):b[sortConfig.key].toUpperCase()
                 if (valueA < valueB) {
-                return sortConfig.direction === 'ascending' ? -1:1
+                    return sortConfig.direction === 'ascending' ? -1:1
                 }
-                if (valueA > valueB) {
-                return sortConfig.direction === 'ascending' ? 1:-1
+                else if (valueA > valueB) {
+                    return sortConfig.direction === 'ascending' ? 1:-1
                 }
             
                 // names must be equal
@@ -96,7 +79,7 @@ function Certificates(){
             api
                 .get(`/certificate/'${search}'&${filter}`)
                 .then(response => {
-                    setArr(ordenateArr(response.data))
+                    setArr(response.data)
                 })
                 .catch(err => {
                     console.error('Ocorreu um erro ao processar a requisição!')
@@ -122,17 +105,19 @@ function Certificates(){
             <table className="flex-1 grow w-full table-auto text-center divide-y">
                 <thead>
                     <tr>
-                        <th>
-                            <button className="flex justify-self-start" onClick={()=>{requestSort('owner')}}>
-                                <th className="w-3/5 text-left pl-5">Nome</th>
+                        <th className="w-3/5 ">
+                            <button className="flex justify-self-start items-center" onClick={()=>{requestSort('owner')}}>
+                                <th className="text-left pl-5 pr-1">Nome</th>
+                                {SortInfo(sortConfig, 'owner')}
                             </button>
                         </th>
                         <th>
                             Emissão
                         </th>
-                        <th>
-                            <button onClick={()=>{requestSort('valid')}}>
-                                Validade
+                        <th className="flex justify-center">
+                            <button className="flex items-center" onClick={()=>{requestSort('valid')}}>
+                            <th>Validade</th>
+                                {SortInfo(sortConfig, 'valid')}
                             </button>
                         </th>
                     </tr>
