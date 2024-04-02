@@ -11,7 +11,7 @@ function Footer(){
                 <Link to={'https://instagram.com/mgcontabilidademba'}><img src={instaIcon} alt="Nos siga no Instagram" /></Link>
             </div>
             <div className="flex flex-1">
-            <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 Moura e Gagliardi Contabilidade™. All Rights Reserved.</span>
+                <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 Moura e Gagliardi Contabilidade™. Developed by <a className="underline" href="https://www.github.com/joaovmour4" rel="noreferrer" target="_blank">joaovmour4</a>. All Rights Reserved.</span>
             </div>
         </div>
     )

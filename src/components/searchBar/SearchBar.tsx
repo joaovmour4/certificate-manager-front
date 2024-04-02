@@ -1,16 +1,27 @@
-function SearchBar(setSearch: Function){
+function SearchBar(setSearch: Function, setFilter: Function){
     
     function handleSearch(event: any){
         setSearch(event.target.value)
     }
+
+    function handleFilter(event: any){
+        setFilter(event.target.value)
+    }
     
     return(
-        <form className="flex flex-1 justify-start items-center max-w-sm">   
-            <div className="w-full flex bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:shadow-md block w-full ps-5 p-2.5 focus:outline-none">
-                <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                </svg>
-                <input type="text" id="simple-search" onChange={handleSearch} className="pl-5 bg-transparent grow focus:outline-none" placeholder="Buscar" required />
+        <form className="flex flex-1 justify-start items-center max-w-sm">  
+            <div className="w-full flex gap-x-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:shadow-md block w-full p-2.5 focus:outline-none divide-x divide-slate-300">
+                <select className="flex-none bg-transparent focus:outline-none" onChange={handleFilter}>
+                    <option value="all">Todos</option>
+                    <option value="true">Válidos</option>
+                    <option value="false">Expirados</option>
+                </select>    
+                <div className="flex flex-1 pl-3">
+                    <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                    <input type="text" id="simple-search" onChange={handleSearch} className="pl-3 bg-transparent grow focus:outline-none" placeholder="Buscar" required />
+                </div>
             </div>
         </form>
     )

@@ -35,10 +35,10 @@ function Certificates(){
                 const valueA = sortConfig.key === 'valid' ? Date.parse(a[sortConfig.key]):a[sortConfig.key].toUpperCase()
                 const valueB = sortConfig.key === 'valid' ? Date.parse(b[sortConfig.key]):b[sortConfig.key].toUpperCase()
                 if (valueA < valueB) {
-                    return sortConfig.direction === 'ascending' ? -1:1
+                    return sortConfig.direction === 'ascending' ? 1:-1
                 }
                 else if (valueA > valueB) {
-                    return sortConfig.direction === 'ascending' ? 1:-1
+                    return sortConfig.direction === 'ascending' ? -1:1
                 }
             
                 // names must be equal
@@ -98,7 +98,7 @@ function Certificates(){
             <h1 className="flex-1 text-3xl pb-10">Certificados</h1>
             
             <div className="flex flex-row justify-between pb-10 flex-wrap">
-                {SearchBar(setSearch)}
+                {SearchBar(setSearch, setFilter)}
                 <button onClick={() => setShowAddModal(true)} className="text-white rounded-full bg-green-600 px-5 place-self-center hover:bg-green-500 active:bg-green-600 shadow hover:shadow-lg">Adicionar Certificado</button>
             </div>
 

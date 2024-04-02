@@ -7,7 +7,7 @@ interface Properties{
 function SortInfo(props: Properties, location: string){
     if(props.key === location)
         return(
-            <img className='h-3' src={props.direction === 'descending' ? downArrow:upArrow} alt="" />
+            <img className='h-3' src={props.direction === 'ascending' ? downArrow:upArrow} alt="" />
         )
 }
 
