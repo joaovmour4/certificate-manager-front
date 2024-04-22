@@ -5,6 +5,7 @@ import ValidTag from "../components/validTag/ValidTag";
 import EditCertificate from '../views/EditCertificate'
 import AddCertificateModal from "../modals/AddCertificate";
 import ResponseModal from "../modals/ResponseModal";
+import ConfirmModal from "../modals/ConfirmModal";
 import SortInfo from "../components/SortInfo/SortInfor";
 import { AxiosResponse } from "axios";
 
@@ -21,9 +22,11 @@ function Certificates(){
     const [search, setSearch] = useState('')
     const [sortConfig, setSortConfig] = useState({key:'owner', direction:'ascending'})
     const [filter, setFilter] = useState('all')
+    const [id, setId] = useState('')
     const [owner, setOwner] = useState('')
     const [showModal, setShowModal] = useState(false)
     const [showAddModal, setShowAddModal] = useState(false)
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
     const [showResponseModal, setShowResponseModal] = useState(false)
     const [file, setFile] = useState<File | null >(null)
     const [password, setPassword] = useState('')
@@ -61,17 +64,20 @@ function Certificates(){
         setShowModal(true)
     }
 
-    function handleRemove(_id: string){
-        api
-            .delete(`/certificate/${_id}`)
-            .then(response => {
-                setResponse(response)
-                setShowResponseModal(true)
-                console.log(response)
-            })
-            .catch(err => {
-                console.log(err.message)
-            })
+    function handleRemove(_id: string, owner: string){
+        setId(_id)
+        setOwner(owner)
+        setShowConfirmModal(true)
+        // api
+        //     .delete(`/certificate/${_id}`)
+        //     .then(response => {
+        //         setResponse(response)
+        //         setShowResponseModal(true)
+        //         console.log(response)
+        //     })
+        //     .catch(err => {
+        //         console.log(err.message)
+        //     })
     }
     
     useEffect(()=>{
@@ -99,7 +105,7 @@ function Certificates(){
             
             <div className="flex flex-row justify-between pb-10 flex-wrap">
                 {SearchBar(setSearch, setFilter)}
-                <button onClick={() => setShowAddModal(true)} className="text-white rounded-full bg-green-600 px-5 place-self-center hover:bg-green-500 active:bg-green-600 shadow hover:shadow-lg">Adicionar Certificado</button>
+                <button onClick={() => setShowAddModal(true)} className="text-white rounded bg-green-600 px-5 place-self-center hover:bg-green-500 active:bg-green-600 shadow hover:shadow-lg">Adicionar Certificado</button>
             </div>
 
             <table className="flex-1 grow w-full table-auto text-center divide-y">
@@ -136,10 +142,11 @@ function Certificates(){
                                 <td>{new Date(certificate?.valid).toLocaleDateString('pt-BR')}</td>
                                 <td className="flex justify-evenly content-center">
                                     <button onClick={() => {handdleEdit(certificate?.owner)}}><svg className="h-5 w-5 hover:fill-yellow-500" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512"><path d="M22.853,1.148a3.626,3.626,0,0,0-5.124,0L1.465,17.412A4.968,4.968,0,0,0,0,20.947V23a1,1,0,0,0,1,1H3.053a4.966,4.966,0,0,0,3.535-1.464L22.853,6.271A3.626,3.626,0,0,0,22.853,1.148ZM5.174,21.122A3.022,3.022,0,0,1,3.053,22H2V20.947a2.98,2.98,0,0,1,.879-2.121L15.222,6.483l2.3,2.3ZM21.438,4.857,18.932,7.364l-2.3-2.295,2.507-2.507a1.623,1.623,0,1,1,2.295,2.3Z"/></svg></button>
-                                    <button onClick={() => handleRemove(certificate?._id)}><svg className="h-5 w-5 hover:fill-red-500" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512"><path d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z"/><path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z"/><path d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"/></svg></button>
+                                    <button onClick={() => handleRemove(certificate?._id, certificate?.owner)}><svg className="h-5 w-5 hover:fill-red-500" xmlns="http://www.w3.org/2000/svg" id="Outline" viewBox="0 0 24 24" width="512" height="512"><path d="M21,4H17.9A5.009,5.009,0,0,0,13,0H11A5.009,5.009,0,0,0,6.1,4H3A1,1,0,0,0,3,6H4V19a5.006,5.006,0,0,0,5,5h6a5.006,5.006,0,0,0,5-5V6h1a1,1,0,0,0,0-2ZM11,2h2a3.006,3.006,0,0,1,2.829,2H8.171A3.006,3.006,0,0,1,11,2Zm7,17a3,3,0,0,1-3,3H9a3,3,0,0,1-3-3V6H18Z"/><path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18Z"/><path d="M14,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"/></svg></button>
                                     {showModal ? EditCertificate(setShowModal, owner, certificate?.docOwner, file, setFile, password, setPassword, setResponse, setShowResponseModal):null}
                                     {showAddModal ? AddCertificateModal(setShowAddModal, file, setFile, password, setPassword, setResponse, setShowResponseModal): null}
-                                    {showResponseModal ? ResponseModal(setShowResponseModal, response):null}
+                                    {showResponseModal ? ResponseModal(setShowResponseModal, response, setShowAddModal):null}
+                                    {showConfirmModal ? <ConfirmModal id={id} name={owner} deleteType="certificate" setShowModal={setShowConfirmModal}/>:null}
                                 </td>
                             </tr>
                         )

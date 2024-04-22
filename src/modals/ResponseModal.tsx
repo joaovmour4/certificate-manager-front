@@ -1,4 +1,5 @@
-const ResponseModal = (setShowModal: Function, response: any) => {    
+
+const ResponseModal = (setShowModal: Function, response: any, setShowAddModal: Function) => {    
     if(response){
         return (
             <>
@@ -20,7 +21,7 @@ const ResponseModal = (setShowModal: Function, response: any) => {
                       <button
                         className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1"
                         type="button"
-                        onClick={() => {setShowModal(false);if(response.status === 200 || response.status === 201)
+                        onClick={() => {setShowModal(false); setShowAddModal(false);if(response.status === 200 || response.status === 201)
                           window.location.reload()}}
                       >
                         Fechar
