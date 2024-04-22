@@ -13,8 +13,9 @@ function SearchBar(setSearch: Function, setFilter: Function){
             <div className="w-full flex gap-x-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:shadow-md block w-full p-2.5 focus:outline-none divide-x divide-slate-300">
                 <select className="flex-none bg-transparent focus:outline-none" onChange={handleFilter}>
                     <option value="all">Todos</option>
-                    <option value="true">Válidos</option>
-                    <option value="false">Expirados</option>
+                    <option value="valid">Válidos</option>
+                    <option value="invalid">Expirados</option>
+                    <option value="almost">À Expirar</option>
                 </select>    
                 <div className="flex flex-1 pl-3">
                     <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">

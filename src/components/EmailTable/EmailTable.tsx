@@ -51,13 +51,13 @@ const EmailTable = ({search}: props) => {
 
   return (
     <>
-        <table className="flex-1 grow w-full table-auto text-center divide-y">
+        <table className="w-full table-auto text-center divide-y">
             <thead>
                 <tr>
                     <th className="w-3/5 ">
-                        <th className="flex justify-self-start items-center text-left pl-5 pr-1">Usuário</th>
+                        <th className="flex justify-self-start content-center text-left pl-5 pr-1">Usuário</th>
                     </th>
-                    <th>
+                    <th className='content-center text-left'>
                         E-Mail
                     </th>
                 </tr>

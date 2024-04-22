@@ -12,17 +12,16 @@ import AddCertificates from './views/AddCertificates';
 function App() {
   return (
     <BrowserRouter>
-      <div className='min-h-screen flex flex-col justify-between'>
-        <Header />
-        <Routes>
-          <Route path='/' element={<Home/>} />
-          <Route path='/certificados' element={<Certificates/>} />
-          <Route path='/emails' element={<Emails/>} />
-          <Route path='/adicionarCertificado' element={<AddCertificates/>} />
-          {/* <Route path='/editarCertificado' element={<EditCertificate/>} /> */}
-        </Routes>
-        <Footer/>
-      </div>
+        <div className='flex flex-col min-h-screen'>
+          <Header />
+          <Routes>
+            <Route path='/' element={<Home/>} />
+            <Route path='/certificados' element={<Certificates/>} />
+            <Route path='/emails' element={<Emails/>} />
+            <Route path='/adicionarCertificado' element={<AddCertificates/>} />
+          </Routes>
+          <Footer />
+        </div>
     </BrowserRouter>
   );
 }
