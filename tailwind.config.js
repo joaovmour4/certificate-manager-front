@@ -6,12 +6,31 @@ module.exports = {
   ],
   theme: {
     extend: {
+      maxWidth: {
+        'name': '25vw'
+      },
       colors:{
         'blue': '#D1ECF3',
-        'blue-active': '#94D2E2'
+        'blue-active': '#94D2E2',
+        'blue-table': '#EDF7FA'
       }
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+          ".no-scrollbar::-webkit-scrollbar": {
+              display: "block",
+              position: "absolute"
+          },
+          ".no-scrollbar": {
+              "-ms-overflow-style": "auto",
+              "scrollbar-width": "16px",
+          },
+      };
+      addUtilities(newUtilities);
+    },
+    require('tailwind-scrollbar')
+],
 }
 

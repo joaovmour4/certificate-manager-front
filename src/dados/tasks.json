@@ -1,0 +1,10 @@
+{"tasks":[
+    {"name": "DAE", "value": "dae"},
+    {"name": "ICMS NORMAL", "value": "icms"},
+    {"name": "DIEF", "value": "dief"},
+    {"name": "SPED FISCAL", "value": "sped"},
+    {"name": "EFD REINF", "value": "reinf"},
+    {"name": "ISSQN", "value": "issqn"},
+    {"name": "ISSQN1", "value": "issqn1"},
+    {"name": "ISSQN2", "value": "issqn2"}
+]}

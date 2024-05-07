@@ -1,21 +1,32 @@
-function SearchBar(setSearch: Function, setFilter: Function){
+import React from "react"
+interface props{
+    setSearch: Function
+    setFilter: Function
+    options: Array<option>
+}
+interface option{
+    value: string
+    name: string
+}
+function SearchBar(props: props){
     
     function handleSearch(event: any){
-        setSearch(event.target.value)
+        props.setSearch(event.target.value)
     }
 
     function handleFilter(event: any){
-        setFilter(event.target.value)
+        props.setFilter(event.target.value)
     }
     
     return(
-        <form className="flex flex-1 justify-start items-center max-w-sm">  
+        <form className="flex justify-start items-center max-w-sm place-self-start">  
             <div className="w-full flex gap-x-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:shadow-md block w-full p-2.5 focus:outline-none divide-x divide-slate-300">
                 <select className="flex-none bg-transparent focus:outline-none" onChange={handleFilter}>
-                    <option value="all">Todos</option>
-                    <option value="valid">Válidos</option>
-                    <option value="invalid">Expirados</option>
-                    <option value="almost">À Expirar</option>
+                    {props.options.map((option) => {
+                        return (
+                            <option value={option.value}>{option.name}</option>
+                        )
+                    })}
                 </select>    
                 <div className="flex flex-1 pl-3">
                     <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">

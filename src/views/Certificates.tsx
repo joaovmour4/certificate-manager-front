@@ -7,6 +7,7 @@ import AddCertificateModal from "../modals/AddCertificate";
 import ResponseModal from "../modals/ResponseModal";
 import ConfirmModal from "../modals/ConfirmModal";
 import SortInfo from "../components/SortInfo/SortInfor";
+import loadingImg from "../img/loading.svg"
 import { AxiosResponse } from "axios";
 
 export interface Certificate{
@@ -103,8 +104,13 @@ function Certificates(){
         <div className="flex flex-1 flex-col px-20 py-10 font-thin">
             <h1 className="text-3xl">Certificados</h1>
             
-            <div className="flex flex-row justify-between py-10 flex-wrap">
-                {SearchBar(setSearch, setFilter)}
+            <div className="flex flex-row justify-between flex-wrap py-10">
+                <SearchBar setFilter={setFilter} setSearch={setSearch} options={[
+                    {value:'all', name:'Todos'},
+                    {value:'valid', name:'Válidos'}, 
+                    {value:'invalid', name:'Expirados'}, 
+                    {value:'almost', name:'À Expirar'}
+                ]}/>
                 <button onClick={() => setShowAddModal(true)} className="text-white rounded bg-green-600 px-5 place-self-end hover:bg-green-500 active:bg-green-600 shadow hover:shadow-lg">Adicionar Certificado</button>
             </div>
 
@@ -128,8 +134,8 @@ function Certificates(){
                         </th>
                     </tr>
                 </thead>
-                <tbody className="divide-y content-center self-center">
-                    {arr.map((certificate: Certificate) =>{
+                <tbody className="divide-y content-center self-center [&>*:nth-child(odd)]:bg-blue-table">
+                    {arr.length !== 0 ? arr.map((certificate: Certificate) =>{
                         return(
                             <tr>
                                 <td>
@@ -150,7 +156,11 @@ function Certificates(){
                                 </td>
                             </tr>
                         )
-                    })}
+                    }) : 
+                    <div className="absolute w-full flex justify-center align-middle">
+                        <img className="h-auto w-36 animate-spin" src={loadingImg} alt="Carregando registros." />
+                    </div>
+                    }
                 </tbody>
             </table>
         </div>

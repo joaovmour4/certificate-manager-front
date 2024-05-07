@@ -1,9 +1,16 @@
 import React from "react";
+import loading from "../../img/loading.svg"
 
-function headerButton(name: string){
+interface props{
+    name: string
+}
+
+function HeaderButton({name}: props){
     return(
-        <a href="https://google.com" className='px-4 font-thin hover:text-slate-500'>{name}</a>
+        <>
+            <a href="https://google.com" className='px-4 font-thin select-none hover:text-slate-500'>{name}</a>
+        </>        
     )
 }
 
-export default headerButton
+export default HeaderButton
