@@ -1,7 +1,10 @@
 import React from "react";
 import { status } from "../components/TaskCheckbox/TaskCheckbox";
+import api from "../services/api";
 
 interface props{
+    idEmpresa: number
+    idAtividade: number | undefined
     task: string
     status: status
     setStatus: Function
@@ -9,15 +12,34 @@ interface props{
 }
 
 const TaskConfirmModal = (props:props) => {
+  
+    const [response, setResponse] = React.useState({
+      status: 0,
+      response: ''
+    })
 
 
     function handleSubmit(event: any) {
-        props.setStatus((oldStatus: status)=>{
-            return(
-                {pendente: !oldStatus.pendente, date: new Date()}
-            )
+
+      api
+        .post(`/user/atividade/${props.status.pendente ? '' : 'cancelarAtividade'}`, {
+          idEmpresa: props.idEmpresa,
+          idAtividade: props.idAtividade
         })
-        props.setShowModal(false)
+        .then((response) => {
+          setResponse({
+            status: response.status,
+            response: response.data.message
+          })
+          window.location.reload()
+        })
+        .catch((error) => {
+          setResponse({
+            status: error.status,
+            response: error.message
+          })
+        })
+      props.setShowModal(false)
     }
     
     return (
