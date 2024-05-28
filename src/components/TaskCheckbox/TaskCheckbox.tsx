@@ -20,21 +20,12 @@ interface status{
     pendente: boolean
     date: Date
 }
-interface EmpresaAtividade{
-    idEmpresaAtividade: number
-    dataRealizacao: Date
-    EmpresaIdEmpresa: number
-    AtividadeIdAtividade: number
-}
-
-const forceUpdateReducer = (state: any) => !state;
 
 const TaskCheckbox = (props: props) => {
     const [status, setStatus] = React.useState<status>({
         pendente: props.realizacaoAtividade ? false:true, 
         date: props.realizacaoAtividade ? new Date(Date.parse(props.realizacaoAtividade)) : new Date(),
     })
-    const [checked, setChecked] = React.useState<boolean>()
     const [showModal, setShowModal] = React.useState(false)
 
 

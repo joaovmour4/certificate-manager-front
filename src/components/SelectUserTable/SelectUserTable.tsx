@@ -17,9 +17,10 @@ const SelectUserTable = (props: props) => {
         <tbody className='[&>*:nth-child(odd)]:bg-blue-table divide-y'>
             {props.Empresas && props.Empresas.map((empresa)=>{
                 return(
-                    <tr className='py-0'>
+                    <tr>
                         <td>
                             <SelectUsuario 
+                                empresa={empresa}
                                 Usuarios={props.Usuarios}
                             />
                         </td>

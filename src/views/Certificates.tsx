@@ -69,16 +69,6 @@ function Certificates(){
         setId(_id)
         setOwner(owner)
         setShowConfirmModal(true)
-        // api
-        //     .delete(`/certificate/${_id}`)
-        //     .then(response => {
-        //         setResponse(response)
-        //         setShowResponseModal(true)
-        //         console.log(response)
-        //     })
-        //     .catch(err => {
-        //         console.log(err.message)
-        //     })
     }
     
     useEffect(()=>{

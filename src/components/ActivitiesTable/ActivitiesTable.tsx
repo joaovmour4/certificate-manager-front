@@ -1,12 +1,13 @@
 import React from 'react'
 import ActivitiesTableLine from '../ActivitiesTableLine/ActivitiesTableLine'
 import TaskCheckbox from '../TaskCheckbox/TaskCheckbox'
-import loadingImg from "../../img/loading.svg"
-
-
 import api from '../../services/api'
 import SelectUserTable from '../SelectUserTable/SelectUserTable'
 
+interface props{
+  search: string
+  filter: string
+}
 interface Empresa{
   idEmpresa: number
   nameEmpresa: string
@@ -16,6 +17,8 @@ interface Empresa{
   cnpjEmpresa: string
   inscricaoEmpresa: string
   representante: string
+  idUsuarioResponsavel: number
+  responsavel: Usuario
   Usuarios: Array<Usuario>
   Atividades: Array<Atividade>
 }
@@ -54,28 +57,21 @@ interface EmpresaAtividade{
   dataRealizacao: string | null
 }
 
-interface IEmpresaAtividade{
-  idEmpresaAtividade: number
-  dataRealizacao: string | null
-  EmpresaIdEmpresa: number
-  AtividadeIdAtividade: number
-}
-
-const ActivitiesTable = () => {
+const ActivitiesTable = (props: props) => {
 
   const [empresas, setEmpresas] = React.useState<Array<Empresa> | null>()
   const [tasks, setTasks] = React.useState<Array<Obrigacao> | null>()
-  const [atividades, setAtividades] = React.useState<Array<IEmpresaAtividade>>()
   const [usuarios, setUsuarios] = React.useState<Array<Usuario>>([])
   const [competencia, setCompetencia] = React.useState({
     mes: new Date().getMonth()+1,
     ano: new Date().getFullYear()
   })
+  const user = JSON.parse(sessionStorage.getItem('user')!)
 
   React.useEffect(() => {
     const updateData = async () => {
       api
-        .get(`/empresa/?mes=${competencia.mes}&ano=${competencia.ano}`)
+        .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${competencia.mes}&ano=${competencia.ano}&user=${user.idUsuario}`)
           .then((response: any) => {
             setEmpresas(response.data.empresas)
           })
@@ -91,24 +87,28 @@ const ActivitiesTable = () => {
           .catch((err) => {
             console.log(err)
           })
+      api
+        .get('/user')
+          .then((response: any) => {
+            setUsuarios(response.data)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
     }
 
-    api
-      .get('/user')
-        .then((response: any) => {
-          setUsuarios(response.data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
 
-    updateData()
+    // updateData()
 
-    const interval = setInterval(updateData, 5000)
+    const interval = setInterval(updateData, 30000)
+    const delayDebounceFn = setTimeout(updateData, 300)
 
-    return ()=> clearInterval(interval)
+    return ()=> {
+      clearInterval(interval)
+      clearTimeout(delayDebounceFn)
+    }
 
-  }, [competencia])
+  }, [competencia, props.filter, props.search, user])
 
   return (
     <div className='flex flex-row'>
@@ -138,7 +138,7 @@ const ActivitiesTable = () => {
         </tbody>
       </table>
       <div className='overflow-x-scroll scrollbar scrollbar-thin table-fixed flex-1'>
-        <table className='divide-y'>
+        <table className='divide-y w-full'>
           <thead>
             <tr className='h-5'>
               {tasks && tasks.map((task)=>{
@@ -168,18 +168,19 @@ const ActivitiesTable = () => {
                     </td>
                 )
               })
-              return <tr className='h-7'>{taskEmpresa}</tr>
+              return <tr className='h-7 w-[200px]'>{taskEmpresa}</tr>
             })}
           </tbody>
         </table>
       </div>
-        <SelectUserTable 
-          Empresas={empresas!}
-          Usuarios={usuarios!}
-        />
+      {(user.cargo === 'admin' || user.cargo === 'supervisor') && 
+      <SelectUserTable 
+        Empresas={empresas!}
+        Usuarios={usuarios!}
+      />}
     </div>
   )
 }
 
-export type {Usuario, Empresa}
+export type {Usuario, Empresa, Regime}
 export default ActivitiesTable

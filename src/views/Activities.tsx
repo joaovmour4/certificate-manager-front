@@ -3,7 +3,6 @@ import ActivitiesTable from '../components/ActivitiesTable/ActivitiesTable'
 import SearchBar from '../components/searchBar/SearchBar'
 
 
-
 const Activities = () => {
 
     function getCompetencias(qtdMeses: number){
@@ -19,8 +18,9 @@ const Activities = () => {
     }
 
     const [search, setSearch] = React.useState('')
-    const [filter, setFilter] = React.useState('')
+    const [filter, setFilter] = React.useState('all')
     const competencias = getCompetencias(12)
+
 
     return (
         <div className='flex-1 flex flex-col px-20 py-10'>
@@ -28,9 +28,9 @@ const Activities = () => {
             <div className='py-10 flex justify-between'>
                 <SearchBar setSearch={setSearch} setFilter={setFilter} options={[
                     {value:'all', name:'Todos'},
-                    {value:'simples', name:'Simples'}, 
-                    {value:'presumido', name:'Presumido'}, 
-                    {value:'real', name:'Real'}
+                    {value:'1', name:'Simples'}, 
+                    {value:'2', name:'Presumido'}, 
+                    {value:'3', name:'Real'}
                 ]}/>
                 <select className="flex-none bg-transparent focus:outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 p-2.5 focus:outline-none">
                     {competencias.map((competencia) => {
@@ -40,7 +40,10 @@ const Activities = () => {
                     })}
                 </select>  
             </div>
-            <ActivitiesTable />
+            <ActivitiesTable 
+                filter={filter}
+                search={search}
+            />
         </div>
     )
 }

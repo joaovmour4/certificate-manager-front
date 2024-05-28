@@ -15,7 +15,7 @@ const SelectActive = (props: props) => {
       newStatus: act
     }
     api
-      .patch(`/empresa/${props.idEmpresa}`, data)
+      .patch(`/empresa/active/${props.idEmpresa}`, data)
         .then(() => {
           props.setActive(act)
           window.location.reload()

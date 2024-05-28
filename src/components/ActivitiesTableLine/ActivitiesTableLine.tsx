@@ -23,7 +23,7 @@ const ActivitiesTableLine = (props: props) => {
     // 72
     return (
         <>
-            <td className='flex font-thin justify-between self-center  max-w-[450px]'>
+            <td className='flex font-thin justify-between self-center w-full'>
                 <button className='truncate text-left align-middle pl-5' onClick={handleCardModal}>{props.name}</button>
                 <div className='flex flex-row justify-between px-1'>
                     <TagRegime regime={props.regime} />

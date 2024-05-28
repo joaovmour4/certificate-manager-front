@@ -9,8 +9,16 @@ import Emails from './views/Emails';
 import AddCertificates from './views/AddCertificates';
 import Activities from './views/Activities';
 import Login from './views/Login';
+import api from './services/api';
 
 function App() {
+  React.useEffect(()=>{
+    api
+        .get('user/1')
+        .then(response => {
+            sessionStorage.setItem('user', JSON.stringify(response.data))
+        })
+  }, [])
   return (
     <BrowserRouter>
         <div className='flex flex-col min-h-screen'>
