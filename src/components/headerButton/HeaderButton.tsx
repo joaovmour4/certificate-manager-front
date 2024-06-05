@@ -8,7 +8,7 @@ interface props{
 function HeaderButton({name}: props){
     return(
         <>
-            <a href="https://google.com" className='px-4 font-thin select-none hover:text-slate-500'>{name}</a>
+            <p className='px-4 font-thin select-none hover:text-slate-500'>{name}</p>
         </>        
     )
 }

@@ -5,11 +5,12 @@ import api from '../../services/api'
 interface props{
   empresa: Empresa
   Usuarios: Array<Usuario>
+  responsavel: string
 }
 
 const SelectUsuario = (props: props) => {
 
-  const [user, setUser] = React.useState<Usuario | null>(props.empresa.responsavel)
+  const [user, setUser] = React.useState<string>(props.responsavel)
 
   const handleUsuario = (event: any) => {
 
@@ -22,6 +23,7 @@ const SelectUsuario = (props: props) => {
     api
       .patch(`/empresa/usuario`, data)
         .then(() => {
+          user && setUser(user.login)
           window.location.reload()
         })
         .catch((err) => {
@@ -31,11 +33,11 @@ const SelectUsuario = (props: props) => {
 
   return (
     <>
-      <select onChange={handleUsuario} defaultValue={'default'} className='max-w-[90px] bg-transparent text-sm focus:outline-none'>
+      <select onChange={handleUsuario} value={user} className='max-w-[90px] bg-transparent text-sm focus:outline-none'>
         <option value="default" disabled></option>
         {props.Usuarios.map((usuario) => {
           return(
-            <option selected={user && user.idUsuario === usuario.idUsuario ? true:false} value={usuario.login}>
+            <option value={usuario.login}>
               {usuario.username}
             </option>
           )

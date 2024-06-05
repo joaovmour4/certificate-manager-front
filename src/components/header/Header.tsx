@@ -2,8 +2,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logoImg from '../../img/MG logo x7 - svg - ORIGINAL.svg'
 import HeaderButton from '../headerButton/HeaderButton';
+import { Usuario } from '../ActivitiesTable/ActivitiesTable';
+import ProfileButton from '../ProfileButton/ProfileButton';
+interface props{
+  isAuthenticated: boolean
+  user: Usuario
+}
 
-function Header() {
+function Header(props: props) {
   return (
     <header className='flex items-center flex-col relative bg-blue shadow-md sm:flex-row'>
       <Link to={'/'}>
@@ -16,7 +22,13 @@ function Header() {
         <Link to={'/emails'}><HeaderButton name="E-Mails"/></Link>
       </div>
       <div>
-        <Link className="border rounded border-slate-500 py-1 px-5 mr-5" to={'/login'}><HeaderButton name="Login" /></Link>
+        {!props.isAuthenticated? 
+          <Link className="border rounded border-slate-500 py-1 px-5 mr-5" to={'/login'}><HeaderButton name="Login" /></Link>
+          :
+          <ProfileButton 
+            user={props.user}
+          />
+        }
       </div>
     </header>
   );

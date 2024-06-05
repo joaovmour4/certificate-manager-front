@@ -1,4 +1,5 @@
 import React from 'react'
+import { jwtDecode } from 'jwt-decode'
 import ActivitiesTableLine from '../ActivitiesTableLine/ActivitiesTableLine'
 import TaskCheckbox from '../TaskCheckbox/TaskCheckbox'
 import api from '../../services/api'
@@ -33,6 +34,8 @@ interface Usuario{
   login: string
   email: string
   password: string
+  cargo: string
+  idSetor: number
   createdAt: Date
   updatedAt: Date
 }
@@ -66,12 +69,26 @@ const ActivitiesTable = (props: props) => {
     mes: new Date().getMonth()+1,
     ano: new Date().getFullYear()
   })
-  const user = JSON.parse(sessionStorage.getItem('user')!)
+  const [user, setUser] = React.useState<Usuario | null>(null)
+  
+  React.useEffect(()=>{
+    const token = localStorage.getItem('userToken')
+
+    if(token){
+      try{
+        const decodedToken: any = jwtDecode(token)
+        setUser(decodedToken?.user)
+      }catch(err){
+        console.log(err)
+      }
+    }
+  }, [])
 
   React.useEffect(() => {
+
     const updateData = async () => {
       api
-        .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${competencia.mes}&ano=${competencia.ano}&user=${user.idUsuario}`)
+        .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${competencia.mes}&ano=${competencia.ano}&user=${user?.idUsuario}`)
           .then((response: any) => {
             setEmpresas(response.data.empresas)
           })
@@ -90,17 +107,14 @@ const ActivitiesTable = (props: props) => {
       api
         .get('/user')
           .then((response: any) => {
-            setUsuarios(response.data)
+            setUsuarios(response.data.users)
           })
           .catch((err) => {
             console.log(err)
           })
     }
 
-
-    // updateData()
-
-    const interval = setInterval(updateData, 30000)
+    const interval = setInterval(updateData, 3000)
     const delayDebounceFn = setTimeout(updateData, 300)
 
     return ()=> {
@@ -108,7 +122,7 @@ const ActivitiesTable = (props: props) => {
       clearTimeout(delayDebounceFn)
     }
 
-  }, [competencia, props.filter, props.search, user])
+  }, [competencia, user, props.filter, props.search])
 
   return (
     <div className='flex flex-row'>
@@ -173,7 +187,7 @@ const ActivitiesTable = (props: props) => {
           </tbody>
         </table>
       </div>
-      {(user.cargo === 'admin' || user.cargo === 'supervisor') && 
+      {(user?.cargo === 'admin' || user?.cargo === 'supervisor') && 
       <SelectUserTable 
         Empresas={empresas!}
         Usuarios={usuarios!}

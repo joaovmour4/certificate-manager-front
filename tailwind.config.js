@@ -13,6 +13,9 @@ module.exports = {
         'blue': '#D1ECF3',
         'blue-active': '#94D2E2',
         'blue-table': '#EDF7FA'
+      },
+      transitionProperty:{
+        'height': 'height'
       }
     },
   },
