@@ -114,7 +114,7 @@ const ActivitiesTable = (props: props) => {
           })
     }
 
-    const interval = setInterval(updateData, 3000)
+    const interval = setInterval(updateData, 30000)
     const delayDebounceFn = setTimeout(updateData, 300)
 
     return ()=> {
@@ -126,10 +126,12 @@ const ActivitiesTable = (props: props) => {
 
   return (
     <div className='flex flex-row'>
-      <table className='divide-y mb-3 w-1/3'>
+      <table className='divide-y mb-3'>
         <thead>
           <tr>
             <th className='pl-5 text-left h-5'>Nome</th>
+            <th>Regime</th>
+            <th>Situação</th>
           </tr>
         </thead>
         <tbody className='divide-y [&>*:nth-child(odd)]:bg-blue-table'>

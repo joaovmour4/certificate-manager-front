@@ -24,16 +24,8 @@ const ActivitiesTableLine = (props: props) => {
     // 72
     return (
         <>
-            <td className='flex font-thin justify-between self-center w-full'>
-                <button ref={lineRef} className='truncate text-left align-middle pl-5' onClick={handleCardModal}>{props.name}</button>
-                <div className='flex flex-row justify-between px-1'>
-                    <TagRegime regime={props.regime} />
-                    <SelectActive 
-                        active={activeEmpresa} 
-                        setActive={setActiveEmpresa}
-                        idEmpresa={props.idEmpresa}
-                    />
-                </div>
+            <td className='flex font-thin justify-between self-center max-w-[320px]'>
+                <button ref={lineRef} className='flex-1 truncate text-left align-middle pl-5' onClick={handleCardModal}>{props.name}</button>
             </td>
             {<CardEmpresaModal 
                 lineRef={lineRef}
@@ -45,6 +37,18 @@ const ActivitiesTableLine = (props: props) => {
                 inscMunicipal={props.inscMunicipal}
                 representante={props.representante}
             />}
+            <td>
+                <div className='flex flex-row justify-between px-1'>
+                    <TagRegime regime={props.regime} />
+                </div>
+            </td>
+            <td>
+                <SelectActive 
+                    active={activeEmpresa} 
+                    setActive={setActiveEmpresa}
+                    idEmpresa={props.idEmpresa}
+                />
+            </td>
         </>
     )
 }

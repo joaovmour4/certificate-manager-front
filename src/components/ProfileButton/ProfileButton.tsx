@@ -1,6 +1,7 @@
 import React from 'react'
 import { Usuario } from '../ActivitiesTable/ActivitiesTable'
 import ProfileModal from '../../modals/ProfileModal'
+import profileImg from '../../img/user.png'
 interface props{
     user: Usuario
 }
@@ -15,8 +16,10 @@ const ProfileButton = (props: props) => {
 
     return (
         <>
-            <button ref={buttonRef} onClick={handleModal} className='px-5 font-thin select-none'>Olá, {props.user.username}</button>
-            {<ProfileModal buttonRef={buttonRef} showModal={showModal} setShowModal={setShowModal}/>}
+            <button ref={buttonRef} onClick={handleModal} className='font-thin select-none h-[35px] w-[35px] bg-white rounded-full flex justify-center items-center mr-7'>
+                <img src={profileImg} alt="" className='h-[30px] w-[30px]'/>
+            </button>
+            {showModal && <ProfileModal buttonRef={buttonRef} showModal={showModal} setShowModal={setShowModal}/>}
         </>
     )
 }

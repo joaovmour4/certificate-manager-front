@@ -27,7 +27,7 @@ const SelectActive = (props: props) => {
 
   return (
     <>
-        <select onChange={changeSelect} name="" id="activeSelect" defaultValue={props.active ? "true":"false"} className='pl-1 bg-transparent text-sm focus:outline-none'>
+        <select onChange={changeSelect} name="" id="activeSelect" value={props.active ? "true":"false"} className='pl-1 bg-transparent text-sm focus:outline-none'>
             <option value='true'>Ativo</option>
             <option value='false'>S/M</option>
         </select>

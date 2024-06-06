@@ -25,11 +25,11 @@ const CardEmpresaModal = (props: props) => {
     }, [props])
   return (
     <div ref={appRef} className={`${props.showModal ? 'scale-100':'scale-0 invisible'} absolute w-2/5 flex flex-col text-left font-thin bg-blue rounded-md shadow p-5 transition-all duration-200 ease-in-out`}>
-        <p><span className='font-light'>Nome: </span>{props.name}</p>
-        <p><span className='font-light'>Código Questor: </span>{props.questorCode}</p>
-        <p><span className='font-light'>CNPJ: </span>{props.cnpj}</p>
-        <p><span className='font-light'>Inscrição Municipal: </span>{props.inscMunicipal}</p>
-        <p className='sticky'><span className='font-light'>Representante Legal: </span>{props.representante}</p>
+        <p><span className='font-medium select-none'>Nome: </span>{props.name}</p>
+        <p><span className='font-medium select-none'>Código Questor: </span>{props.questorCode}</p>
+        <p><span className='font-medium select-none'>CNPJ: </span>{props.cnpj}</p>
+        <p><span className='font-medium select-none'>Inscrição Municipal: </span>{props.inscMunicipal}</p>
+        <p><span className='font-medium select-none'>Representante Legal: </span>{props.representante}</p>
     </div>
   )
 }

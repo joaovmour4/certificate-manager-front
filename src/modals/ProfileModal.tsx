@@ -1,4 +1,7 @@
 import React from 'react'
+import company from '../img/companhia.png'
+import logoutImg from '../img/logout.png'
+import DropdownButton from '../components/DropdownButton/DropdownButton'
 interface props{
     showModal: boolean
     setShowModal: Function
@@ -24,33 +27,33 @@ const ProfileModal = (props: props) => {
         window.location.reload()
     }
     return (
-        <div ref={appRef} className={`${props.showModal ? 'h-32 w-28':'h-0 w-0 invisible'} px-3 py-1 fixed bg-slate-100 font-thin shadow rounded transition-[height] duration-100 ease-in-out`}>
-            <ul>
-                <li>
-                    <button>
-                        Empresas
-                    </button>
-                </li>
-                <li>
-                    <button>
-                        Empresas
-                    </button>
-                </li>
-                <li>
-                    <button>
-                        Empresas
-                    </button>
-                </li>
-                <li>
-                    <button>
-                        Empresas
-                    </button>
-                </li>
-                <li>
-                    <button onClick={logout}>
-                        Sair
-                    </button>
-                </li>
+        <div ref={appRef} className={`flex flex-col justify-center fixed bg-slate-100 font-thin shadow-md rounded right-5 mt-4`}>
+            <ul className='flex-1 flex flex-col justify-center'>
+                <DropdownButton 
+                    clickFunction={undefined}
+                    img={company}
+                    name='Empresas'
+                />             
+                <DropdownButton 
+                    clickFunction={undefined}
+                    img={company}
+                    name='Empresas'
+                />             
+                <DropdownButton 
+                    clickFunction={undefined}
+                    img={company}
+                    name='Empresas'
+                />             
+                <DropdownButton 
+                    clickFunction={undefined}
+                    img={company}
+                    name='Empresas'
+                />             
+                <DropdownButton 
+                    clickFunction={logout}
+                    img={logoutImg}
+                    name='Sair'
+                />
             </ul>
         </div>
     )

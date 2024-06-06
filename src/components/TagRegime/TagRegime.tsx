@@ -5,18 +5,9 @@ interface props{
 }
 
 function TagRegime(props: props){
-    if(props.regime === 'Simples')
-        return (
-            <>
-                <label className="px-1 rounded-full select-none bg-green-600 w-24 text-white text-center align-middle justify-center">{props.regime}</label>
-            </>
-        )
-    else
-        return (
-            <>
-                <label className="px-1 rounded-full select-none bg-yellow-600 w-24 text-white text-center align-middle justify-center">{props.regime}</label>
-            </>
-        )
+    return (
+        <label className={`px-1 rounded-full select-none font-thin bg-${props.regime === 'Simples' ? 'green':'yellow'}-600 w-24 text-white text-center align-middle justify-center`}>{props.regime}</label>
+    )
 }
 
 export default TagRegime
