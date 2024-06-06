@@ -4,6 +4,7 @@ import ActivitiesTableLine from '../ActivitiesTableLine/ActivitiesTableLine'
 import TaskCheckbox from '../TaskCheckbox/TaskCheckbox'
 import api from '../../services/api'
 import SelectUserTable from '../SelectUserTable/SelectUserTable'
+import loadingImg from "../../img/loading.png"
 
 interface props{
   search: string
@@ -65,6 +66,7 @@ const ActivitiesTable = (props: props) => {
   const [empresas, setEmpresas] = React.useState<Array<Empresa> | null>()
   const [tasks, setTasks] = React.useState<Array<Obrigacao> | null>()
   const [usuarios, setUsuarios] = React.useState<Array<Usuario>>([])
+  const [loading, setLoading] = React.useState(true)
   const [competencia, setCompetencia] = React.useState({
     mes: new Date().getMonth()+1,
     ano: new Date().getFullYear()
@@ -91,6 +93,7 @@ const ActivitiesTable = (props: props) => {
         .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${competencia.mes}&ano=${competencia.ano}&user=${user?.idUsuario}`)
           .then((response: any) => {
             setEmpresas(response.data.empresas)
+            setLoading(false)
           })
           .catch((err) => {
             console.log(err)
@@ -123,6 +126,18 @@ const ActivitiesTable = (props: props) => {
     }
 
   }, [competencia, user, props.filter, props.search])
+
+  if(loading)
+    return(
+      <img className="animate-spin place-self-center" src={loadingImg} alt="Carregando registros." />
+    )
+
+  if(empresas?.length === 0)
+    return(
+      <p className='text-center text-gray-500 italic'>
+        Não há empresas cadastradas para o seu usuário.
+      </p>
+    )
 
   return (
     <div className='flex flex-row'>

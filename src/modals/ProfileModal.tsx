@@ -33,22 +33,7 @@ const ProfileModal = (props: props) => {
                     clickFunction={undefined}
                     img={company}
                     name='Empresas'
-                />             
-                <DropdownButton 
-                    clickFunction={undefined}
-                    img={company}
-                    name='Empresas'
-                />             
-                <DropdownButton 
-                    clickFunction={undefined}
-                    img={company}
-                    name='Empresas'
-                />             
-                <DropdownButton 
-                    clickFunction={undefined}
-                    img={company}
-                    name='Empresas'
-                />             
+                />         
                 <DropdownButton 
                     clickFunction={logout}
                     img={logoutImg}

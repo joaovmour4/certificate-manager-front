@@ -20,7 +20,8 @@ const Login = (props: props) => {
     setMostrarSenha(mostrarSenha => !mostrarSenha)
   }
 
-  const handleEntrar = () =>{
+  const handleEntrar = (event: any) =>{
+    event.preventDefault()
     const data = {
       login: user,
       password: password
@@ -40,7 +41,7 @@ const Login = (props: props) => {
   }
 
   return (
-    <div className="flex-1 flex flex-col justify-center items-center">
+    <form onSubmit={handleEntrar} className="flex-1 flex flex-col justify-center items-center">
       {props.userToken && <Navigate to='/' replace={true} />}
       <img className='h-56 w-auto sm:flex-none' src={logoImg} alt="Logo MG" />
       <Input 
@@ -53,7 +54,7 @@ const Login = (props: props) => {
         placeHolder='Senha'
         setInput={setPassword}
       />
-      <button onClick={handleEntrar} className='mt-5 py-1 px-5 rounded shadow bg-blue hover:bg-blue-active'>
+      <button className='mt-5 py-1 px-5 rounded shadow bg-blue hover:bg-blue-active'>
         Entrar
       </button>
       {showModal && 
@@ -62,7 +63,7 @@ const Login = (props: props) => {
           response={response}
           setShowAddModal={null}
         />}
-    </div>
+    </form>
   )
 }
 

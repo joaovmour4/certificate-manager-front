@@ -8,7 +8,6 @@ async function authVerify(){
     .catch(error=>{
         return error.response
     })
-    console.log(auth.data.auth)
     return auth.data.auth
 }
 

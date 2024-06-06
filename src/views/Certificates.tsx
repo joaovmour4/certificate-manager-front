@@ -7,7 +7,7 @@ import AddCertificateModal from "../modals/AddCertificate";
 import ResponseModal from "../modals/ResponseModal";
 import ConfirmModal from "../modals/ConfirmModal";
 import SortInfo from "../components/SortInfo/SortInfor";
-import loadingImg from "../img/loading.svg"
+import loadingImg from "../img/loading.png"
 import { AxiosResponse } from "axios";
 
 export interface Certificate{
@@ -104,6 +104,10 @@ function Certificates(){
                 <button onClick={() => setShowAddModal(true)} className="text-white rounded bg-green-600 px-5 place-self-end hover:bg-green-500 active:bg-green-600 shadow hover:shadow-lg">Adicionar Certificado</button>
             </div>
 
+            {arr.length === 0 &&
+                <img className="animate-spin place-self-center" src={loadingImg} alt="Carregando registros." />
+            }
+            {arr.length !== 0 && 
             <table className="w-full table-auto text-center divide-y">
                 <thead>
                     <tr>
@@ -125,7 +129,7 @@ function Certificates(){
                     </tr>
                 </thead>
                 <tbody className="divide-y content-center self-center [&>*:nth-child(odd)]:bg-blue-table">
-                    {arr.length !== 0 ? arr.map((certificate: Certificate) =>{
+                    {arr.map((certificate: Certificate) =>{
                         return(
                             <tr>
                                 <td>
@@ -146,13 +150,10 @@ function Certificates(){
                                 </td>
                             </tr>
                         )
-                    }) : 
-                    <div className="absolute w-full flex justify-center align-middle">
-                        <img className="h-auto w-36 animate-spin" src={loadingImg} alt="Carregando registros." />
-                    </div>
+                    })
                     }
                 </tbody>
-            </table>
+            </table>}
         </div>
     )
 }

@@ -62,7 +62,7 @@ const EmailTable = ({search}: props) => {
                     </th>
                 </tr>
             </thead>
-            <tbody className="divide-y content-center">
+            <tbody className="divide-y content-center [&>*:nth-child(odd)]:bg-blue-table">
                 {arr.map((email: Email) =>{
                     return(
                         <tr>
