@@ -2,9 +2,11 @@ import React from "react";
 import { Link } from "react-router-dom";
 import msgIcon from '../../img/msgIcon.png'
 import instaIcon from '../../img/instaIcon.png'
+import AuthContext from "../../contexts/auth";
 
 function Footer(){
-    return(
+    const Auth = React.useContext(AuthContext)
+    if(Auth.signed) return(
         <footer className='w-full flex flex-col items-center bg-blue py-1 font-thin'>
             <div className='flex flex-none items-center justify-items-center pr-5'>
                 <Link to={'mailto:contabilidade-maraba@hotmail.com'}><img className="pr-5" src={msgIcon} alt="Envie-nos um E-Mail" /></Link>
@@ -15,6 +17,7 @@ function Footer(){
             </div>
         </footer>
     )
+    return null
 }
 
 export default Footer

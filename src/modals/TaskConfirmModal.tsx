@@ -1,6 +1,8 @@
 import React from "react";
 import { status } from "../components/TaskCheckbox/TaskCheckbox";
 import api from "../services/api";
+import { jwtDecode } from "jwt-decode";
+import { Token } from "../App";
 
 interface props{
     idEmpresa: number
@@ -12,19 +14,22 @@ interface props{
 }
 
 const TaskConfirmModal = (props:props) => {
-  
+    const token = localStorage.getItem('userToken')
+    const user: Token =  jwtDecode(token!)
+
     const [response, setResponse] = React.useState({
       status: 0,
       response: ''
     })
 
 
-    function handleSubmit(event: any) {
+    function handleSubmit() {
 
       api
         .post(`/user/atividade/${props.status.pendente ? '' : 'cancelarAtividade'}`, {
           idEmpresa: props.idEmpresa,
-          idAtividade: props.idAtividade
+          idAtividade: props.idAtividade,
+          idUsuario: user?.user.idUsuario
         })
         .then((response) => {
           setResponse({
@@ -46,7 +51,7 @@ const TaskConfirmModal = (props:props) => {
         <>
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="absolute w-2/5 my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="border rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
                   <h3 className="text-3xl font=semibold whitespace-nowrap">{props.status.pendente ? 'Concluir atividade':'Marcar atividade pendente'}</h3>
                 </div>

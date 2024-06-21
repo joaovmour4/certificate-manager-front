@@ -1,12 +1,13 @@
 import React from 'react'
 import { Navigate } from 'react-router-dom'
+import AuthContext from '../../contexts/auth'
 interface props{
-    isAuthenticated: boolean
     children: React.ReactElement
 }
 
 const ProtectRoutes = (props: props) => {
-  if(!props.isAuthenticated)
+  const Auth = React.useContext(AuthContext)
+  if(!Auth.signed)
     return <Navigate to='/login' replace />
 
   return props.children

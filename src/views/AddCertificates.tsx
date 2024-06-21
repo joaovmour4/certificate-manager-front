@@ -5,15 +5,15 @@ function AddCertificates(){
     const [file, setFile] = useState<File | null >(null)
     const [password, setPassword] = useState('')
 
-    function handleChange(event: any) {
-      setFile(event.target.files[0])
+    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+      setFile(event.target.files && event.target.files[0])
     }
 
-    function handlePassword(event: any){
+    function handlePassword(event: React.ChangeEvent<HTMLInputElement>){
       setPassword(event.target.value)
     }
 
-    function handleSubmit(event: any) {
+    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault()
         const formData = new FormData()
         formData.append('certFile', file!)

@@ -2,10 +2,12 @@ import React from 'react'
 import TagRegime from '../TagRegime/TagRegime'
 import CardEmpresaModal from '../../modals/CardEmpresaModal'
 import SelectActive from '../SelectActive/SelectActive'
+import { situacaoFinanceiro } from '../ActivitiesTable/ActivitiesTable'
 interface props{
     idEmpresa: number
     name: string
     active: boolean
+    situacaoFinanceiro: situacaoFinanceiro
     questorCode: number
     cnpj: string
     inscMunicipal: string
@@ -24,8 +26,13 @@ const ActivitiesTableLine = (props: props) => {
     // 72
     return (
         <>
-            <td className='flex font-thin justify-between self-center max-w-[320px]'>
+            <td className='flex font-thin justify-between self-center w-[320px]'>
                 <button ref={lineRef} className='flex-1 truncate text-left align-middle pl-5' onClick={handleCardModal}>{props.name}</button>
+                {!props.situacaoFinanceiro.active && 
+                    <p className='px-3 bg-red-600 text-white rounded'>
+                        Bloqueada
+                    </p>
+                } 
             </td>
             {<CardEmpresaModal 
                 lineRef={lineRef}
@@ -37,6 +44,7 @@ const ActivitiesTableLine = (props: props) => {
                 inscMunicipal={props.inscMunicipal}
                 representante={props.representante}
             />}
+            
             <td>
                 <div className='flex flex-row justify-between px-1'>
                     <TagRegime regime={props.regime} />
@@ -45,6 +53,7 @@ const ActivitiesTableLine = (props: props) => {
             <td>
                 <SelectActive 
                     active={activeEmpresa} 
+                    situacaoFinanceiro={props.situacaoFinanceiro}
                     setActive={setActiveEmpresa}
                     idEmpresa={props.idEmpresa}
                 />

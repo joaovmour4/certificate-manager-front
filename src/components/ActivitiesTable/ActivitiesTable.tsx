@@ -5,10 +5,17 @@ import TaskCheckbox from '../TaskCheckbox/TaskCheckbox'
 import api from '../../services/api'
 import SelectUserTable from '../SelectUserTable/SelectUserTable'
 import loadingImg from "../../img/loading.png"
+import { AxiosResponse } from 'axios'
+import { Competencia } from '../../views/Activities'
+import { Token } from '../../App'
+import AuthContext from '../../contexts/auth'
 
 interface props{
   search: string
   filter: string
+  competencia: Competencia
+  loading: boolean
+  setLoading: Function
 }
 interface Empresa{
   idEmpresa: number
@@ -20,9 +27,16 @@ interface Empresa{
   inscricaoEmpresa: string
   representante: string
   idUsuarioResponsavel: number
+  idRegime: number
   responsavel: Usuario
   Usuarios: Array<Usuario>
   Atividades: Array<Atividade>
+  Setors?: Array<Setor>
+  situacaoFinanceiro: situacaoFinanceiro
+}
+interface situacaoFinanceiro{
+  active: boolean
+  date: Date
 }
 interface Regime{
   idRegime: number
@@ -34,11 +48,15 @@ interface Usuario{
   username: string
   login: string
   email: string
-  password: string
   cargo: string
   idSetor: number
+  Setor?: Setor
   createdAt: Date
   updatedAt: Date
+}
+interface Setor{
+  idSetor: number
+  setorName: string
 }
 interface Obrigacao{
   idObrigacao: number
@@ -61,39 +79,23 @@ interface EmpresaAtividade{
   dataRealizacao: string | null
 }
 
+
 const ActivitiesTable = (props: props) => {
+  const Auth = React.useContext(AuthContext)
 
   const [empresas, setEmpresas] = React.useState<Array<Empresa> | null>()
   const [tasks, setTasks] = React.useState<Array<Obrigacao> | null>()
   const [usuarios, setUsuarios] = React.useState<Array<Usuario>>([])
-  const [loading, setLoading] = React.useState(true)
-  const [competencia, setCompetencia] = React.useState({
-    mes: new Date().getMonth()+1,
-    ano: new Date().getFullYear()
-  })
-  const [user, setUser] = React.useState<Usuario | null>(null)
-  
-  React.useEffect(()=>{
-    const token = localStorage.getItem('userToken')
 
-    if(token){
-      try{
-        const decodedToken: any = jwtDecode(token)
-        setUser(decodedToken?.user)
-      }catch(err){
-        console.log(err)
-      }
-    }
-  }, [])
 
   React.useEffect(() => {
 
     const updateData = async () => {
       api
-        .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${competencia.mes}&ano=${competencia.ano}&user=${user?.idUsuario}`)
-          .then((response: any) => {
+        .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}`)
+          .then((response: AxiosResponse) => {
             setEmpresas(response.data.empresas)
-            setLoading(false)
+            props.setLoading(false)
           })
           .catch((err) => {
             console.log(err)
@@ -101,7 +103,7 @@ const ActivitiesTable = (props: props) => {
 
       api
         .get('/obrigacao')
-          .then((response: any) => {
+          .then((response: AxiosResponse) => {
             setTasks(response.data)
           })
           .catch((err) => {
@@ -109,8 +111,8 @@ const ActivitiesTable = (props: props) => {
           })
       api
         .get('/user')
-          .then((response: any) => {
-            setUsuarios(response.data.users)
+          .then((response: AxiosResponse) => {
+            setUsuarios(response.data)
           })
           .catch((err) => {
             console.log(err)
@@ -125,9 +127,9 @@ const ActivitiesTable = (props: props) => {
       clearTimeout(delayDebounceFn)
     }
 
-  }, [competencia, user, props.filter, props.search])
+  }, [Auth.user, props])
 
-  if(loading)
+  if(props.loading)
     return(
       <img className="animate-spin place-self-center" src={loadingImg} alt="Carregando registros." />
     )
@@ -157,6 +159,7 @@ const ActivitiesTable = (props: props) => {
                   idEmpresa={empresa.idEmpresa}
                   name={empresa.nameEmpresa}
                   active={empresa.activeEmpresa}
+                  situacaoFinanceiro={empresa.situacaoFinanceiro}
                   regime={empresa.Regime.regimeName}
                   questorCode={empresa.codigoQuestor}
                   cnpj={empresa.cnpjEmpresa}
@@ -194,6 +197,7 @@ const ActivitiesTable = (props: props) => {
                         cnpjEmpresa={empresa.cnpjEmpresa}
                         regime={empresa.Regime.regimeName}
                         activeEmpresa={empresa.activeEmpresa}
+                        situacaoFinanceiro={empresa.situacaoFinanceiro}
                         empresaTasks={empresa.Regime.Obrigacaos}
                       />
                     </td>
@@ -204,7 +208,7 @@ const ActivitiesTable = (props: props) => {
           </tbody>
         </table>
       </div>
-      {(user?.cargo === 'admin' || user?.cargo === 'supervisor') && 
+      {(Auth.user?.cargo === 'admin' || Auth.user?.cargo === 'supervisor') && 
       <SelectUserTable 
         Empresas={empresas!}
         Usuarios={usuarios!}
@@ -213,5 +217,5 @@ const ActivitiesTable = (props: props) => {
   )
 }
 
-export type {Usuario, Empresa, Regime}
+export type {Usuario, Empresa, Regime, situacaoFinanceiro}
 export default ActivitiesTable

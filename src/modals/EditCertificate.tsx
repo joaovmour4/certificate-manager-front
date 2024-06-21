@@ -1,17 +1,18 @@
 import api from "../services/api";
+import React from "react";
 
 const Modal = (setShowModal: Function, owner: string, docOwner: string, file: File | null, setFile: Function, password: string, setPassword: Function, setResponse: Function, setShowResponseModal: Function) => {
     
 
-    function handleChange(event: any) {
-      setFile(event.target.files[0])
+    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+      setFile(event.target.files && event.target.files[0])
     }
 
-    function handlePassword(event: any){
+    function handlePassword(event: React.ChangeEvent<HTMLInputElement>){
       setPassword(event.target.value)
     }
 
-    function handleSubmit(event: any) {
+    function handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
         const formData = new FormData()
         formData.append('certFile', file!)
@@ -29,7 +30,7 @@ const Modal = (setShowModal: Function, owner: string, docOwner: string, file: Fi
             console.log(response.data.message)
             setShowModal(false)
           })
-          .catch((error:any)=>{
+          .catch((error)=>{
             setResponse(error.response)
             setShowResponseModal(true)
             setShowModal(false)
@@ -41,7 +42,7 @@ const Modal = (setShowModal: Function, owner: string, docOwner: string, file: Fi
         <>
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="absolute w-1/3 my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="border rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
                   <h3 className="text-3xl font=semibold">Editar Certificado</h3>
                 </div>

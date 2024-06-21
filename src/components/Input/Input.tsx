@@ -6,7 +6,6 @@ interface props{
 }
 const Input = (props: props) => {
   const handleInput = (event: React.ChangeEvent<HTMLInputElement>) =>{
-    event.preventDefault()
     props.setInput(event.target.value)
   }
   return (

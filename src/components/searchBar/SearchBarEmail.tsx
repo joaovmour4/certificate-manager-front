@@ -1,6 +1,6 @@
 function SearchBarEmail(setSearch: Function){
     
-    function handleSearch(event: any){
+    function handleSearch(event: React.ChangeEvent<HTMLInputElement>){
         setSearch(event.target.value)
     }
 

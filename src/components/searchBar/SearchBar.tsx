@@ -10,11 +10,11 @@ interface option{
 }
 function SearchBar(props: props){
     
-    function handleSearch(event: any){
+    function handleSearch(event: React.ChangeEvent<HTMLInputElement>){
         props.setSearch(event.target.value)
     }
 
-    function handleFilter(event: any){
+    function handleFilter(event: React.ChangeEvent<HTMLSelectElement>){
         props.setFilter(event.target.value)
     }
     

@@ -1,14 +1,16 @@
 import React from 'react'
 import api from '../../services/api'
+import { situacaoFinanceiro } from '../ActivitiesTable/ActivitiesTable'
 interface props{
   idEmpresa: number
   active: boolean
   setActive: Function
+  situacaoFinanceiro: situacaoFinanceiro
 }
 
 const SelectActive = (props: props) => {
 
-  const changeSelect = (event: any) => {
+  const changeSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const act: boolean = event.target.value === 'true' ? true : false
     
     const data = {
@@ -27,7 +29,7 @@ const SelectActive = (props: props) => {
 
   return (
     <>
-        <select onChange={changeSelect} name="" id="activeSelect" value={props.active ? "true":"false"} className='pl-1 bg-transparent text-sm focus:outline-none'>
+        <select disabled={!props.situacaoFinanceiro.active} onChange={changeSelect} name="" id="activeSelect" value={props.active ? "true":"false"} className={`z-0 pl-1 bg-transparent text-sm focus:outline-none`}>
             <option value='true'>Ativo</option>
             <option value='false'>S/M</option>
         </select>

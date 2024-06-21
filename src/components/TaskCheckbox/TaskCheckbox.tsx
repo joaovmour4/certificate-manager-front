@@ -1,5 +1,6 @@
 import React from 'react'
 import TaskConfirmModal from '../../modals/TaskConfirmModal'
+import { situacaoFinanceiro } from '../ActivitiesTable/ActivitiesTable'
 interface props{
     name: string
     idAtividade: number | undefined
@@ -9,6 +10,7 @@ interface props{
     idEmpresa: number
     cnpjEmpresa: string
     activeEmpresa: boolean
+    situacaoFinanceiro: situacaoFinanceiro
     empresaTasks: Array<Task>
 }
 interface Task{
@@ -48,7 +50,7 @@ const TaskCheckbox = (props: props) => {
     return (
         <div className='flex flex-col'>
             <input onClick={handleCheck} 
-                disabled={find && props.activeEmpresa ? false:true} 
+                disabled={find && props.activeEmpresa && props.situacaoFinanceiro.active ? false:true} 
                 type="checkbox" 
                 checked={!status.pendente} 
                 name={props.name} 

@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../services/api";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import ResponseModal from "./ResponseModal";
 
 interface props{
@@ -10,7 +10,7 @@ interface props{
 const AddEmailModal = ({setShowModal}:props) => {
     const [name, setName] = React.useState<string>('')
     const [email, setEmail] = React.useState<string>('')
-    const [response, setResponse] = React.useState<AxiosResponse<any, any>>()
+    const [response, setResponse] = React.useState<AxiosResponse>()
     const [ShowResponseModal, setShowResponseModal] = React.useState(false)
 
     const handleName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +21,7 @@ const AddEmailModal = ({setShowModal}:props) => {
       setEmail(event.target.value)
     }
 
-    function handleSubmit(event: any) {
+    function handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
 
         const data = {
@@ -37,7 +37,7 @@ const AddEmailModal = ({setShowModal}:props) => {
             console.log(response.data.message)
             // setShowModal(false)
           })
-          .catch((error: any)=>{
+          .catch((error: AxiosError)=>{
             setResponse(error.response)
             setShowResponseModal(true)
             // setShowModal(false)
@@ -49,7 +49,7 @@ const AddEmailModal = ({setShowModal}:props) => {
         <>
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="absolute w-1/3 my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="border rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
                   <h3 className="text-3xl font=semibold">Adicionar E-Mail</h3>
                 </div>
@@ -79,7 +79,8 @@ const AddEmailModal = ({setShowModal}:props) => {
                   >
                       Adicionar
                   </button>
-                  {ShowResponseModal ? ResponseModal(setShowResponseModal, response, setShowModal):null}
+                  {ShowResponseModal && response && 
+                    <ResponseModal setShowAddModal={setShowModal} response={response} setShowModal={setShowResponseModal}/>}
                 </div>
               </div>
             </div>

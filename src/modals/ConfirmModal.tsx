@@ -1,6 +1,6 @@
 import React from "react";
 import api from "../services/api";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 import ResponseModal from "./ResponseModal";
 
 interface props{
@@ -9,13 +9,22 @@ interface props{
     deleteType: string
     setShowModal: Function
 }
+interface AxiosResponseModal extends AxiosResponse{
+  data: data
+}
+interface data{
+  message: string
+}
+interface AxiosErrorModal extends AxiosError{
+  response: AxiosResponseModal
+}
 
 const ConfirmModal = (props:props) => {
-    const [response, setResponse] = React.useState<AxiosResponse<any, any>>()
+    const [response, setResponse] = React.useState<AxiosResponseModal>()
     const [ShowResponseModal, setShowResponseModal] = React.useState(false)
 
 
-    function handleSubmit(event: any) {
+    function handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
         event.preventDefault()
 
         api.delete(`/${props.deleteType}/${props.id}`)
@@ -25,7 +34,7 @@ const ConfirmModal = (props:props) => {
             console.log(response.data.message)
             // setShowModal(false)
           })
-          .catch((error: any)=>{
+          .catch((error: AxiosErrorModal)=>{
             setResponse(error.response)
             setShowResponseModal(true)
             // setShowModal(false)
@@ -37,7 +46,7 @@ const ConfirmModal = (props:props) => {
         <>
           <div className="flex justify-center items-center overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
             <div className="absolute w-1/3 my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+              <div className="border rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
                   <h3 className="text-3xl font=semibold">Excluir Registro</h3>
                 </div>
@@ -61,7 +70,7 @@ const ConfirmModal = (props:props) => {
                   >
                       Sim
                   </button>
-                  {ShowResponseModal ? ResponseModal(setShowResponseModal, response, props.setShowModal):null}
+                  {ShowResponseModal && response && <ResponseModal setShowModal={setShowResponseModal} response={response} setShowAddModal={props.setShowModal} />}
                 </div>
               </div>
             </div>
@@ -70,4 +79,5 @@ const ConfirmModal = (props:props) => {
     );
 };
 
+export type { AxiosResponseModal, AxiosErrorModal }
 export default ConfirmModal;

@@ -12,7 +12,7 @@ const SelectUsuario = (props: props) => {
 
   const [user, setUser] = React.useState<string>(props.responsavel)
 
-  const handleUsuario = (event: any) => {
+  const handleUsuario = (event: React.ChangeEvent<HTMLSelectElement>) => {
 
     const user = props.Usuarios.find(usuario => usuario.login === event.target.value)
 
@@ -33,7 +33,7 @@ const SelectUsuario = (props: props) => {
 
   return (
     <>
-      <select onChange={handleUsuario} value={user} className='max-w-[90px] bg-transparent text-sm focus:outline-none'>
+      <select onChange={handleUsuario} value={user} disabled={!props.empresa.situacaoFinanceiro.active} className='max-w-[90px] bg-transparent text-sm focus:outline-none'>
         <option value="default" disabled></option>
         {props.Usuarios.map((usuario) => {
           return(

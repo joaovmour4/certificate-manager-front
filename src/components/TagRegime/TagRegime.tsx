@@ -6,7 +6,7 @@ interface props{
 
 function TagRegime(props: props){
     return (
-        <label className={`px-1 rounded-full select-none font-thin bg-${props.regime === 'Simples' ? 'green':'yellow'}-600 w-24 text-white text-center align-middle justify-center`}>{props.regime}</label>
+        <p className={`px-1 rounded select-none font-thin ${props.regime === 'Simples' ? 'bg-green-600':'bg-neutral-500'}  w-24 text-white text-center align-middle`}>{props.regime}</p>
     )
 }
 

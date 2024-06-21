@@ -1,29 +1,42 @@
 import React from 'react'
 import ActivitiesTable from '../components/ActivitiesTable/ActivitiesTable'
 import SearchBar from '../components/searchBar/SearchBar'
+import api from '../services/api'
+import { AxiosResponse } from 'axios'
+import SelectCompetencia from '../components/SelectCompetencia/SelectCompetencia'
+interface Competencia{
+    idCompetencia: number
+    mes: string
+    ano: string
+}
 
 
 const Activities = () => {
 
-    function getCompetencias(qtdMeses: number){
-        const datas: Array<Date> = []
-        const data = new Date()
-        datas.push(data)
-        for(let i=0; i<qtdMeses; i++){
-            data.setMonth(data.getMonth()-1)
-            datas.push(data)
-        }
-    
-        return datas
-    }
-
     const [search, setSearch] = React.useState('')
     const [filter, setFilter] = React.useState('all')
-    const competencias = getCompetencias(12)
+    const [competencias, setCompetencias] = React.useState<Array<Competencia>>([])
+    const [competencia, setCompetencia] = React.useState<Competencia>()
+    const [loading, setLoading] = React.useState(true)
 
+    React.useEffect(()=>{
+        api
+            .get('/competencia')
+            .then((response: AxiosResponse)=>{
+                const actualDate = new Date()
+                setCompetencias(response.data)
+                setCompetencia(response.data.find((arrayElement: Competencia) => 
+                    Number(arrayElement.mes) === actualDate.getMonth()+1 && 
+                    Number(arrayElement.ano) === actualDate.getFullYear()
+                ))
+            })
+            .catch(err =>{
+                console.log(err.message)
+            })
+    }, [])
 
     return (
-        <div className='flex-1 flex flex-col px-20 py-10'>
+        <div className='flex-1 flex flex-col px-20 py-10 pb-32'>
             <h1 className='text-3xl font-thin'>Minhas Atividades</h1>
             <div className='py-10 flex justify-between'>
                 <SearchBar setSearch={setSearch} setFilter={setFilter} options={[
@@ -32,20 +45,23 @@ const Activities = () => {
                     {value:'2', name:'Presumido'}, 
                     {value:'3', name:'Real'}
                 ]}/>
-                <select className="flex-none bg-transparent focus:outline-none bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 p-2.5 focus:outline-none">
-                    {competencias.map((competencia) => {
-                        return (
-                            <option value={competencia.getMonth()}>{competencia.getMonth()+1}/{competencia.getFullYear()}</option>
-                        )
-                    })}
-                </select>  
+                <SelectCompetencia 
+                    competencias={competencias}
+                    competencia={competencia!}
+                    setCompetencia={setCompetencia}
+                    setLoading={setLoading}
+                /> 
             </div>
             <ActivitiesTable 
                 filter={filter}
                 search={search}
+                competencia={competencia!}
+                loading={loading}
+                setLoading={setLoading}
             />
         </div>
     )
 }
 
+export type { Competencia }
 export default Activities
