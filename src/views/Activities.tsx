@@ -16,7 +16,7 @@ const Activities = () => {
     const [search, setSearch] = React.useState('')
     const [filter, setFilter] = React.useState('all')
     const [competencias, setCompetencias] = React.useState<Array<Competencia>>([])
-    const [competencia, setCompetencia] = React.useState<Competencia>()
+    const [competencia, setCompetencia] = React.useState<Competencia | null>(null)
     const [loading, setLoading] = React.useState(true)
 
     React.useEffect(()=>{
@@ -25,10 +25,14 @@ const Activities = () => {
             .then((response: AxiosResponse)=>{
                 const actualDate = new Date()
                 setCompetencias(response.data)
-                setCompetencia(response.data.find((arrayElement: Competencia) => 
-                    Number(arrayElement.mes) === actualDate.getMonth()+1 && 
-                    Number(arrayElement.ano) === actualDate.getFullYear()
-                ))
+                const session = window.sessionStorage.getItem('competencia')
+                if(session)
+                    setCompetencia(JSON.parse(session))
+                else
+                    setCompetencia(response.data.find((arrayElement: Competencia) => 
+                        Number(arrayElement.mes) === actualDate.getMonth()+1 && 
+                        Number(arrayElement.ano) === actualDate.getFullYear()
+                    ))
             })
             .catch(err =>{
                 console.log(err.message)
@@ -41,24 +45,26 @@ const Activities = () => {
             <div className='py-10 flex justify-between'>
                 <SearchBar setSearch={setSearch} setFilter={setFilter} options={[
                     {value:'all', name:'Todos'},
-                    {value:'1', name:'Simples'}, 
-                    {value:'2', name:'Presumido'}, 
+                    {value:'1', name:'Simples'},
+                    {value:'2', name:'Presumido'},
                     {value:'3', name:'Real'}
                 ]}/>
+                {competencia &&
                 <SelectCompetencia 
                     competencias={competencias}
-                    competencia={competencia!}
+                    competencia={competencia}
                     setCompetencia={setCompetencia}
                     setLoading={setLoading}
-                /> 
+                />} 
             </div>
-            <ActivitiesTable 
+            {competencia &&
+            <ActivitiesTable
                 filter={filter}
                 search={search}
-                competencia={competencia!}
+                competencia={competencia}
                 loading={loading}
                 setLoading={setLoading}
-            />
+            />}
         </div>
     )
 }

@@ -5,32 +5,51 @@ import api from '../services/api'
 import { AxiosError, AxiosResponse } from 'axios'
 import CompaniesTable from '../components/CompaniesTable/CompaniesTable'
 import AddCompanyModal from '../modals/AddCompanyModal'
+import loadingImg from '../img/loading.png'
+interface option{
+    value: string
+    name: string
+}
 
 const Companies = () => {
     const [empresas, setEmpresas] = React.useState<Array<Empresa>>()
     const [showAddModal, setShowAddModal] = React.useState(false)
     const [search, setSearch] = React.useState('')
-    const [filter, setFilter] = React.useState('')
+    const [filter, setFilter] = React.useState('all')
     const [loading, setLoading] = React.useState(true)
 
-    const options = [
-        {value:'all', name:'Todos'},
-        {value:'1', name:'Simples'}, 
-        {value:'2', name:'Presumido'}, 
-        {value:'3', name:'Real'}
-    ]
+    const [options, setOptions] = React.useState<Array<option>>([])
 
     React.useEffect(()=>{
         api
-            .get('/empresa')
+        .get('/regime')
+        .then(response=>{
+            setOptions([{value:'all', name:'Todos'}])
+            for(const regime of response.data){
+                setOptions(prevState=> [...prevState, {value: String(regime.idRegime), name: regime.regimeName}])
+            }
+        })
+        .catch(err=>{
+            console.log(err.response.message)
+        })
+    }, [])
+
+    React.useEffect(()=>{
+        const delayDebounceFn = setTimeout(()=>{
+            api
+            .get(`/empresa?filter=${filter}&search=${search}`)
             .then((response: AxiosResponse) =>{
                 setEmpresas(response.data)
                 setLoading(false)
             })
             .catch((error: AxiosError)=>{
-                console.log(error.message)
+                alert(error.message)
             })
-    }, [])
+        }, 300)
+
+        return ()=> clearTimeout(delayDebounceFn)
+
+    }, [search, filter])
 
     return (
         <div className='flex flex-1 flex-col justify-start px-20 py-10 font-thin'>
@@ -45,7 +64,12 @@ const Companies = () => {
                     Adicionar Empresa
                 </button>
             </div>
-            {empresas && <CompaniesTable empresas={empresas} loading={loading}/>}
+            {loading && 
+                <div className='flex justify-center'>
+                    <img src={loadingImg} className='animate-spin h-28 w-28' alt="" />
+                </div>
+            }
+            {empresas && !loading && <CompaniesTable empresas={empresas} loading={loading}/>}
             {showAddModal && <AddCompanyModal setShowModal={setShowAddModal}/>}
         </div>
     )

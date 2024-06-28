@@ -7,35 +7,52 @@ import UsersTable from '../components/UsersTable/UsersTable'
 import AddUserModal from '../modals/AddUserModal'
 import { useAuth } from '../contexts/auth'
 import { Navigate } from 'react-router-dom'
+import loadingImg from '../img/loading.png'
+interface option{
+    value: string
+    name: string
+}
 
 const Users = () => {
     const Auth = useAuth()
     const [users, setUsers] = React.useState<Array<Usuario>>()
     const [showAddModal, setShowAddModal] = React.useState(false)
     const [search, setSearch] = React.useState('')
-    const [filter, setFilter] = React.useState('')
+    const [filter, setFilter] = React.useState('all')
     const [loading, setLoading] = React.useState(true)
 
-    const options = [
-        {value:'all', name:'Todos'},
-        {value:'1', name:'Fiscal'}, 
-        {value:'2', name:'Contábil'}, 
-        {value:'3', name:'Recursos Humanos'},
-        {value:'4', name:'Financeiro'}
-    ]
+    const [options, setOptions] = React.useState<Array<option>>([])
 
     React.useEffect(()=>{
         api
-            .get('/user')
-            .then((response: AxiosResponse) =>{
-                console.log(response)
-                setUsers(response.data)
-                setLoading(false)
+            .get('/setor')
+            .then(response=>{
+                setOptions([{value:'all', name:'Todos'}])
+                for(const setor of response.data){
+                    setOptions(prevState=> [...prevState, {value: String(setor.idSetor), name: setor.setorName}])
+                }
             })
-            .catch((error: AxiosError)=>{
-                console.log(error.message)
+            .catch(err=>{
+                console.log(err.response.message)
             })
     }, [])
+
+    React.useEffect(()=>{
+        const delayDebounceFn = setTimeout(()=>{
+            api
+                .get(`/user?setor=${filter}&search=${search}`)
+                .then((response: AxiosResponse) =>{
+                    setUsers(response.data)
+                    setLoading(false)
+                })
+                .catch((error: AxiosError)=>{
+                    console.log(error.message)
+                })
+        }, 300)
+
+        return () => clearTimeout(delayDebounceFn)
+        
+    }, [search, filter])
 
     return (
         <div className='flex flex-1 flex-col justify-start px-20 py-10 font-thin'>
@@ -53,7 +70,12 @@ const Users = () => {
                     Adicionar Usuario
                 </button>
             </div>
-            {users && <UsersTable usuarios={users} loading={loading}/>}
+            {loading && 
+                <div className='flex justify-center'>
+                    <img src={loadingImg} className='animate-spin h-28 w-28' alt="" />
+                </div>
+            }
+            {users && !loading && <UsersTable usuarios={users} />}
             {showAddModal && <AddUserModal setShowModal={setShowAddModal}/>}
         </div>
     )

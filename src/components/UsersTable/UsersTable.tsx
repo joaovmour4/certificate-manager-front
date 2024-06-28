@@ -1,17 +1,11 @@
 import React from 'react'
 import { Usuario } from '../ActivitiesTable/ActivitiesTable'
-import loadingImg from '../../img/loading.png'
 import UsersTableLine from '../UsersTableLine/UsersTableLine'
 interface props{
     usuarios: Array<Usuario>
-    loading: boolean
 }
 
 const UsersTable = (props: props) => {
-    if(props.loading)
-        return (
-            <img src={loadingImg} className='animate-spin' alt="" />
-        )
     return (
         <table className='divide-y table-fixed'>
             <thead>

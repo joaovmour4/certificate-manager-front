@@ -32,12 +32,10 @@ const ConfirmModal = (props:props) => {
             setResponse(response)
             setShowResponseModal(true)
             console.log(response.data.message)
-            // setShowModal(false)
           })
           .catch((error: AxiosErrorModal)=>{
             setResponse(error.response)
             setShowResponseModal(true)
-            // setShowModal(false)
           })
     
       }

@@ -33,7 +33,7 @@ const Login = () => {
       <img className='h-56 w-auto sm:flex-none' src={logoImg} alt="Logo MG" />
       <Input 
         type='text'
-        placeHolder='Usuário ou Email'
+        placeHolder='Usuário'
         setInput={setUser}
       />
       <PasswordInput 

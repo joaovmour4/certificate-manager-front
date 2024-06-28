@@ -33,7 +33,7 @@ const SelectUsuario = (props: props) => {
 
   return (
     <>
-      <select onChange={handleUsuario} value={user} disabled={!props.empresa.situacaoFinanceiro.active} className='max-w-[90px] bg-transparent text-sm focus:outline-none'>
+      <select onChange={handleUsuario} value={user} disabled={!props.empresa.situacaoFinanceiro.active} className='max-w-[90px] bg-transparent text-sm focus:outline-none cursor-pointer'>
         <option value="default" disabled></option>
         {props.Usuarios.map((usuario) => {
           return(

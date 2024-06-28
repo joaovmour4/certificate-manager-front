@@ -1,6 +1,7 @@
 import React from 'react'
 import company from '../img/companhia.png'
 import logoutImg from '../img/logout.png'
+import obrigacoesImg from '../img/obrigacoes.png'
 import users from '../img/users.png'
 import DropdownButton from '../components/DropdownButton/DropdownButton'
 import { Usuario } from '../components/ActivitiesTable/ActivitiesTable'
@@ -33,6 +34,10 @@ const ProfileModal = (props: props) => {
         navigate('/usuarios')
         props.setShowModal(false)
     }
+    const obrigacoesButton = () => {
+        navigate('/obrigacoes')
+        props.setShowModal(false)
+    }
     const empresasButton = () => {
         navigate('/empresas')
         props.setShowModal(false)
@@ -46,11 +51,17 @@ const ProfileModal = (props: props) => {
                         {props.user.username}
                     </p>
                 </li>
-                {Auth.user?.cargo !== 'operador' &&
+                {Auth.user?.cargo !== 'operador' && // Opção liberada a administradores e supervisores
                 <DropdownButton 
                     clickFunction={usersButton}
                     img={users}
                     name='Usuarios'
+                />}
+                {Auth.user?.cargo === 'admin' && // Opção liberada apenas a administradores
+                <DropdownButton 
+                    clickFunction={obrigacoesButton}
+                    img={obrigacoesImg}
+                    name='Obrigações'
                 />}
                 <DropdownButton 
                     clickFunction={empresasButton}

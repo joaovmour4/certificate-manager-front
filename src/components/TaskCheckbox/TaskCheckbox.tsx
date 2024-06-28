@@ -1,6 +1,6 @@
 import React from 'react'
 import TaskConfirmModal from '../../modals/TaskConfirmModal'
-import { situacaoFinanceiro } from '../ActivitiesTable/ActivitiesTable'
+import { Obrigacao, situacaoFinanceiro } from '../ActivitiesTable/ActivitiesTable'
 interface props{
     name: string
     idAtividade: number | undefined
@@ -12,6 +12,7 @@ interface props{
     activeEmpresa: boolean
     situacaoFinanceiro: situacaoFinanceiro
     empresaTasks: Array<Task>
+    obrigacao?: Obrigacao
 }
 interface Task{
     idObrigacao: number
@@ -45,18 +46,20 @@ const TaskCheckbox = (props: props) => {
         setShowModal(!showModal)
     }
 
-    const find = props.empresaTasks.find((item) => item.obrigacaoShortName === props.value)
-
     return (
         <div className='flex flex-col'>
             <input onClick={handleCheck} 
-                disabled={find && props.activeEmpresa && props.situacaoFinanceiro.active ? false:true} 
+                disabled={
+                    !props.idAtividade || 
+                    !props.activeEmpresa ||
+                    !props.situacaoFinanceiro.active ||
+                    Boolean(props.obrigacao?.deletedAt)
+                } 
                 type="checkbox" 
                 checked={!status.pendente} 
-                name={props.name} 
-                id={`${props.cnpjEmpresa};${props.idAtividade}`} 
+                name={props.name}
             />
-            <label className='whitespace-nowrap text-[10px]/[10px] text-slate-500' htmlFor={props.value}>{status.pendente ? '' : `OK - ${status.date.getDate()}/${status.date.getMonth()+1}`}</label>
+            <label className='whitespace-nowrap text-[10px]/[10px] text-slate-500'>{status.pendente ? '' : `OK - ${status.date.getDate()}/${status.date.getMonth()+1}`}</label>
             {showModal && 
             <TaskConfirmModal 
                 idEmpresa={props.idEmpresa}

@@ -15,6 +15,8 @@ interface ConfirmModal{
 
 const MultiSelect = (props: props) => {
     const Auth = useAuth()
+    const appRef = React.useRef<HTMLDivElement>(null)
+    const buttonRef = React.useRef<HTMLButtonElement>(null)
     const [showDropdown, setShowDropdown] = React.useState(false)
     const [showConfirmModal, setShowConfirmModal] = React.useState<ConfirmModal>({
         show: false,
@@ -35,6 +37,19 @@ const MultiSelect = (props: props) => {
         if(props.options.length === selectedItems.length)
             setShowDropdown(false)
     }, [props.options, selectedItems])
+
+    React.useEffect(()=>{
+    
+        const handleClickOutside = (event: Event) =>{
+            if(appRef.current && buttonRef.current && !appRef.current.contains(event.target as Node) && !buttonRef.current.contains(event.target as Node))
+                setShowDropdown(false)
+        }
+    
+        document.addEventListener('mousedown', handleClickOutside)
+        return () =>{
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+      }, [])
     
     return (
         <td className='w-[280px]'>
@@ -53,12 +68,13 @@ const MultiSelect = (props: props) => {
                         )
                     })}
                 </div>
-                <button className='pl-1' disabled={Auth.user?.cargo === 'operador'} onClick={handleDropdown}>
+                <button ref={buttonRef} className='pl-1' disabled={Auth.user?.cargo === 'operador'} onClick={handleDropdown}>
                     <img className='h-3 w-3' alt='' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAv0lEQVR4nO3XSwqDMBRG4bOJG3T/O2lHfU3qoMtpETIQKSVqHjf0PyA48ML9zCiglFJKKaXUP3cC7kDAXwF4AOeUj6/AG5icYULcad7tkjJgwDMOvICx/I6bdxr2Do49Ijxh7CjCA8ZyIVpiLDeiBcZKIWpirDSiBqYaoiSmOqIEphkiJ6Y5IgfGDeIIxh1iD8YtYgvGPSIF0w3iF6Y7xLfb3LR693TrTGp5Ct2dxLr579/i091JKKWUUkophcs+GiV0FcyNP/cAAAAASUVORK5CYII="></img>
                 </button>
             </div>
             {showDropdown && 
-                <ul className='w-[280px] absolute z-10 py-1 bg-white rounded shadow-xl border'>
+                <div ref={appRef} className='w-[280px] absolute z-10 py-1 bg-white rounded shadow-xl border'>
+                    <ul>
                     {props.options.map(opt=>{
                         if(selectedItems.find(item => item.idSetor === opt.idSetor) || opt.setorName === 'Financeiro')
                             return null
@@ -74,6 +90,7 @@ const MultiSelect = (props: props) => {
                         )
                     })}
                 </ul>
+                </div>
             }
             {showConfirmModal.show && selectedOpt &&
                 <ConfirmSetorEmpresaModal 

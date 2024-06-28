@@ -27,7 +27,9 @@ const CompaniesTable = (props: props) => {
 
     if(props.loading)
         return (
-            <img src={loadingImg} className='animate-spin' alt="" />
+            <div className='flex justify-center'>
+                <img src={loadingImg} className='animate-spin h-28 w-28' alt="" />
+            </div>
         )
     return (
         <table className='divide-y table-auto'>

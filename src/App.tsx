@@ -17,7 +17,6 @@ interface Token extends JwtPayload{
 }
 
 function App() {
-  const [loading, setLoading] = React.useState(true)
   return (
     <BrowserRouter>
       <div className='flex flex-col min-h-screen'>

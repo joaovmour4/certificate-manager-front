@@ -3,6 +3,7 @@ import api from '../services/api'
 import { jwtDecode } from 'jwt-decode';
 import { Token } from '../App';
 import { Usuario } from '../components/ActivitiesTable/ActivitiesTable';
+import loadingImg from '../img/loading.png'
 
 interface props{
     children: React.ReactNode
@@ -18,6 +19,7 @@ const AuthContext = React.createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProvider: React.FC<props> = ({ children } : props) =>{
     const [user, setUser] = React.useState<Usuario | null>(null)
+    const [loading, setLoading] = React.useState(true)
 
     function Login(data: object){
         return (
@@ -47,8 +49,16 @@ export const AuthProvider: React.FC<props> = ({ children } : props) =>{
         if(storagedToken && storagedUser){
             setUser(JSON.parse(storagedUser))
         }
+        setLoading(false)
     }, [])
 
+    if(loading){
+        return(
+            <div className='flex flex-1 flex-row justify-center items-center'>
+                <img src={loadingImg} alt="" className='animate-spin h-36 w-36'/>
+            </div>
+        )
+    }
     return(
         <AuthContext.Provider 
             value={{ signed: Boolean(user), user, Login, Logout }}

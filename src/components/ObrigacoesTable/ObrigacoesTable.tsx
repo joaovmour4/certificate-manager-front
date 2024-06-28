@@ -1,0 +1,32 @@
+import React from 'react'
+import ObrigacoesTableLine from '../ObrigacoesTableLine/ObrigacoesTableLine'
+import { ObrigacaoRegime } from '../../views/Obrigacoes'
+interface props{
+    obrigacoes: Array<ObrigacaoRegime>
+}
+
+
+const ObrigacoesTable = (props: props) => {
+    return (
+        <table className='divide-y table-auto'>
+            <thead>
+            <tr>
+                <th className='pl-5 text-left'>Nome</th>
+                <th>Regime</th>
+                <th className='w-28'>Ações</th>
+            </tr>
+            </thead>
+            <tbody className='divide-y [&>*:nth-child(odd)]:bg-blue-table'>
+                {props.obrigacoes && props.obrigacoes.map((obrigacao)=>{
+                    return(
+                        <ObrigacoesTableLine 
+                            obrigacao={obrigacao}
+                        />
+                    )
+                })}
+            </tbody>
+        </table>
+    )
+}
+
+export default ObrigacoesTable

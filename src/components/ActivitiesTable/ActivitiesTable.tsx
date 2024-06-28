@@ -1,5 +1,4 @@
 import React from 'react'
-import { jwtDecode } from 'jwt-decode'
 import ActivitiesTableLine from '../ActivitiesTableLine/ActivitiesTableLine'
 import TaskCheckbox from '../TaskCheckbox/TaskCheckbox'
 import api from '../../services/api'
@@ -7,7 +6,6 @@ import SelectUserTable from '../SelectUserTable/SelectUserTable'
 import loadingImg from "../../img/loading.png"
 import { AxiosResponse } from 'axios'
 import { Competencia } from '../../views/Activities'
-import { Token } from '../../App'
 import AuthContext from '../../contexts/auth'
 
 interface props{
@@ -58,11 +56,6 @@ interface Setor{
   idSetor: number
   setorName: string
 }
-interface Obrigacao{
-  idObrigacao: number
-  obrigacaoName: string,
-  obrigacaoShortName: string
-}
 interface Atividade{
   idAtividade: number
   idObrigacao: number
@@ -74,6 +67,7 @@ interface Obrigacao{
   idObrigacao: number
   obrigacaoName: string
   obrigacaoShortName: string
+  deletedAt: Date
 }
 interface EmpresaAtividade{
   dataRealizacao: string | null
@@ -86,10 +80,14 @@ const ActivitiesTable = (props: props) => {
   const [empresas, setEmpresas] = React.useState<Array<Empresa> | null>()
   const [tasks, setTasks] = React.useState<Array<Obrigacao> | null>()
   const [usuarios, setUsuarios] = React.useState<Array<Usuario>>([])
+  const [isActual, setIsActual] = React.useState<boolean>()
 
 
   React.useEffect(() => {
-
+    setIsActual(
+      String(props.competencia.mes) === String(new Date().getMonth()+1) && 
+      String(props.competencia.ano) === String(new Date().getFullYear())
+    )
     const updateData = async () => {
       api
         .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}`)
@@ -102,7 +100,7 @@ const ActivitiesTable = (props: props) => {
           })
 
       api
-        .get('/obrigacao')
+        .get(`/obrigacao/false?filter=all&search=`)
           .then((response: AxiosResponse) => {
             setTasks(response.data)
           })
@@ -110,7 +108,7 @@ const ActivitiesTable = (props: props) => {
             console.log(err)
           })
       api
-        .get('/user')
+        .get('/user?setor=all&search=')
           .then((response: AxiosResponse) => {
             setUsuarios(response.data)
           })
@@ -127,7 +125,7 @@ const ActivitiesTable = (props: props) => {
       clearTimeout(delayDebounceFn)
     }
 
-  }, [Auth.user, props])
+  }, [Auth.user, props, isActual])
 
   if(props.loading)
     return(
@@ -176,6 +174,8 @@ const ActivitiesTable = (props: props) => {
           <thead>
             <tr className='h-5'>
               {tasks && tasks.map((task)=>{
+                if(task.deletedAt && isActual)
+                  return null
                 return(
                   <th className='text-center divide-x whitespace-nowrap px-5'>{task.obrigacaoName}</th>
                 )
@@ -185,22 +185,25 @@ const ActivitiesTable = (props: props) => {
           <tbody className='divide-y [&>*:nth-child(odd)]:bg-blue-table'>
             {empresas && tasks && empresas.map((empresa)=>{
               const taskEmpresa = tasks.map((task)=>{
+                if(task.deletedAt && isActual)
+                  return null
                 const find = empresa.Atividades.find((item) => item.idObrigacao === task.idObrigacao)
                 return(
-                    <td className='px-5 text-center'>
-                      <TaskCheckbox
-                        name={task.obrigacaoName}
-                        idAtividade={find?.idAtividade}
-                        realizacaoAtividade={find?.EmpresaAtividade.dataRealizacao}
-                        value={task.obrigacaoShortName}
-                        idEmpresa={empresa.idEmpresa}
-                        cnpjEmpresa={empresa.cnpjEmpresa}
-                        regime={empresa.Regime.regimeName}
-                        activeEmpresa={empresa.activeEmpresa}
-                        situacaoFinanceiro={empresa.situacaoFinanceiro}
-                        empresaTasks={empresa.Regime.Obrigacaos}
-                      />
-                    </td>
+                  <td className='px-5 text-center'>
+                    <TaskCheckbox
+                      name={task.obrigacaoName}
+                      obrigacao={task}
+                      idAtividade={find?.idAtividade}
+                      realizacaoAtividade={find?.EmpresaAtividade.dataRealizacao}
+                      value={task.obrigacaoShortName}
+                      idEmpresa={empresa.idEmpresa}
+                      cnpjEmpresa={empresa.cnpjEmpresa}
+                      regime={empresa.Regime.regimeName}
+                      activeEmpresa={empresa.activeEmpresa}
+                      situacaoFinanceiro={empresa.situacaoFinanceiro}
+                      empresaTasks={empresa.Regime.Obrigacaos}
+                    />
+                  </td>
                 )
               })
               return <tr className='h-7 w-[200px]'>{taskEmpresa}</tr>
@@ -217,5 +220,5 @@ const ActivitiesTable = (props: props) => {
   )
 }
 
-export type {Usuario, Empresa, Regime, situacaoFinanceiro}
+export type {Usuario, Empresa, Regime, situacaoFinanceiro, Obrigacao, Atividade}
 export default ActivitiesTable
