@@ -1,8 +1,7 @@
 import React from "react";
 import { status } from "../components/TaskCheckbox/TaskCheckbox";
 import api from "../services/api";
-import { jwtDecode } from "jwt-decode";
-import { Token } from "../App";
+import { useAuth } from "../contexts/auth";
 
 interface props{
     idEmpresa: number
@@ -14,14 +13,7 @@ interface props{
 }
 
 const TaskConfirmModal = (props:props) => {
-    const token = localStorage.getItem('userToken')
-    const user: Token =  jwtDecode(token!)
-
-    const [response, setResponse] = React.useState({
-      status: 0,
-      response: ''
-    })
-
+    const Auth = useAuth()
 
     function handleSubmit() {
 
@@ -29,20 +21,14 @@ const TaskConfirmModal = (props:props) => {
         .post(`/user/atividade/${props.status.pendente ? '' : 'cancelarAtividade'}`, {
           idEmpresa: props.idEmpresa,
           idAtividade: props.idAtividade,
-          idUsuario: user?.user.idUsuario
+          idUsuario: Auth.user?.idUsuario
         })
         .then((response) => {
-          setResponse({
-            status: response.status,
-            response: response.data.message
-          })
           window.location.reload()
+          console.log(response)
         })
         .catch((error) => {
-          setResponse({
-            status: error.status,
-            response: error.message
-          })
+          console.log(error.response)
         })
       props.setShowModal(false)
     }

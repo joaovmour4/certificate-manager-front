@@ -1,5 +1,4 @@
 import React from "react";
-import loading from "../../img/loading.svg"
 
 interface props{
     name: string

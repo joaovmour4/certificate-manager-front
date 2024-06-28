@@ -9,9 +9,6 @@ import { Setor, Token } from '../App';
 interface props{
     setShowModal: Function
 }
-interface AxiosResponseUsuario extends AxiosResponse{
-  data: Usuario
-}
 interface Data{
   username: string
   email: string
