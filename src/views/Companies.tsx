@@ -6,6 +6,7 @@ import { AxiosError, AxiosResponse } from 'axios'
 import CompaniesTable from '../components/CompaniesTable/CompaniesTable'
 import AddCompanyModal from '../modals/AddCompanyModal'
 import loadingImg from '../img/loading.png'
+import addCompanyImg from '../img/adicionar-empresa.png'
 interface option{
     value: string
     name: string
@@ -60,8 +61,9 @@ const Companies = () => {
                     setFilter={setFilter}
                     options={options}
                 />
-                <button onClick={()=>setShowAddModal(true)} className="text-white rounded bg-green-600 px-5 place-self-end hover:bg-green-500 active:bg-green-600 shadow hover:shadow-lg">
-                    Adicionar Empresa
+                <button onClick={()=>setShowAddModal(true)} className="flex flex-row items-center gap-x-2 text-sm font-normal text-white rounded bg-green-600 px-5 py-1 place-self-end hover:bg-green-500 active:bg-green-600 shadow hover:shadow-lg">
+                    <img className='h-7' src={addCompanyImg} alt="" />
+                    ADICIONAR EMPRESA
                 </button>
             </div>
             {loading && 

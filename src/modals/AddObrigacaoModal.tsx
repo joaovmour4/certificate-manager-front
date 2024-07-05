@@ -6,11 +6,13 @@ import ResponseModalComponent from './ResponseModalComponent';
 import { Regime } from '../components/ActivitiesTable/ActivitiesTable';
 interface props{
     setShowModal: Function
+    idSetor: string
 }
 interface Data{
   name: string
   shortName: string
   idRegime?: number
+  idSetor: number
 }
 
 const AddObrigacaoModal = (props: props) => {
@@ -29,7 +31,8 @@ const AddObrigacaoModal = (props: props) => {
     var data: Data = {
       name: obrigacaoNameInput,
       shortName: obrigacaoShortNameInput,
-      idRegime: regimeInput
+      idRegime: regimeInput,
+      idSetor: Number(props.idSetor)
     }
     api
       .post(`/obrigacao`, data)

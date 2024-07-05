@@ -50,7 +50,7 @@ const ActivitiesTableLine = (props: props) => {
                     <TagRegime regime={props.regime} />
                 </div>
             </td>
-            <td>
+            <td className='text-center'>
                 <SelectActive 
                     active={activeEmpresa} 
                     situacaoFinanceiro={props.situacaoFinanceiro}

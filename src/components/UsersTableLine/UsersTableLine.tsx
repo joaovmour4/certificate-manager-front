@@ -23,7 +23,7 @@ const UsersTableLine = (props: props) => {
                 {props.usuario.username}
             </td>
             <td>
-                {props.usuario.Setor?.setorName}
+                {props.usuario.Setor?.setorName ? props.usuario.Setor?.setorName : 'Admin'}
             </td>
             <td>
                 <div className='flex justify-evenly'>

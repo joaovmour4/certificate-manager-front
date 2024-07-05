@@ -1,5 +1,5 @@
 import React from 'react'
-import { Competencia } from '../../views/Activities'
+import { Competencia } from '../../views/MyActivities'
 interface props{
     competencias: Array<Competencia>
     competencia: Competencia

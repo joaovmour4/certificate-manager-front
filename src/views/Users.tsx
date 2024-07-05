@@ -8,6 +8,7 @@ import AddUserModal from '../modals/AddUserModal'
 import { useAuth } from '../contexts/auth'
 import { Navigate } from 'react-router-dom'
 import loadingImg from '../img/loading.png'
+import addUserImg from '../img/adicionar-usuario.png'
 interface option{
     value: string
     name: string
@@ -66,8 +67,9 @@ const Users = () => {
                     setFilter={setFilter}
                     options={options}
                 />
-                <button onClick={()=>setShowAddModal(true)} className="text-white rounded bg-green-600 px-5 place-self-end hover:bg-green-500 active:bg-green-600 shadow hover:shadow-lg">
-                    Adicionar Usuario
+                <button onClick={()=>setShowAddModal(true)} className="flex flex-row items-center gap-x-1 text-white rounded bg-green-600 px-3 py-1 place-self-end text-sm font-normal hover:bg-green-500 active:bg-green-600 shadow hover:shadow-lg">
+                    <img className='h-9' src={addUserImg} alt="" />
+                    ADICIONAR USUÁRIO
                 </button>
             </div>
             {loading && 

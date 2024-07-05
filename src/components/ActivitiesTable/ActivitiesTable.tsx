@@ -5,13 +5,14 @@ import api from '../../services/api'
 import SelectUserTable from '../SelectUserTable/SelectUserTable'
 import loadingImg from "../../img/loading.png"
 import { AxiosResponse } from 'axios'
-import { Competencia } from '../../views/Activities'
+import { Competencia } from '../../views/MyActivities'
 import AuthContext from '../../contexts/auth'
 
 interface props{
   search: string
   filter: string
   competencia: Competencia
+  setor: string
   loading: boolean
   setLoading: Function
 }
@@ -82,15 +83,15 @@ const ActivitiesTable = (props: props) => {
   const [usuarios, setUsuarios] = React.useState<Array<Usuario>>([])
   const [isActual, setIsActual] = React.useState<boolean>()
 
-
   React.useEffect(() => {
     setIsActual(
       String(props.competencia.mes) === String(new Date().getMonth()+1) && 
       String(props.competencia.ano) === String(new Date().getFullYear())
     )
+
     const updateData = async () => {
       api
-        .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}`)
+        .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}&setor=${props.setor && props.setor}`)
           .then((response: AxiosResponse) => {
             setEmpresas(response.data.empresas)
             props.setLoading(false)
@@ -100,7 +101,7 @@ const ActivitiesTable = (props: props) => {
           })
 
       api
-        .get(`/obrigacao/false?filter=all&search=`)
+        .get(`/obrigacao/false?filter=all&search=&setor=${props.setor}`)
           .then((response: AxiosResponse) => {
             setTasks(response.data)
           })
@@ -131,6 +132,13 @@ const ActivitiesTable = (props: props) => {
     return(
       <img className="animate-spin place-self-center" src={loadingImg} alt="Carregando registros." />
     )
+  
+  if(!tasks?.length)
+    return (
+      <p className='text-center text-gray-500 italic'>
+        Não há obrigações cadastradas, cadastre no menu Obrigações.
+      </p>
+    )
 
   if(empresas?.length === 0)
     return(
@@ -140,13 +148,13 @@ const ActivitiesTable = (props: props) => {
     )
 
   return (
-    <div className='flex flex-row'>
+    <div className='flex flex-row divide-x'>
       <table className='divide-y mb-3'>
         <thead>
           <tr>
             <th className='pl-5 text-left h-5'>Nome</th>
             <th>Regime</th>
-            <th>Situação</th>
+            <th className='px-1'>Situação</th>
           </tr>
         </thead>
         <tbody className='divide-y [&>*:nth-child(odd)]:bg-blue-table'>

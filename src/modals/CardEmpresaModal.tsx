@@ -11,10 +11,9 @@ interface props{
 }
 
 const CardEmpresaModal = (props: props) => {
-  const appRef = React.useRef<HTMLDivElement>(null)
+  const appRef = React.useRef<HTMLDivElement>(null)  
 
   React.useEffect(()=>{
-    
     const handleClickOutside = (event: Event) =>{
         if(appRef.current && !appRef.current.contains(event.target as Node) && !props.lineRef.current?.contains(event.target as Node))
             props.setShowModal(false)

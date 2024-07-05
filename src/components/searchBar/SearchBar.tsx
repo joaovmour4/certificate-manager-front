@@ -21,7 +21,7 @@ function SearchBar(props: props){
     return(
         <form className="flex flex-1 justify-start items-center max-w-sm place-self-start">  
             <div className="w-full flex gap-x-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:shadow-md block w-full p-2.5 focus:outline-none divide-x divide-slate-300">
-                <select className="flex-none bg-transparent font-thin focus:outline-none cursor-pointer" onChange={handleFilter}>
+                <select className="flex-none bg-transparent font-thin focus:outline-none cursor-pointer select-none" onChange={handleFilter}>
                     {props.options.map((option) => {
                         return (
                             <option value={option.value}>{option.name}</option>

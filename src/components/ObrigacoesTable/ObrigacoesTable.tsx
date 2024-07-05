@@ -7,6 +7,10 @@ interface props{
 
 
 const ObrigacoesTable = (props: props) => {
+    if(!props.obrigacoes.length)
+        return(
+            <p className='text-center text-gray-500 italic'>Não há obrigações cadastradas.</p>
+        )
     return (
         <table className='divide-y table-auto'>
             <thead>
