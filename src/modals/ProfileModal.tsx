@@ -57,7 +57,7 @@ const ProfileModal = (props: props) => {
                     img={users}
                     name='Usuarios'
                 />}
-                {Auth.user?.cargo === 'admin' && // Opção liberada apenas a administradores
+                {Auth.user?.cargo !== 'operador' && // Opção liberada a administradores e supervisores
                 <DropdownButton 
                     clickFunction={obrigacoesButton}
                     img={obrigacoesImg}

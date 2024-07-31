@@ -18,7 +18,10 @@ const Companies = () => {
     const [search, setSearch] = React.useState('')
     const [filter, setFilter] = React.useState('all')
     const [loading, setLoading] = React.useState(true)
-
+    const [order, setOrder] = React.useState({
+        field: 'nameEmpresa',
+        ascending: true
+      })
     const [options, setOptions] = React.useState<Array<option>>([])
 
     React.useEffect(()=>{
@@ -38,19 +41,19 @@ const Companies = () => {
     React.useEffect(()=>{
         const delayDebounceFn = setTimeout(()=>{
             api
-            .get(`/empresa?filter=${filter}&search=${search}`)
+            .get(`/empresa?filter=${filter}&search=${search}&of=${order.field}&o=${order.ascending}`)
             .then((response: AxiosResponse) =>{
                 setEmpresas(response.data)
                 setLoading(false)
             })
             .catch((error: AxiosError)=>{
-                alert(error.message)
+                console.log(error.message)
             })
         }, 300)
 
         return ()=> clearTimeout(delayDebounceFn)
 
-    }, [search, filter])
+    }, [search, filter, order])
 
     return (
         <div className='flex flex-1 flex-col justify-start px-20 py-10 font-thin'>
@@ -71,7 +74,14 @@ const Companies = () => {
                     <img src={loadingImg} className='animate-spin h-28 w-28' alt="" />
                 </div>
             }
-            {empresas && !loading && <CompaniesTable empresas={empresas} loading={loading}/>}
+            {empresas && !loading && 
+                <CompaniesTable 
+                    empresas={empresas} 
+                    loading={loading} 
+                    order={order}
+                    setOrder={setOrder} 
+                />
+            }
             {showAddModal && <AddCompanyModal setShowModal={setShowAddModal}/>}
         </div>
     )

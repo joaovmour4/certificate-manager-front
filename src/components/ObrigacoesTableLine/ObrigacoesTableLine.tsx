@@ -1,9 +1,12 @@
 import React from 'react'
 import ConfirmModal from '../../modals/ConfirmModal'
-import { ObrigacaoRegime } from '../../views/Obrigacoes'
+import { Excecao, ObrigacaoExcecao, ObrigacaoRegime } from '../../views/Obrigacoes'
 import EditObrigacaoModal from '../../modals/EditObrigacaoModal'
+import MultiSelectException from '../MultiSelectException/MultiSelectException'
 interface props{
     obrigacao: ObrigacaoRegime
+    excecoes: Array<Excecao>
+    relacaoExcecoes: Array<ObrigacaoExcecao>
 }
 
 const ObrigacoesTableLine = (props: props) => {
@@ -20,6 +23,12 @@ const ObrigacoesTableLine = (props: props) => {
         <tr className='text-center'>
             <td className='font-thin text-left pl-5 grow-1'>
                 {props.obrigacao.obrigacaoName}
+            </td>
+            <td className='w-[250px]'>
+                <MultiSelectException 
+                    excecoes={props.excecoes}
+                    relacaoExcecoes={props.relacaoExcecoes.find(element => element.idObrigacao === props.obrigacao.idObrigacao)}
+                />
             </td>
             <td>
                 {props.obrigacao.Regimes[0].regimeName}

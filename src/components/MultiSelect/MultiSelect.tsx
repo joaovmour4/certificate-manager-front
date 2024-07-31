@@ -53,7 +53,7 @@ const MultiSelect = (props: props) => {
     
     return (
         <td className='w-[280px]'>
-            <div className='flex justify-between items-center divide-x min-h-8 select-none bg-white px-3 py-1 border shadow'>
+            <div className={`flex justify-between items-center divide-x min-h-8 select-none bg-white px-3 py-1 border ${showDropdown && 'shadow'}`}>
                 <div className='flex flex-row flex-wrap jutify-start items-center'>
                     {selectedItems.map(selectedItem=>{
                         if(selectedItem.setorName === 'Financeiro')

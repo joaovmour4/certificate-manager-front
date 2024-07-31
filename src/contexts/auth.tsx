@@ -19,6 +19,7 @@ const AuthContext = React.createContext<AuthContextData>({} as AuthContextData)
 
 export const AuthProvider: React.FC<props> = ({ children } : props) =>{
     const [user, setUser] = React.useState<Usuario | null>(null)
+    const [auth, setAuth] = React.useState(false)
     const [loading, setLoading] = React.useState(true)
 
     function Login(data: object){
@@ -39,6 +40,7 @@ export const AuthProvider: React.FC<props> = ({ children } : props) =>{
     function Logout(){
         window.localStorage.removeItem('userToken')
         window.localStorage.removeItem('user')
+        window.sessionStorage.clear()
         window.location.reload()
     }
 
@@ -48,6 +50,10 @@ export const AuthProvider: React.FC<props> = ({ children } : props) =>{
         
         if(storagedToken && storagedUser){
             setUser(JSON.parse(storagedUser))
+            const currentTime = Math.floor(Date.now() / 1000)
+            const token: Token = jwtDecode(storagedToken)
+            if(token.exp && token.exp > currentTime) // Verificando a validade do token ao abrir o sistema
+                setAuth(true)
         }
         setLoading(false)
     }, [])
@@ -61,7 +67,7 @@ export const AuthProvider: React.FC<props> = ({ children } : props) =>{
     }
     return(
         <AuthContext.Provider 
-            value={{ signed: Boolean(user), user, Login, Logout }}
+            value={{ signed: auth, user, Login, Logout }}
         >
             {children}
         </AuthContext.Provider>

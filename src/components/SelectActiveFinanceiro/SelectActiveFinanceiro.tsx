@@ -9,7 +9,7 @@ interface props{
 
 const SelectActiveFinanceiro = (props: props) => {
 
-    const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) =>{
+    const handleSelect = () =>{
         props.setShowConfirmModal(true)
     }
 

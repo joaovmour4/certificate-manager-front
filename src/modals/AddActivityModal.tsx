@@ -68,7 +68,7 @@ const AddActivityModal = (props:props) => {
 
       const delayDebounceFn = setTimeout(()=>{
         api
-        .get(`/empresa?filter=all&search=${search}`)
+        .get(`/empresa?filter=all&search=${search}&of=nameEmpresa&o=true`)
         .then((response: AxiosResponse) =>{
             setEmpresas(response.data)
         })

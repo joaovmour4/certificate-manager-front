@@ -8,19 +8,22 @@ import MyActivities from '../views/MyActivities'
 import Companies from '../views/Companies'
 import Users from '../views/Users'
 import Obrigacoes from '../views/Obrigacoes'
+import { SessionProvider } from '../contexts/sessionContext'
 
 const OtherRoutes = () => {
   return (
-    <Routes>
-      <Route path='/' element={<Home />}/>
-      <Route path='/certificados' element={<Certificates />}/>
-      <Route path='/emails' element={<Emails />} />
-      <Route path='/adicionarCertificado' element={<AddCertificates />} />
-      <Route path='/atividades' element={<MyActivities />} />
-      <Route path='/empresas' element={<Companies />} />
-      <Route path='/usuarios' element={<Users />}/>
-      <Route path='/obrigacoes' element={<Obrigacoes />}/>
-    </Routes>
+    <SessionProvider>
+      <Routes>
+        <Route path='/' element={<Home />}/>
+        <Route path='/certificados' element={<Certificates />}/>
+        <Route path='/emails' element={<Emails />} />
+        <Route path='/adicionarCertificado' element={<AddCertificates />} />
+        <Route path='/atividades' element={<MyActivities />} />
+        <Route path='/empresas' element={<Companies />} />
+        <Route path='/usuarios' element={<Users />}/>
+        <Route path='/obrigacoes' element={<Obrigacoes />}/>
+      </Routes>
+    </SessionProvider>
   )
 }
 

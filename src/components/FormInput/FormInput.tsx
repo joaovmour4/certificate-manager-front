@@ -46,7 +46,7 @@ const FormInput = (props: props) => {
                   placeholder={props.placeholder} 
                   value={props.value} 
                   onChange={handleChange} 
-                  className="shadow appearance-none border rounded w-full py-2 px-1 file:rounded file:bg-blue" 
+                  className="appearance-none border border-slate-300 rounded w-full py-2 px-1 file:rounded file:bg-blue focus:outline-none focus:shadow" 
                 />
               </>
             }

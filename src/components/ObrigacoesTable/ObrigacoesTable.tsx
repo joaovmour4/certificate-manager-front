@@ -1,8 +1,10 @@
 import React from 'react'
 import ObrigacoesTableLine from '../ObrigacoesTableLine/ObrigacoesTableLine'
-import { ObrigacaoRegime } from '../../views/Obrigacoes'
+import { Excecao, ObrigacaoExcecao, ObrigacaoRegime } from '../../views/Obrigacoes'
 interface props{
     obrigacoes: Array<ObrigacaoRegime>
+    excecoes: Array<Excecao>
+    relacaoExcecoes: Array<ObrigacaoExcecao>
 }
 
 
@@ -16,6 +18,7 @@ const ObrigacoesTable = (props: props) => {
             <thead>
             <tr>
                 <th className='pl-5 text-left'>Nome</th>
+                <th>Exceções</th>
                 <th>Regime</th>
                 <th className='w-28'>Ações</th>
             </tr>
@@ -25,6 +28,8 @@ const ObrigacoesTable = (props: props) => {
                     return(
                         <ObrigacoesTableLine 
                             obrigacao={obrigacao}
+                            excecoes={props.excecoes}
+                            relacaoExcecoes={props.relacaoExcecoes}
                         />
                     )
                 })}

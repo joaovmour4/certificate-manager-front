@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from "axios"
 
 const api = axios.create({
-  baseURL: `http://localhost:80`,
+  baseURL: `http://192.168.1.20:80`,
 });
 
 api.interceptors.request.use(
@@ -12,6 +12,21 @@ api.interceptors.request.use(
     return config
   },
   error => {
+    return Promise.reject(error)
+  }
+)
+
+api.interceptors.response.use(
+  (response) => {
+    return response
+  },
+  (error) => {
+    if(error.response && error.response.status === 401){
+      localStorage.removeItem('userToken')
+      localStorage.removeItem('user')
+      alert('Seu login expirou, realize o login novamente.')
+      window.location.reload()
+    }
     return Promise.reject(error)
   }
 )

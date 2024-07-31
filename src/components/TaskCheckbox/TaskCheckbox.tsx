@@ -48,7 +48,7 @@ const TaskCheckbox = (props: props) => {
 
     return (
         <div className='flex flex-col'>
-            <input onClick={handleCheck} 
+            <input onChange={handleCheck} 
                 disabled={
                     !props.idAtividade || 
                     !props.activeEmpresa ||

@@ -5,6 +5,7 @@ import SelectInput from '../components/SelectInput/SelectInput';
 import { AxiosResponse } from 'axios';
 import ResponseModalComponent from './ResponseModalComponent';
 import { Empresa } from '../components/ActivitiesTable/ActivitiesTable';
+import SelectIEInput from '../components/SelectInput/SelectIEInput';
 interface props{
     setShowModal: Function
     idEmpresa: number
@@ -20,6 +21,7 @@ const EditCompanyModal = (props: props) => {
   const [questorCodeInput, setQuestorCodeInput] = React.useState('')
   const [cnpjInput, setCnpjInput] = React.useState('')
   const [inscInput, setInscInput] = React.useState('')
+  const [situacaoIEInput, setSituacaoIEInput] = React.useState('')
   const [representanteInput, setRepresentanteInput] = React.useState('')
   const [regimeInput, setRegimeInput] = React.useState('')
   const [response, setResponse] = React.useState<AxiosResponse>()
@@ -31,6 +33,7 @@ const EditCompanyModal = (props: props) => {
       codigoQuestor: questorCodeInput,
       cnpjEmpresa: cnpjInput,
       inscricaoEmpresa: inscInput,
+      situacaoIE: situacaoIEInput,
       representante: representanteInput,
       idRegime: Number(regimeInput)
     }
@@ -55,6 +58,7 @@ const EditCompanyModal = (props: props) => {
         setQuestorCodeInput(String(response.data.codigoQuestor))
         setCnpjInput(response.data.cnpjEmpresa)
         setInscInput(response.data.inscricaoEmpresa)
+        setSituacaoIEInput(response.data.situacaoIE)
         setRepresentanteInput(response.data.representante)
         setRegimeInput(String(response.data.idRegime))
       })
@@ -99,11 +103,17 @@ const EditCompanyModal = (props: props) => {
                     setInput={setCnpjInput}
                   />
                   <FormInput 
-                    label='Inscrição Municipal'
+                    label='Inscrição Estadual (Opcional)'
                     type='text'
                     value={inscInput}
                     setInput={setInscInput}
                   />
+                  <SelectIEInput 
+                    label='Situação de IE'
+                    options={['SERVICO', 'INABILITADA', 'HABILITADO']}
+                    setInput={setSituacaoIEInput}
+                    value={situacaoIEInput}
+                  /> 
                   <FormInput 
                     label='Representante'
                     placeholder='000.000.000-00'

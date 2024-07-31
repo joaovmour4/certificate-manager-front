@@ -8,6 +8,7 @@ import { useAuth } from '../contexts/auth'
 import { Setor } from '../App'
 import AddActivityModal from '../modals/AddActivityModal'
 import addActivityImg from '../img/adicionar-lista.png'
+import { SessionContextData, useSession } from '../contexts/sessionContext'
 interface Competencia{
     idCompetencia: number
     mes: string
@@ -17,17 +18,23 @@ interface Competencia{
 
 const MyActivities = () => {
     const Auth = useAuth()
+    const {searchParams, setSearchParams} = useSession()
     const [search, setSearch] = React.useState('')
     const [filter, setFilter] = React.useState('all')
     const [competencias, setCompetencias] = React.useState<Array<Competencia>>([])
     const [competencia, setCompetencia] = React.useState<Competencia | null>(null)
     const [loading, setLoading] = React.useState(true)
-    const [setor, setSetor] = React.useState<string>(Auth.user?.Setor ? String(Auth.user.idSetor):'1')
+    const [setor, setSetor] = React.useState<string>(Auth.user?.Setor ? String(Auth.user.idSetor):String(searchParams.setor))
     const [setores, setSetores] = React.useState<Array<Setor>>([])
     const [showAddActivityModal, setShowAddActivityModal] = React.useState(false)
 
     const handleSetor = (event: React.ChangeEvent<HTMLSelectElement>) =>{
         setSetor(event.target.value)
+        setSearchParams((prevState: SessionContextData) => {
+            return {...prevState, 
+                setor: event.target.value
+            }
+        })
     }
     const handleAddActivityModal = () => {
         setShowAddActivityModal(true)
@@ -39,9 +46,8 @@ const MyActivities = () => {
             .then((response: AxiosResponse)=>{
                 const actualDate = new Date()
                 setCompetencias(response.data)
-                const session = window.sessionStorage.getItem('competencia')
-                if(session)
-                    setCompetencia(JSON.parse(session))
+                if(searchParams.competencia)
+                    setCompetencia(searchParams.competencia)
                 else
                     setCompetencia(response.data.find((arrayElement: Competencia) => 
                         Number(arrayElement.mes) === actualDate.getMonth()+1 && 
@@ -54,12 +60,13 @@ const MyActivities = () => {
         api
             .get('/setor')
             .then(response=>{
-                setSetores(response.data)
+                setSetores(response.data.filter((element: Setor) => element.idSetor !== 4))
+                // Retirando o Setor Financeiro com id 4 da lista
             })
             .catch(err=>{
                 console.log(err.response.message)
             })
-    }, [])
+    }, [searchParams.competencia])
 
     return (
         <div className='flex-1 flex flex-col px-20 py-10 pb-32'>

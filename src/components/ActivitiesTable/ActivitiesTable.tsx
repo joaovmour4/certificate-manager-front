@@ -4,9 +4,12 @@ import TaskCheckbox from '../TaskCheckbox/TaskCheckbox'
 import api from '../../services/api'
 import SelectUserTable from '../SelectUserTable/SelectUserTable'
 import loadingImg from "../../img/loading.png"
+import upArrow from '../../img/up-arrow.png'
+import downArrow from '../../img/down-arrow.png'
 import { AxiosResponse } from 'axios'
 import { Competencia } from '../../views/MyActivities'
 import AuthContext from '../../contexts/auth'
+import { SessionContextData, useSession } from '../../contexts/sessionContext'
 
 interface props{
   search: string
@@ -24,6 +27,7 @@ interface Empresa{
   codigoQuestor: number
   cnpjEmpresa: string
   inscricaoEmpresa: string
+  situacaoIE: string
   representante: string
   idUsuarioResponsavel: number
   idRegime: number
@@ -73,17 +77,56 @@ interface Obrigacao{
 interface EmpresaAtividade{
   dataRealizacao: string | null
 }
+interface OrderType{
+  field: string | null
+  ascending: boolean
+}
 
 
 const ActivitiesTable = (props: props) => {
   const Auth = React.useContext(AuthContext)
-
+  const {searchParams, setSearchParams} = useSession()
   const [empresas, setEmpresas] = React.useState<Array<Empresa> | null>()
   const [tasks, setTasks] = React.useState<Array<Obrigacao> | null>()
   const [usuarios, setUsuarios] = React.useState<Array<Usuario>>([])
   const [isActual, setIsActual] = React.useState<boolean>()
+  const [order, setOrder] = React.useState<OrderType>(searchParams.order)
 
-  React.useEffect(() => {
+  const handleNameAsc = () => {
+    setOrder((prevState)=> {
+      const option = {
+        field: 'nameEmpresa',
+        ascending: prevState.field === 'nameEmpresa' ? !prevState.ascending : true 
+      }
+      setSearchParams((prevState: SessionContextData) => {
+        return {...prevState, 
+          order: {
+            option
+          }
+        }
+      })
+      return option
+    })
+    
+  }
+  const handleRegimeAsc = () => {
+    setOrder((prevState)=> {
+      const option = {
+        field: 'regimeName',
+        ascending: prevState.field === 'regimeName' ? !prevState.ascending : true 
+      }
+      setSearchParams((prevState: SessionContextData) => {
+        return {...prevState,
+          order: {
+            option
+          }
+        }
+      })
+      return option
+    })
+  }
+
+  React.useEffect(() => {  
     setIsActual(
       String(props.competencia.mes) === String(new Date().getMonth()+1) && 
       String(props.competencia.ano) === String(new Date().getFullYear())
@@ -91,13 +134,13 @@ const ActivitiesTable = (props: props) => {
 
     const updateData = async () => {
       api
-        .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}&setor=${props.setor && props.setor}`)
+        .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}&setor=${searchParams.setor}&of=${order.field}&o=${order.ascending}`)
           .then((response: AxiosResponse) => {
             setEmpresas(response.data.empresas)
             props.setLoading(false)
           })
           .catch((err) => {
-            console.log(err)
+            alert(err.message)
           })
 
       api
@@ -126,7 +169,7 @@ const ActivitiesTable = (props: props) => {
       clearTimeout(delayDebounceFn)
     }
 
-  }, [Auth.user, props, isActual])
+  }, [Auth.user, props, isActual, order, searchParams.setor])
 
   if(props.loading)
     return(
@@ -152,8 +195,22 @@ const ActivitiesTable = (props: props) => {
       <table className='divide-y mb-3'>
         <thead>
           <tr>
-            <th className='pl-5 text-left h-5'>Nome</th>
-            <th>Regime</th>
+            <th className='pl-5 text-left h-5'>
+              <button onClick={handleNameAsc} className='flex flex-row justify-center items-center'>
+                Nome
+                {order.field === 'nameEmpresa' && 
+                  <img className='h-3' src={order.ascending ? downArrow : upArrow} alt="" />
+                }
+              </button>
+            </th>
+            <th className='flex justify-center'>
+              <button onClick={handleRegimeAsc} className='flex flex-row justify-center items-center'>
+                Regime
+                {order.field === 'regimeName' && 
+                  <img className='h-3' src={order.ascending ? downArrow : upArrow} alt="" />
+                }
+              </button>
+            </th>
             <th className='px-1'>Situação</th>
           </tr>
         </thead>
@@ -169,7 +226,7 @@ const ActivitiesTable = (props: props) => {
                   regime={empresa.Regime.regimeName}
                   questorCode={empresa.codigoQuestor}
                   cnpj={empresa.cnpjEmpresa}
-                  inscMunicipal={empresa.inscricaoEmpresa}
+                  inscEstadual={empresa.inscricaoEmpresa}
                   representante={empresa.representante}
                 />
               </tr>

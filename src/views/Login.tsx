@@ -40,14 +40,13 @@ const Login = () => {
         placeHolder='Senha'
         setInput={setPassword}
       />
-      <button className='mt-5 py-1 px-5 rounded shadow bg-blue hover:bg-blue-active'>
+      <button className='border mt-5 py-1 px-5 rounded shadow bg-blue hover:bg-blue-active'>
         Entrar
       </button>
       {showModal && response && 
         <ResponseModalComponent 
           setShowModal={setShowModal}
           response={response}
-          setShowAddModal={null}
         />}
     </form>
   )

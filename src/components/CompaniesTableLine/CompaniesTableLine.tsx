@@ -8,6 +8,7 @@ import EditCompanyModal from '../../modals/EditCompanyModal'
 import AuthContext from '../../contexts/auth'
 import MultiSelect from '../MultiSelect/MultiSelect'
 import { Setor } from '../../App'
+import CardEmpresaModal from '../../modals/CardEmpresaModal'
 interface props{
     idEmpresa: number
     name: string
@@ -20,10 +21,12 @@ interface props{
 
 const CompaniesTableLine = (props: props) => {
     const Auth = React.useContext(AuthContext)
+    const lineRef = React.useRef<HTMLButtonElement>(null)
     const [activeEmpresa, setActiveEmpresa] = React.useState(props.situacaoFinanceiro.active)
     const [showConfirmModal, setShowConfirmModal] = React.useState(false)
     const [showEditModal, setShowEditModal] = React.useState(false)
     const [showConfirmLockModal, setShowConfirmLockModal] = React.useState(false)
+    const [showCardModal, setShowCardModal] = React.useState(false)
 
     const handleRemove = () =>{
         setShowConfirmModal(true)
@@ -31,11 +34,26 @@ const CompaniesTableLine = (props: props) => {
     const handleEdit = () =>{
         setShowEditModal(true)
     }
+    const handleCard = () => {
+        setShowCardModal(prevState => !prevState)
+    }
 
     return (
-        <tr className='justify-items-center place-items-center'>
+        <>
             <td className='font-thin text-left pl-5'>
-                {props.name}
+                <button ref={lineRef} onClick={handleCard}>
+                    {props.name}
+                </button>
+                <CardEmpresaModal 
+                    lineRef={lineRef}
+                    setShowModal={setShowCardModal}
+                    showModal={showCardModal}
+                    cnpj={props.empresa.cnpjEmpresa}
+                    inscEstadual={props.empresa.inscricaoEmpresa}
+                    name={props.empresa.nameEmpresa}
+                    questorCode={props.empresa.codigoQuestor}
+                    representante={props.empresa.representante}
+                />
             </td>
             <td>
                 <div className='flex justify-center'>
@@ -88,7 +106,7 @@ const CompaniesTableLine = (props: props) => {
                     setShowModal={setShowConfirmLockModal}
                 />
             }
-        </tr>
+        </>
     )
 }
 

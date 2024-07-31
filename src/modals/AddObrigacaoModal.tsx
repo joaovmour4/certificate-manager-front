@@ -4,6 +4,8 @@ import api from '../services/api';
 import { AxiosResponse } from 'axios';
 import ResponseModalComponent from './ResponseModalComponent';
 import { Regime } from '../components/ActivitiesTable/ActivitiesTable';
+import MultiSelectNoConfirm from '../components/MultiSelect/MultiSelectNoConfirm';
+import { Excecao } from '../views/Obrigacoes';
 interface props{
     setShowModal: Function
     idSetor: string
@@ -22,6 +24,8 @@ const AddObrigacaoModal = (props: props) => {
   const [response, setResponse] = React.useState<AxiosResponse>()
   const [showResponseModal, setShowResponseModal] = React.useState(false)
   const [regimes, setRegimes] = React.useState<Array<Regime>>([])
+  const [excecoes, setExcecoes] = React.useState<Array<Excecao>>([])
+  const [selectedExcecoes, setSelectedExcecoes] = React.useState<Array<Excecao>>([])
 
   const handleRegime = (event: React.ChangeEvent<HTMLSelectElement>) =>{
     setRegimeInput(Number(event.target.value))
@@ -57,6 +61,14 @@ const AddObrigacaoModal = (props: props) => {
       .catch(error=>{
         console.log(error.response.message)
       })
+    api
+      .get('/excecao')
+      .then(response=>{
+        setExcecoes(response.data)
+      })
+      .catch(err=>{
+        console.log(err.response.message)
+      })
   }, [])
 
   return (
@@ -67,7 +79,7 @@ const AddObrigacaoModal = (props: props) => {
               <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
                 <h3 className="text-3xl font=semibold">Adicionar Obrigação</h3>
               </div>
-              <div className="relative p-6 flex-auto overflow-y-scroll h-[320px]">
+              <div className="relative p-6 flex-auto overflow-y-scroll overflow-x-hidden h-[320px]">
                 <form onSubmit={handleSubmit} className="bg-gray-200 shadow-md rounded px-8 pt-6 pb-8 w-full">
                   <FormInput 
                     label='Nome'
@@ -96,6 +108,11 @@ const AddObrigacaoModal = (props: props) => {
                       })}
                     </select>
                   </div>
+                  <MultiSelectNoConfirm 
+                    excecoes={excecoes}
+                    selectedExcecoes={selectedExcecoes}
+                    setSelectedExcecoes={setSelectedExcecoes}
+                  />
                 </form>
               </div>
               <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">

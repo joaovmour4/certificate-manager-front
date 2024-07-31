@@ -30,6 +30,9 @@ module.exports = {
               "-ms-overflow-style": "auto",
               "scrollbar-width": "16px",
           },
+          "button":{
+              "user-select": "none",
+          }
       };
       addUtilities(newUtilities);
     },

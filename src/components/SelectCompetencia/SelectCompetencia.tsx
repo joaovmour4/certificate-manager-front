@@ -1,5 +1,6 @@
 import React from 'react'
 import { Competencia } from '../../views/MyActivities'
+import { SessionContextData, useSession } from '../../contexts/sessionContext'
 interface props{
     competencias: Array<Competencia>
     competencia: Competencia
@@ -8,11 +9,16 @@ interface props{
 }
 
 const SelectCompetencia = (props: props) => {
+    const {setSearchParams} = useSession()
 
     const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>)=>{
         const selected = props.competencias.find(arrayElement => arrayElement.idCompetencia === Number(event.target.value))
         props.setCompetencia(selected)
-        window.sessionStorage.setItem('competencia', JSON.stringify(selected))
+        setSearchParams((prevState: SessionContextData) => {
+            return {...prevState, 
+                competencia: selected
+            }
+        })
         props.setLoading(true)
     }
 

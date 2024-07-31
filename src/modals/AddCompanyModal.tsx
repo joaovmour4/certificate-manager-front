@@ -4,6 +4,7 @@ import api from '../services/api';
 import SelectInput from '../components/SelectInput/SelectInput';
 import { AxiosResponse } from 'axios';
 import ResponseModalComponent from './ResponseModalComponent';
+import SelectIEInput from '../components/SelectInput/SelectIEInput';
 interface props{
     setShowModal: Function
 }
@@ -14,6 +15,7 @@ const AddCompanyModal = (props: props) => {
   const [questorCodeInput, setQuestorCodeInput] = React.useState('')
   const [cnpjInput, setCnpjInput] = React.useState('')
   const [inscInput, setInscInput] = React.useState('')
+  const [situacaoIEInput, setSituacaoIEInput] = React.useState('')
   const [representanteInput, setRepresentanteInput] = React.useState('')
   const [regimeInput, setRegimeInput] = React.useState('')
   const [response, setResponse] = React.useState<AxiosResponse>()
@@ -26,6 +28,7 @@ const AddCompanyModal = (props: props) => {
       codigoQuestor: questorCodeInput,
       cnpjEmpresa: cnpjInput,
       inscricaoEmpresa: inscInput,
+      situacaoIE: situacaoIEInput,
       representante: representanteInput,
       idRegime: Number(regimeInput)
     }
@@ -80,10 +83,15 @@ const AddCompanyModal = (props: props) => {
                     setInput={setCnpjInput}
                   />
                   <FormInput 
-                    label='Inscrição Municipal'
+                    label='Inscrição Estadual (Opcional)'
                     type='text'
                     setInput={setInscInput}
                   />
+                  <SelectIEInput 
+                    label='Situação de IE'
+                    options={['SERVICO', 'INABILITADA', 'HABILITADO']}
+                    setInput={setSituacaoIEInput}
+                  /> 
                   <FormInput 
                     label='Representante'
                     placeholder='000.000.000-00'

@@ -10,7 +10,7 @@ function Header() {
   if(Auth.signed && Auth.user) return (
     <header className='flex items-center flex-col relative bg-blue shadow-md sm:flex-row'>
       <Link to={'/'}>
-        <img className='h-auto w-36 sm:flex-none' src={logoImg} alt="Logo MG" />
+        <img className='h-auto w-36 sm:flex-none select-none' src={logoImg} alt="Logo MG" />
       </Link>
       <div className='flex flex-1 flex-row flex-wrap justify-end items-center justify-items-center pr-7 divide-x divide-slate-300'>
         <Link to={'/'}><HeaderButton name="Início"/></Link>

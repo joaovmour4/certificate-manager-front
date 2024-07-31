@@ -3,7 +3,7 @@ import { AxiosResponseModal } from "./ConfirmModal";
 interface props{
   setShowModal: Function
   response: AxiosResponseModal
-  setShowAddModal: Function | null
+  setShowAddModal?: Function
 }
 
 const ResponseModalComponent = (props: props) => {    

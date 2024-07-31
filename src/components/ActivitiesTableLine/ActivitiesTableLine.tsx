@@ -10,7 +10,7 @@ interface props{
     situacaoFinanceiro: situacaoFinanceiro
     questorCode: number
     cnpj: string
-    inscMunicipal: string
+    inscEstadual: string
     representante: string
     regime: string
 }
@@ -41,7 +41,7 @@ const ActivitiesTableLine = (props: props) => {
                 name={props.name}
                 questorCode={props.questorCode}
                 cnpj={props.cnpj}
-                inscMunicipal={props.inscMunicipal}
+                inscEstadual={props.inscEstadual}
                 representante={props.representante}
             />}
             

@@ -17,6 +17,13 @@ interface option{
   value: string
   name: string
 }
+interface Excecao{
+  idExcecao: number
+  excecaoName: string
+}
+interface ObrigacaoExcecao extends Obrigacao{
+  Excecoes: Array<Excecao>
+}
 
 const Obrigacoes = () => {
   const Auth = useAuth()
@@ -24,6 +31,8 @@ const Obrigacoes = () => {
   const [filter, setFilter] = React.useState('all')
   const [setor, setSetor] = React.useState<string>(Auth.user?.Setor ? String(Auth.user.idSetor):'1')
   const [obrigacoes, setObrigacoes] = React.useState<Array<ObrigacaoRegime>>([])
+  const [excecoes, setExcecoes] = React.useState<Array<Excecao>>([])
+  const [relacaoExcecoes, setRelacaoExcecoes] = React.useState<Array<ObrigacaoExcecao>>([])
   const [setores, setSetores] = React.useState<Array<Setor>>([])
   const [showAddModal, setShowAddModal] = React.useState(false)
   const [options, setOptions] = React.useState<Array<option>>([])
@@ -53,6 +62,22 @@ const Obrigacoes = () => {
       .catch(err=>{
           console.log(err.response.message)
       })
+    api
+      .get('/excecao')
+      .then(response=>{
+        setExcecoes(response.data)
+      })
+      .catch(err=>{
+        console.log(err.response.message)
+      })
+    api
+      .get('/excecao/obrigacoes')
+      .then(response=>{
+        setRelacaoExcecoes(response.data)
+      })
+      .catch(err=>{
+        console.log(err.response.message)
+      })
   }, [])
 
   React.useEffect(()=>{
@@ -75,7 +100,7 @@ const Obrigacoes = () => {
   return (
     <div className='flex-1'>
       <div className='flex flex-1 flex-col justify-start px-20 py-10 font-thin'>
-            {(Auth.user?.cargo !== 'admin') &&
+            {(Auth.user?.cargo === 'operador') &&
                 <Navigate to='/' replace={true} />
             }
             <h1 className="text-3xl font-thin">Obrigações</h1>
@@ -104,16 +129,22 @@ const Obrigacoes = () => {
                 </button>
             </div>
             {loading && 
-            <div className='flex justify-center'>
-                <img src={loadingImg} className='animate-spin h-28 w-28' alt="" />
-            </div>
+              <div className='flex justify-center'>
+                  <img src={loadingImg} className='animate-spin h-28 w-28' alt="" />
+              </div>
             }
-            {obrigacoes && !loading && <ObrigacoesTable obrigacoes={obrigacoes}/>}
+            {obrigacoes && !loading && 
+              <ObrigacoesTable 
+                obrigacoes={obrigacoes}
+                excecoes={excecoes}
+                relacaoExcecoes={relacaoExcecoes}
+              />
+            }
             {showAddModal && setor && <AddObrigacaoModal setShowModal={setShowAddModal} idSetor={setor}/>}
         </div>
     </div>
   )
 }
 
-export type { ObrigacaoRegime }
+export type { ObrigacaoRegime, ObrigacaoExcecao, Excecao }
 export default Obrigacoes
