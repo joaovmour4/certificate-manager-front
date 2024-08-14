@@ -1,7 +1,5 @@
 import React from 'react'
 import { Excecao } from '../../views/Obrigacoes'
-import api from '../../services/api'
-import { Obrigacao } from '../ActivitiesTable/ActivitiesTable'
 interface props{
     excecao: Excecao
     handleClick: Function

@@ -3,7 +3,6 @@ import { Excecao, ObrigacaoExcecao } from '../../views/Obrigacoes'
 import Item from './Item'
 import api from '../../services/api'
 import ResponseModalComponent from '../../modals/ResponseModalComponent'
-import { AxiosResponse } from 'axios'
 import { AxiosResponseModal } from '../../modals/ConfirmModal'
 interface props{
     excecoes: Array<Excecao>
