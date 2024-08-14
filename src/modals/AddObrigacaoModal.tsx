@@ -15,6 +15,7 @@ interface Data{
   shortName: string
   idRegime?: number
   idSetor: number
+  excecoes: string
 }
 
 const AddObrigacaoModal = (props: props) => {
@@ -36,7 +37,8 @@ const AddObrigacaoModal = (props: props) => {
       name: obrigacaoNameInput,
       shortName: obrigacaoShortNameInput,
       idRegime: regimeInput,
-      idSetor: Number(props.idSetor)
+      idSetor: Number(props.idSetor),
+      excecoes: JSON.stringify(selectedExcecoes.map(excecao => excecao.idExcecao))
     }
     api
       .post(`/obrigacao`, data)

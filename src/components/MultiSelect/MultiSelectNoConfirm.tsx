@@ -15,20 +15,6 @@ const MultiSelectNoConfirm = (props: props) => {
         setShowDropdown(prevState => !prevState)
         setOnFocus(true)
     }
-    // React.useEffect(()=>{
-    //     setSelectedItems(props.selectedExcecoes)
-    //     const handleClickOutside = (event: Event) =>{
-    //         if(appRef.current && !appRef.current.contains(event.target as Node)){
-    //             setOnFocus(false)
-    //             setShowDropdown(false)
-    //         }
-    //     }
-    
-    //     document.addEventListener('mousedown', handleClickOutside)
-    //     return () =>{
-    //         document.removeEventListener('mousedown', handleClickOutside)
-    //     }
-    // }, [props.selectedExcecoes])
 
     return (
         <>
