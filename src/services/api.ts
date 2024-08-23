@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: `http://localhost:80`,
+  baseURL: `http://${process.env.API_URL}:${process.env.API_PORT}`,
 });
 
 api.interceptors.request.use(
