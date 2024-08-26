@@ -1,4 +1,5 @@
 import axios from "axios"
+import 'dotenv'
 
 const api = axios.create({
   baseURL: `http://${process.env.API_URL}:${process.env.API_PORT}`,
