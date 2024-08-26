@@ -1,7 +1,8 @@
 import axios from "axios"
 
 const api = axios.create({
-  baseURL: `http://${process.env.API_URL}:${process.env.API_PORT}`,
+  // baseURL: `http://${process.env.API_URL}:${process.env.API_PORT}`,
+  baseURL: `http://integracao-gagliardi_my-network:3000`,
 });
 
 api.interceptors.request.use(
