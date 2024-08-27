@@ -26,6 +26,9 @@ RUN npm run build
 # Use uma imagem de servidor web para servir os arquivos estáticos
 FROM nginx:stable-alpine
 
+# Copia o arquivo de configuração personalizado para o diretório de configuração do Nginx
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 # Copie os arquivos buildados para o diretório padrão do Nginx
 COPY --from=0 /app/build /usr/share/nginx/html
 
