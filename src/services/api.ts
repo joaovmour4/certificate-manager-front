@@ -5,6 +5,8 @@ const api = axios.create({
   baseURL: `http://${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}`,
 });
 
+console.log(`${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}`)
+
 api.interceptors.request.use(
   config => {
     const token = localStorage.getItem('userToken')
