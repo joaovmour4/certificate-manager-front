@@ -1,6 +1,14 @@
 # Use uma imagem oficial do Node.js como base
 FROM node:18
 
+# Defina as variáveis de ambiente durante o build
+ARG REACT_APP_API_URL
+ARG REACT_APP_API_PORT
+
+# Passe as variáveis de ambiente para o processo de build do React
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ENV REACT_APP_API_PORT=$REACT_APP_API_PORT
+
 # Defina o diretório de trabalho para o front-end
 WORKDIR /app
 
