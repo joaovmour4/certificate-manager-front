@@ -27,6 +27,7 @@ interface Empresa{
   codigoQuestor: number
   cnpjEmpresa: string
   inscricaoEmpresa: string
+  inscricaoMunicipal?: string
   situacaoIE: string
   representante: string
   idUsuarioResponsavel: number

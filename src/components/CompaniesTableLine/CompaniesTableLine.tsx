@@ -46,6 +46,7 @@ const CompaniesTableLine = (props: props) => {
                 </button>
                 <CardEmpresaModal 
                     lineRef={lineRef}
+                    empresa={props.empresa}
                     setShowModal={setShowCardModal}
                     showModal={showCardModal}
                     cnpj={props.empresa.cnpjEmpresa}
