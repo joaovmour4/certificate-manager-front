@@ -50,7 +50,7 @@ const MyActivities = () => {
                     setCompetencia(searchParams.competencia)
                 else
                     setCompetencia(response.data.find((arrayElement: Competencia) => 
-                        Number(arrayElement.mes) === actualDate.getMonth()+1 && 
+                        Number(arrayElement.mes) === actualDate.getMonth() && 
                         Number(arrayElement.ano) === actualDate.getFullYear()
                     ))
             })
