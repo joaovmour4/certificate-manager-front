@@ -32,7 +32,7 @@ const CardEmpresaModal = (props: props) => {
         <p><span className='font-medium select-none'>Código Questor: </span>{props.questorCode}</p>
         <p><span className='font-medium select-none'>CNPJ: </span>{props.cnpj}</p>
         <p><span className='font-medium select-none'>Inscrição Estadual: </span>{props.inscEstadual}</p>
-        <p><span className='font-medium select-none'>Inscrição Municipal: </span>{props.empresa.inscricaoMunicipal}</p>
+        <p><span className='font-medium select-none'>Inscrição Municipal: </span>{props.empresa?.inscricaoMunicipal}</p>
         <p><span className='font-medium select-none'>Representante Legal: </span>{props.representante}</p>
     </div>
   )
