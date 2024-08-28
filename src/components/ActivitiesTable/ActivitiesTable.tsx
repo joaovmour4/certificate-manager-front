@@ -220,6 +220,7 @@ const ActivitiesTable = (props: props) => {
             return(
               <tr className='h-7 items-center'>
                 <ActivitiesTableLine
+                  empresa={empresa}
                   idEmpresa={empresa.idEmpresa}
                   name={empresa.nameEmpresa}
                   active={empresa.activeEmpresa}

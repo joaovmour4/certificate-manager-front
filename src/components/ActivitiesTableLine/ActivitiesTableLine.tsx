@@ -2,8 +2,9 @@ import React from 'react'
 import TagRegime from '../TagRegime/TagRegime'
 import CardEmpresaModal from '../../modals/CardEmpresaModal'
 import SelectActive from '../SelectActive/SelectActive'
-import { situacaoFinanceiro } from '../ActivitiesTable/ActivitiesTable'
+import { Empresa, situacaoFinanceiro } from '../ActivitiesTable/ActivitiesTable'
 interface props{
+    empresa: Empresa
     idEmpresa: number
     name: string
     active: boolean
@@ -35,6 +36,7 @@ const ActivitiesTableLine = (props: props) => {
                 } 
             </td>
             {<CardEmpresaModal 
+                empresa={props.empresa}
                 lineRef={lineRef}
                 showModal={showCardModal}
                 setShowModal={setShowCardModal}
