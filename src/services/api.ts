@@ -4,7 +4,7 @@ const API_URL = process.env.REACT_APP_API_URL || 'localhost'
 const API_PORT = process.env.REACT_APP_API_URL || 3000
 
 const api = axios.create({
-  baseURL: `http://${API_URL}:${API_PORT}`,
+  baseURL: `http://${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_URL}`,
 });
 
 api.interceptors.request.use(
