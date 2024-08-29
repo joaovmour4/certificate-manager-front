@@ -1,10 +1,8 @@
 import axios from "axios"
-
-const API_URL = process.env.REACT_APP_API_URL || 'localhost'
-const API_PORT = process.env.REACT_APP_API_URL || 3000
+// import 'dotenv'
 
 const api = axios.create({
-  baseURL: `http://${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_URL}`,
+  baseURL: `http://${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}`,
 });
 
 api.interceptors.request.use(
