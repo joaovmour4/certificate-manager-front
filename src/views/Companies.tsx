@@ -58,7 +58,7 @@ const Companies = () => {
     return (
         <div className='flex flex-1 flex-col justify-start px-20 py-10 font-thin'>
             <h1 className="text-3xl font-thin">Empresas</h1>
-            <div className="flex flex-row justify-between flex-wrap py-10">
+            <div className="flex flex-row justify-between flex-wrap pt-10 pb-5">
                 <SearchBar
                     setSearch={setSearch}
                     setFilter={setFilter}
@@ -75,12 +75,15 @@ const Companies = () => {
                 </div>
             }
             {empresas && !loading && 
-                <CompaniesTable 
-                    empresas={empresas} 
-                    loading={loading} 
-                    order={order}
-                    setOrder={setOrder} 
-                />
+                <>
+                    <p className='text-xs text-gray-500 italic pb-1'>{empresas.length} Registros</p>
+                    <CompaniesTable 
+                        empresas={empresas} 
+                        loading={loading} 
+                        order={order}
+                        setOrder={setOrder} 
+                    />
+                </>
             }
             {showAddModal && <AddCompanyModal setShowModal={setShowAddModal}/>}
         </div>

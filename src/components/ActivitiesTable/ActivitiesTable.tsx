@@ -192,98 +192,101 @@ const ActivitiesTable = (props: props) => {
     )
 
   return (
-    <div className='flex flex-row divide-x'>
-      <table className='divide-y mb-3'>
-        <thead>
-          <tr>
-            <th className='pl-5 text-left h-5'>
-              <button onClick={handleNameAsc} className='flex flex-row justify-center items-center'>
-                Nome
-                {order.field === 'nameEmpresa' && 
-                  <img className='h-3' src={order.ascending ? downArrow : upArrow} alt="" />
-                }
-              </button>
-            </th>
-            <th className='flex justify-center'>
-              <button onClick={handleRegimeAsc} className='flex flex-row justify-center items-center'>
-                Regime
-                {order.field === 'regimeName' && 
-                  <img className='h-3' src={order.ascending ? downArrow : upArrow} alt="" />
-                }
-              </button>
-            </th>
-            <th className='px-1'>Situação</th>
-          </tr>
-        </thead>
-        <tbody className='divide-y [&>*:nth-child(odd)]:bg-blue-table'>
-          {empresas && empresas.map((empresa)=>{
-            return(
-              <tr className='h-7 items-center'>
-                <ActivitiesTableLine
-                  empresa={empresa}
-                  idEmpresa={empresa.idEmpresa}
-                  name={empresa.nameEmpresa}
-                  active={empresa.activeEmpresa}
-                  situacaoFinanceiro={empresa.situacaoFinanceiro}
-                  regime={empresa.Regime.regimeName}
-                  questorCode={empresa.codigoQuestor}
-                  cnpj={empresa.cnpjEmpresa}
-                  inscEstadual={empresa.inscricaoEmpresa}
-                  representante={empresa.representante}
-                />
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
-      <div className='overflow-x-scroll scrollbar scrollbar-thin table-fixed flex-1'>
-        <table className='divide-y w-full'>
+    <>
+      {empresas?.length && <p className='text-xs text-gray-500 italic pb-1'>{empresas.length} Registros</p>}
+      <div className='flex flex-row divide-x'>
+        <table className='divide-y mb-3'>
           <thead>
-            <tr className='h-5'>
-              {tasks && tasks.map((task)=>{
-                if(task.deletedAt && isActual)
-                  return null
-                return(
-                  <th className='text-center divide-x whitespace-nowrap px-5'>{task.obrigacaoName}</th>
-                )
-              })}
+            <tr>
+              <th className='pl-5 text-left h-5'>
+                <button onClick={handleNameAsc} className='flex flex-row justify-center items-center'>
+                  Nome
+                  {order.field === 'nameEmpresa' && 
+                    <img className='h-3' src={order.ascending ? downArrow : upArrow} alt="" />
+                  }
+                </button>
+              </th>
+              <th className='flex justify-center'>
+                <button onClick={handleRegimeAsc} className='flex flex-row justify-center items-center'>
+                  Regime
+                  {order.field === 'regimeName' && 
+                    <img className='h-3' src={order.ascending ? downArrow : upArrow} alt="" />
+                  }
+                </button>
+              </th>
+              <th className='px-1'>Situação</th>
             </tr>
           </thead>
           <tbody className='divide-y [&>*:nth-child(odd)]:bg-blue-table'>
-            {empresas && tasks && empresas.map((empresa)=>{
-              const taskEmpresa = tasks.map((task)=>{
-                if(task.deletedAt && isActual)
-                  return null
-                const find = empresa.Atividades.find((item) => item.idObrigacao === task.idObrigacao)
-                return(
-                  <td className='px-5 text-center'>
-                    <TaskCheckbox
-                      name={task.obrigacaoName}
-                      obrigacao={task}
-                      idAtividade={find?.idAtividade}
-                      realizacaoAtividade={find?.EmpresaAtividade.dataRealizacao}
-                      value={task.obrigacaoShortName}
-                      idEmpresa={empresa.idEmpresa}
-                      cnpjEmpresa={empresa.cnpjEmpresa}
-                      regime={empresa.Regime.regimeName}
-                      activeEmpresa={empresa.activeEmpresa}
-                      situacaoFinanceiro={empresa.situacaoFinanceiro}
-                      empresaTasks={empresa.Regime.Obrigacaos}
-                    />
-                  </td>
-                )
-              })
-              return <tr className='h-7 w-[200px]'>{taskEmpresa}</tr>
+            {empresas && empresas.map((empresa)=>{
+              return(
+                <tr className='h-7 items-center'>
+                  <ActivitiesTableLine
+                    empresa={empresa}
+                    idEmpresa={empresa.idEmpresa}
+                    name={empresa.nameEmpresa}
+                    active={empresa.activeEmpresa}
+                    situacaoFinanceiro={empresa.situacaoFinanceiro}
+                    regime={empresa.Regime.regimeName}
+                    questorCode={empresa.codigoQuestor}
+                    cnpj={empresa.cnpjEmpresa}
+                    inscEstadual={empresa.inscricaoEmpresa}
+                    representante={empresa.representante}
+                  />
+                </tr>
+              )
             })}
           </tbody>
         </table>
+        <div className='overflow-x-scroll scrollbar scrollbar-thin table-fixed flex-1'>
+          <table className='divide-y w-full'>
+            <thead>
+              <tr className='h-5'>
+                {tasks && tasks.map((task)=>{
+                  if(task.deletedAt && isActual)
+                    return null
+                  return(
+                    <th className='text-center divide-x whitespace-nowrap px-5'>{task.obrigacaoName}</th>
+                  )
+                })}
+              </tr>
+            </thead>
+            <tbody className='divide-y [&>*:nth-child(odd)]:bg-blue-table'>
+              {empresas && tasks && empresas.map((empresa)=>{
+                const taskEmpresa = tasks.map((task)=>{
+                  if(task.deletedAt && isActual)
+                    return null
+                  const find = empresa.Atividades.find((item) => item.idObrigacao === task.idObrigacao)
+                  return(
+                    <td className='px-5 text-center'>
+                      <TaskCheckbox
+                        name={task.obrigacaoName}
+                        obrigacao={task}
+                        idAtividade={find?.idAtividade}
+                        realizacaoAtividade={find?.EmpresaAtividade.dataRealizacao}
+                        value={task.obrigacaoShortName}
+                        idEmpresa={empresa.idEmpresa}
+                        cnpjEmpresa={empresa.cnpjEmpresa}
+                        regime={empresa.Regime.regimeName}
+                        activeEmpresa={empresa.activeEmpresa}
+                        situacaoFinanceiro={empresa.situacaoFinanceiro}
+                        empresaTasks={empresa.Regime.Obrigacaos}
+                      />
+                    </td>
+                  )
+                })
+                return <tr className='h-7 w-[200px]'>{taskEmpresa}</tr>
+              })}
+            </tbody>
+          </table>
+        </div>
+        {(Auth.user?.cargo === 'admin' || Auth.user?.cargo === 'supervisor') && 
+        <SelectUserTable 
+          Empresas={empresas!}
+          Usuarios={usuarios!}
+        />}
       </div>
-      {(Auth.user?.cargo === 'admin' || Auth.user?.cargo === 'supervisor') && 
-      <SelectUserTable 
-        Empresas={empresas!}
-        Usuarios={usuarios!}
-      />}
-    </div>
+    </>
   )
 }
 

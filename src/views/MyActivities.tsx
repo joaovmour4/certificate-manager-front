@@ -71,7 +71,7 @@ const MyActivities = () => {
     return (
         <div className='flex-1 flex flex-col px-20 py-10 pb-32'>
             <h1 className='text-3xl font-thin'>Minhas Atividades</h1>
-            <div className='py-10 flex justify-between'>
+            <div className='pt-10 pb-5 flex justify-between'>
                 <div className='flex gap-x-5'>
                     <SearchBar setSearch={setSearch} setFilter={setFilter} options={[
                         {value:'all', name:'Todos'},
@@ -115,7 +115,8 @@ const MyActivities = () => {
                 setor={setor}
                 loading={loading}
                 setLoading={setLoading}
-            />}
+            />
+            }
             {showAddActivityModal &&
                 <AddActivityModal 
                     setor={setor}
