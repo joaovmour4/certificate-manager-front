@@ -14,6 +14,7 @@ interface props{
 
 const TaskConfirmModal = (props:props) => {
     const Auth = useAuth()
+    const [statusSM, setStatusSM] = React.useState<boolean>(false)
 
     function handleSubmit() {
 
@@ -21,7 +22,8 @@ const TaskConfirmModal = (props:props) => {
         .post(`/user/atividade/${props.status.pendente ? '' : 'cancelarAtividade'}`, {
           idEmpresa: props.idEmpresa,
           idAtividade: props.idAtividade,
-          idUsuario: Auth.user?.idUsuario
+          idUsuario: Auth.user?.idUsuario,
+          statusAtividade: statusSM ? 'SM' : 'OK'
         })
         .then((response) => {
           window.location.reload()
@@ -32,6 +34,10 @@ const TaskConfirmModal = (props:props) => {
         })
       props.setShowModal(false)
     }
+
+    const handleSM = () => {
+      setStatusSM(prevStatus => !prevStatus)
+    }
     
     return (
         <>
@@ -41,11 +47,17 @@ const TaskConfirmModal = (props:props) => {
                 <div className="flex items-start justify-between p-5 border-b border-solid border-gray-300 rounded-t ">
                   <h3 className="text-3xl font=semibold whitespace-nowrap">{props.status.pendente ? 'Concluir atividade':'Marcar atividade pendente'}</h3>
                 </div>
-                <div className="relative p-6 flex-auto">
+                <div className="relative flex flex-col items-start p-6">
                     <p className="block text-black text-sm font-bold mb-1">
                         Tem certeza que deseja sinalizar a {props.status.pendente ? 'conclusão da atividade':'atividade como pendente'}?
                     </p>
-                    <label>{props.task}</label>
+                    <label className="place-self-center">{props.task}</label> 
+                    {props.status.pendente && 
+                      <label className="flex pt-5 gap-x-2">
+                        <input type="checkbox" checked={statusSM} onClick={handleSM} />
+                        Sem movimento
+                      </label>
+                    }
                 </div>
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
                   <button

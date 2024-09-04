@@ -77,6 +77,7 @@ interface Obrigacao{
 }
 interface EmpresaAtividade{
   dataRealizacao: string | null
+  status?: string
 }
 interface OrderType{
   field: string | null
@@ -264,6 +265,7 @@ const ActivitiesTable = (props: props) => {
                         obrigacao={task}
                         idAtividade={find?.idAtividade}
                         realizacaoAtividade={find?.EmpresaAtividade.dataRealizacao}
+                        status={find?.EmpresaAtividade.status}
                         value={task.obrigacaoShortName}
                         idEmpresa={empresa.idEmpresa}
                         cnpjEmpresa={empresa.cnpjEmpresa}

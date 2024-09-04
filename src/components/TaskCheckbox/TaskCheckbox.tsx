@@ -13,6 +13,7 @@ interface props{
     situacaoFinanceiro: situacaoFinanceiro
     empresaTasks: Array<Task>
     obrigacao?: Obrigacao
+    status?: string
 }
 interface Task{
     idObrigacao: number
@@ -30,6 +31,12 @@ const TaskCheckbox = (props: props) => {
         date: props.realizacaoAtividade ? new Date(Date.parse(props.realizacaoAtividade)) : new Date(),
     })
     const [showModal, setShowModal] = React.useState(false)
+    const disabled = React.useState(
+        !props.idAtividade || 
+        !props.activeEmpresa ||
+        !props.situacaoFinanceiro.active ||
+        Boolean(props.obrigacao?.deletedAt)
+    )
 
 
     React.useEffect(()=>{
@@ -47,19 +54,15 @@ const TaskCheckbox = (props: props) => {
     }
 
     return (
-        <div className='flex flex-col'>
-            <input onChange={handleCheck} 
-                disabled={
-                    !props.idAtividade || 
-                    !props.activeEmpresa ||
-                    !props.situacaoFinanceiro.active ||
-                    Boolean(props.obrigacao?.deletedAt)
-                } 
+        <div className='flex flex-col justify-center align-middle'>
+            <input onChange={handleCheck}
+                className={`place-self-center ${disabled[0] && 'opacity-30'}`} 
+                disabled={disabled[0]} 
                 type="checkbox" 
                 checked={!status.pendente} 
                 name={props.name}
             />
-            <label className='whitespace-nowrap text-[10px]/[10px] text-slate-500'>{status.pendente ? '' : `OK - ${status.date.getDate()}/${status.date.getMonth()+1}`}</label>
+            <label className='whitespace-nowrap text-[10px]/[10px] text-slate-500'>{status.pendente ? '' : `${props.status} - ${status.date.getDate()}/${status.date.getMonth()+1}`}</label>
             {showModal && 
             <TaskConfirmModal 
                 idEmpresa={props.idEmpresa}
