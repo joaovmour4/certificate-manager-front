@@ -6,7 +6,6 @@ import SelectUserTable from '../SelectUserTable/SelectUserTable'
 import loadingImg from "../../img/loading.png"
 import upArrow from '../../img/up-arrow.png'
 import downArrow from '../../img/down-arrow.png'
-import { AxiosResponse } from 'axios'
 import { Competencia } from '../../views/MyActivities'
 import AuthContext from '../../contexts/auth'
 import { SessionContextData, useSession } from '../../contexts/sessionContext'
@@ -135,33 +134,23 @@ const ActivitiesTable = (props: props) => {
     )
 
     const updateData = async () => {
-      api
-        .get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}&setor=${searchParams.setor}&of=${order.field}&o=${order.ascending}`)
-          .then((response: AxiosResponse) => {
-            setEmpresas(response.data.empresas)
-            props.setLoading(false)
-          })
-          .catch((err) => {
-            alert(err.message)
-          })
-
-      api
-        .get(`/obrigacao/false?filter=all&search=&setor=${props.setor}`)
-          .then((response: AxiosResponse) => {
-            setTasks(response.data)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-      api
-        .get('/user?setor=all&search=')
-          .then((response: AxiosResponse) => {
-            setUsuarios(response.data)
-          })
-          .catch((err) => {
-            console.log(err)
-          })
-    }
+      try{
+        const [empresasResponse, tasksResponse, usuariosResponse] = await Promise.all([
+          api.get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}&setor=${searchParams.setor}&of=${order.field}&o=${order.ascending}`),
+          api.get(`/obrigacao/false?filter=all&search=&setor=${props.setor}`),
+          api.get('/user?setor=all&search=')
+        ]);
+        setEmpresas(empresasResponse.data.empresas);
+        setTasks(tasksResponse.data);
+        setUsuarios(usuariosResponse.data);
+      }
+      catch (err) {
+        console.log(err)
+      }
+      finally {
+        props.setLoading(false)
+      }
+    } 
 
     const interval = setInterval(updateData, 30000)
     const delayDebounceFn = setTimeout(updateData, 300)

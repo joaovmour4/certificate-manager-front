@@ -29,6 +29,7 @@ const MyActivities = () => {
     const [showAddActivityModal, setShowAddActivityModal] = React.useState(false)
 
     const handleSetor = (event: React.ChangeEvent<HTMLSelectElement>) =>{
+        setLoading(true)
         setSetor(event.target.value)
         setSearchParams((prevState: SessionContextData) => {
             return {...prevState, 
