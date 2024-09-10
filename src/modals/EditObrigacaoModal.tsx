@@ -4,6 +4,7 @@ import api from '../services/api';
 import { AxiosResponse } from 'axios';
 import ResponseModalComponent from './ResponseModalComponent';
 import { Regime } from '../components/ActivitiesTable/ActivitiesTable';
+import MultiSelectRegime from '../components/MultiSelectRegime/MultiSelectRegime';
 interface props{
     idObrigacao: number
     setShowModal: Function
@@ -11,6 +12,7 @@ interface props{
 interface Data{
   obrigacaoName: string
   obrigacaoShortName: string
+  regimes: string
 }
 interface ResponseData extends AxiosResponse{
     data: {
@@ -28,15 +30,13 @@ const EditObrigacaoModal = (props: props) => {
   const [response, setResponse] = React.useState<AxiosResponse>()
   const [showResponseModal, setShowResponseModal] = React.useState(false)
   const [regimes, setRegimes] = React.useState<Array<Regime>>([])
-
-  const handleRegime = (event: React.ChangeEvent<HTMLSelectElement>) =>{
-    setRegimeInput(Number(event.target.value))
-  }
+  const [selectedRegimes, setSelectedRegimes] = React.useState<Array<Regime>>([])
 
   const handleSubmit = ()=>{
     var data: Data = {
       obrigacaoName: obrigacaoNameInput,
       obrigacaoShortName: obrigacaoShortNameInput,
+      regimes: JSON.stringify(selectedRegimes.map(regime => regime.idRegime))
     }
     api
       .put(`/obrigacao/${props.idObrigacao}`, data)
@@ -57,7 +57,7 @@ const EditObrigacaoModal = (props: props) => {
         .then((response: ResponseData)=>{
             setObrigacaoNameInput(response.data.obrigacaoName)
             setObrigacaoShortNameInput(response.data.obrigacaoShortName)
-            setRegimeInput(response.data.Regimes[0].idRegime)
+            setSelectedRegimes(response.data.Regimes)
         })
     api
         .get('/regime')
@@ -93,19 +93,11 @@ const EditObrigacaoModal = (props: props) => {
                     value={obrigacaoShortNameInput}
                     setInput={setObrigacaoShortNameInput}
                   />
-                  <div className='flex flex-col'>
-                    <label className="block text-black text-start text-sm font-bold mb-1 pl-1">
-                      Regime
-                    </label>
-                    <select onChange={handleRegime} defaultValue={'default'} value={regimeInput} disabled className='items-start py-2 px-1 shadow rounded focus:outline-none'>
-                      <option value="default" disabled></option>
-                      {regimes.map(option=>{
-                        return(
-                          <option value={option.idRegime}>{option.regimeName}</option>
-                        )
-                      })}
-                    </select>
-                  </div>
+                  <MultiSelectRegime 
+                    regimes={regimes}
+                    selectedRegimes={selectedRegimes}
+                    setSelectedRegimes={setSelectedRegimes} 
+                  />
                 </form>
               </div>
               <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">

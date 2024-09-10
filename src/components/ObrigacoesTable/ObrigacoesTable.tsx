@@ -16,12 +16,12 @@ const ObrigacoesTable = (props: props) => {
     return (
         <table className='divide-y table-auto'>
             <thead>
-            <tr>
-                <th className='pl-5 text-left'>Nome</th>
-                <th>Exceções</th>
-                <th>Regime</th>
-                <th className='w-28'>Ações</th>
-            </tr>
+                <tr>
+                    <th className='pl-5 text-left'>Nome</th>
+                    <th className='w-28'>Exceções</th>
+                    <th className='w-28'>Regime</th>
+                    <th className='w-28'>Ações</th>
+                </tr>
             </thead>
             <tbody className='divide-y [&>*:nth-child(odd)]:bg-blue-table'>
                 {props.obrigacoes && props.obrigacoes.map((obrigacao)=>{

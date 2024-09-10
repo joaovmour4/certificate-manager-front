@@ -6,6 +6,7 @@ import ResponseModalComponent from './ResponseModalComponent';
 import { Regime } from '../components/ActivitiesTable/ActivitiesTable';
 import MultiSelectNoConfirm from '../components/MultiSelect/MultiSelectNoConfirm';
 import { Excecao } from '../views/Obrigacoes';
+import MultiSelectRegime from '../components/MultiSelectRegime/MultiSelectRegime';
 interface props{
     setShowModal: Function
     idSetor: string
@@ -14,6 +15,7 @@ interface Data{
   name: string
   shortName: string
   idRegime?: number
+  regimes: string
   idSetor: number
   excecoes: string
 }
@@ -25,6 +27,7 @@ const AddObrigacaoModal = (props: props) => {
   const [response, setResponse] = React.useState<AxiosResponse>()
   const [showResponseModal, setShowResponseModal] = React.useState(false)
   const [regimes, setRegimes] = React.useState<Array<Regime>>([])
+  const [selectedRegimes, setSelectedRegimes] = React.useState<Array<Regime>>([])
   const [excecoes, setExcecoes] = React.useState<Array<Excecao>>([])
   const [selectedExcecoes, setSelectedExcecoes] = React.useState<Array<Excecao>>([])
 
@@ -37,6 +40,7 @@ const AddObrigacaoModal = (props: props) => {
       name: obrigacaoNameInput,
       shortName: obrigacaoShortNameInput,
       idRegime: regimeInput,
+      regimes: JSON.stringify(selectedRegimes.map(regime => regime.idRegime)),
       idSetor: Number(props.idSetor),
       excecoes: JSON.stringify(selectedExcecoes.map(excecao => excecao.idExcecao))
     }
@@ -97,19 +101,11 @@ const AddObrigacaoModal = (props: props) => {
                     value={obrigacaoShortNameInput}
                     setInput={setObrigacaoShortNameInput}
                   />
-                  <div className='flex flex-col'>
-                    <label className="block text-black text-start text-sm font-bold mb-1 pl-1">
-                      Regime
-                    </label>
-                    <select onChange={handleRegime} defaultValue={'default'} className='items-start py-2 px-1 shadow rounded focus:outline-none'>
-                      <option value="default" disabled></option>
-                      {regimes.map(option=>{
-                        return(
-                          <option value={option.idRegime}>{option.regimeName}</option>
-                        )
-                      })}
-                    </select>
-                  </div>
+                  <MultiSelectRegime
+                    regimes={regimes}
+                    selectedRegimes={selectedRegimes}
+                    setSelectedRegimes={setSelectedRegimes}
+                  />
                   <MultiSelectNoConfirm 
                     excecoes={excecoes}
                     selectedExcecoes={selectedExcecoes}

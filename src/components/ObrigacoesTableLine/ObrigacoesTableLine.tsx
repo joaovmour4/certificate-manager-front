@@ -3,6 +3,7 @@ import ConfirmModal from '../../modals/ConfirmModal'
 import { Excecao, ObrigacaoExcecao, ObrigacaoRegime } from '../../views/Obrigacoes'
 import EditObrigacaoModal from '../../modals/EditObrigacaoModal'
 import MultiSelectException from '../MultiSelectException/MultiSelectException'
+import MultiShowRegime from '../MultiSelectRegime/MultiShowRegime'
 interface props{
     obrigacao: ObrigacaoRegime
     excecoes: Array<Excecao>
@@ -21,17 +22,18 @@ const ObrigacoesTableLine = (props: props) => {
     }
     return (
         <tr className='text-center'>
-            <td className='font-thin text-left pl-5 grow-1'>
+            <td className='font-thin text-left pl-5'>
                 {props.obrigacao.obrigacaoName}
             </td>
-            <td className='w-[250px]'>
+            <td className='px-5'>
                 <MultiSelectException 
                     excecoes={props.excecoes}
                     relacaoExcecoes={props.relacaoExcecoes.find(element => element.idObrigacao === props.obrigacao.idObrigacao)}
                 />
             </td>
-            <td>
-                {props.obrigacao.Regimes[0].regimeName}
+            <td className='px-5'>
+                <MultiShowRegime selectedRegimes={props.obrigacao.Regimes} />
+                {/* {props.obrigacao.Regimes[0].regimeName} */}
             </td>
             <td>
                 <div className='flex justify-evenly'>
