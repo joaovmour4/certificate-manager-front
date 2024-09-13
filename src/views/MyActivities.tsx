@@ -82,7 +82,7 @@ const MyActivities = () => {
                     ]}/>
                     {(Auth.user?.cargo === 'admin' || Auth.user?.Setor?.idSetor === 4) &&
                         <div className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:shadow-md p-2.5 focus:outline-none divide-x divide-slate-300">
-                            <select value={setor} className="flex-none bg-transparent font-thin focus:outline-none cursor-pointer select-none" onChange={handleSetor}>
+                            <select value={setor} className="flex-none bg-transparent font-thin focus:outline-none select-none" onChange={handleSetor}>
                                 {setores.map((option) => {
                                     return (
                                         <option value={option.idSetor}>{option.setorName}</option>

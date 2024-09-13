@@ -102,13 +102,13 @@ const ActivitiesTable = (props: props) => {
       setSearchParams((prevState: SessionContextData) => {
         return {...prevState, 
           order: {
-            option
+            ...option
           }
         }
       })
       return option
     })
-    
+
   }
   const handleRegimeAsc = () => {
     setOrder((prevState)=> {
@@ -119,7 +119,7 @@ const ActivitiesTable = (props: props) => {
       setSearchParams((prevState: SessionContextData) => {
         return {...prevState,
           order: {
-            option
+            ...option
           }
         }
       })
@@ -129,7 +129,7 @@ const ActivitiesTable = (props: props) => {
 
   React.useEffect(() => {  
     setIsActual(
-      String(props.competencia.mes) === String(new Date().getMonth()+1) && 
+      String(props.competencia.mes) === String(new Date().getMonth()) && 
       String(props.competencia.ano) === String(new Date().getFullYear())
     )
 
@@ -137,7 +137,7 @@ const ActivitiesTable = (props: props) => {
       try{
         const [empresasResponse, tasksResponse, usuariosResponse] = await Promise.all([
           api.get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}&setor=${searchParams.setor}&of=${order.field}&o=${order.ascending}`),
-          api.get(`/obrigacao/false?filter=all&search=&setor=${props.setor}`),
+          api.get(`/obrigacao/competencia?mes=${props.competencia.mes}&ano=${props.competencia.ano}&filter=all&search=&setor=${props.setor}`),
           api.get('/user?setor=all&search=')
         ]);
         setEmpresas(empresasResponse.data.empresas);
@@ -233,8 +233,8 @@ const ActivitiesTable = (props: props) => {
             <thead>
               <tr className='h-5'>
                 {tasks && tasks.map((task)=>{
-                  if(task.deletedAt && isActual)
-                    return null
+                  // if(task.deletedAt && isActual)
+                  //   return null
                   return(
                     <th className='text-center divide-x whitespace-nowrap px-5'>{task.obrigacaoName}</th>
                   )
@@ -244,8 +244,8 @@ const ActivitiesTable = (props: props) => {
             <tbody className='divide-y [&>*:nth-child(odd)]:bg-blue-table'>
               {empresas && tasks && empresas.map((empresa)=>{
                 const taskEmpresa = tasks.map((task)=>{
-                  if(task.deletedAt && isActual)
-                    return null
+                  // if(task.deletedAt && isActual)
+                  //   return null
                   const find = empresa.Atividades.find((item) => item.idObrigacao === task.idObrigacao)
                   return(
                     <td className='px-5 text-center'>
@@ -262,6 +262,7 @@ const ActivitiesTable = (props: props) => {
                         activeEmpresa={empresa.activeEmpresa}
                         situacaoFinanceiro={empresa.situacaoFinanceiro}
                         empresaTasks={empresa.Regime.Obrigacaos}
+                        order={order}
                       />
                     </td>
                   )
@@ -281,5 +282,5 @@ const ActivitiesTable = (props: props) => {
   )
 }
 
-export type {Usuario, Empresa, Regime, situacaoFinanceiro, Obrigacao, Atividade}
+export type {Usuario, Empresa, Regime, situacaoFinanceiro, Obrigacao, Atividade, OrderType}
 export default ActivitiesTable

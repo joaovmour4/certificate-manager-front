@@ -1,6 +1,6 @@
 import React from 'react'
 import TaskConfirmModal from '../../modals/TaskConfirmModal'
-import { Obrigacao, situacaoFinanceiro } from '../ActivitiesTable/ActivitiesTable'
+import { Obrigacao, OrderType, situacaoFinanceiro } from '../ActivitiesTable/ActivitiesTable'
 interface props{
     name: string
     idAtividade: number | undefined
@@ -14,6 +14,7 @@ interface props{
     empresaTasks: Array<Task>
     obrigacao?: Obrigacao
     status?: string
+    order: OrderType
 }
 interface Task{
     idObrigacao: number
@@ -31,7 +32,7 @@ const TaskCheckbox = (props: props) => {
         date: props.realizacaoAtividade ? new Date(Date.parse(props.realizacaoAtividade)) : new Date(),
     })
     const [showModal, setShowModal] = React.useState(false)
-    const disabled = React.useState(
+    const [disabled, setDisabled] = React.useState<boolean>(
         !props.idAtividade || 
         !props.activeEmpresa ||
         !props.situacaoFinanceiro.active ||
@@ -47,7 +48,13 @@ const TaskCheckbox = (props: props) => {
                 setStatus((status) => {return {...status, pendente: true}})
         }
         check()
-    }, [props.realizacaoAtividade])
+        setDisabled(
+            !props.idAtividade || 
+            !props.activeEmpresa ||
+            !props.situacaoFinanceiro.active ||
+            Boolean(props.obrigacao?.deletedAt)
+        )
+    }, [props])
 
     const handleCheck = () =>{
         setShowModal(!showModal)
@@ -56,8 +63,8 @@ const TaskCheckbox = (props: props) => {
     return (
         <div className='flex flex-col justify-center align-middle'>
             <input onChange={handleCheck}
-                className={`place-self-center ${disabled[0] && 'opacity-30'}`} 
-                disabled={disabled[0]} 
+                className={`place-self-center ${disabled && 'opacity-30'}`} 
+                disabled={disabled} 
                 type="checkbox" 
                 checked={!status.pendente} 
                 name={props.name}

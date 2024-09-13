@@ -21,6 +21,10 @@ const ActivitiesTableLine = (props: props) => {
     const [activeEmpresa, setActiveEmpresa] = React.useState(props.active)
     const lineRef = React.useRef(null)
 
+    React.useEffect(()=>{
+        setActiveEmpresa(props.active)
+    }, [props])
+
     const handleCardModal = () => {
         setShowCardModal(!showCardModal)
     }

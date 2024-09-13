@@ -29,7 +29,7 @@ const SelectActive = (props: props) => {
 
   return (
     <>
-        <select disabled={!props.situacaoFinanceiro.active} onChange={changeSelect} name="" value={props.active ? "true":"false"} className={`z-0 pl-1 bg-transparent text-sm focus:outline-none cursor-pointer`}>
+        <select disabled={!props.situacaoFinanceiro.active} onChange={changeSelect} name="" value={props.active ? "true":"false"} className={`z-0 pl-1 bg-transparent text-sm focus:outline-none`}>
             <option value='true'>Ativo</option>
             <option value='false'>S/M</option>
         </select>
