@@ -44,7 +44,7 @@ const ProfileModal = (props: props) => {
     }
 
     return (
-        <div ref={appRef} className={`flex flex-col justify-center absolute border bg-slate-100 font-thin shadow-md rounded right-5 mt-4`}>
+        <div ref={appRef} className={`flex flex-col justify-center absolute border bg-slate-100 font-thin shadow-md rounded right-5 mt-3`}>
             <ul className='flex-1 flex flex-col justify-center'>
                 <li className='bg-slate-200 px-3 py-1 select-none'>
                     <p>

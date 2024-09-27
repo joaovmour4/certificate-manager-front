@@ -34,7 +34,8 @@ interface Empresa{
   responsavel: Usuario
   Usuarios: Array<Usuario>
   Atividades: Array<Atividade>
-  Setors?: Array<Setor>
+  Setors: Array<Setor>
+  SetorEmpresas: Array<SetorEmpresa>
   situacaoFinanceiro: situacaoFinanceiro
 }
 interface situacaoFinanceiro{
@@ -60,6 +61,14 @@ interface Usuario{
 interface Setor{
   idSetor: number
   setorName: string
+}
+interface SetorEmpresa{
+  idUsuarioResponsavel: number | null
+  idEmpresa: number
+  idSetor: number
+  Setor: Setor
+  Usuario: Usuario | null
+  Setors?: Array<Setor>
 }
 interface Atividade{
   idAtividade: number
@@ -276,6 +285,7 @@ const ActivitiesTable = (props: props) => {
         <SelectUserTable 
           Empresas={empresas!}
           Usuarios={usuarios!}
+          setor={props.setor}
         />}
       </div>
     </>

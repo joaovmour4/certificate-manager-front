@@ -4,6 +4,7 @@ import SelectUsuario from '../SelectUsuario/SelectUsuario'
 interface props{
     Empresas: Array<Empresa>
     Usuarios: Array<Usuario>
+    setor: string
 }
 
 const SelectUserTable = (props: props) => {
@@ -22,7 +23,7 @@ const SelectUserTable = (props: props) => {
                             <SelectUsuario 
                                 empresa={empresa}
                                 Usuarios={props.Usuarios}
-                                responsavel={empresa.responsavel?empresa.responsavel.login:'default'}
+                                responsavel={empresa.SetorEmpresas[0].Usuario?empresa.SetorEmpresas[0].Usuario?.login:'default'}
                             />
                         </td>
                     </tr>

@@ -1,5 +1,6 @@
 import React from 'react'
-import logoImg from '../img/MG logo x7 - svg - ORIGINAL.svg'
+// import logoImg from '../img/MG logo x7 - svg - ORIGINAL.svg'
+import logoImg from '../img/Ativo 11Logo_Gagliardi.png'
 import Input from '../components/Input/Input'
 import ResponseModalComponent from '../modals/ResponseModalComponent'
 import { Navigate } from 'react-router-dom'
@@ -30,7 +31,7 @@ const Login = () => {
   return (
     <form onSubmit={handleEntrar} className="flex-1 flex flex-col justify-center items-center">
       {Auth.signed && <Navigate to='/' replace={true} />}
-      <img className='h-56 w-auto sm:flex-none' src={logoImg} alt="Logo MG" />
+      <img className='h-28 pb-7 w-auto sm:flex-none' src={logoImg} alt="Logo MG" />
       <Input 
         type='text'
         placeHolder='Usuário'

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logoImg from '../../img/MG logo x7 - svg - ORIGINAL.svg'
+// import logoImg from '../../img/MG logo x7 - svg - ORIGINAL.svg'
+import logoImg from '../../img/Ativo 11Logo_Gagliardi.png'
 import HeaderButton from '../headerButton/HeaderButton';
 import ProfileButton from '../ProfileButton/ProfileButton';
 import AuthContext from '../../contexts/auth';
@@ -8,7 +9,7 @@ import AuthContext from '../../contexts/auth';
 function Header() {
   const Auth = React.useContext(AuthContext)
   if(Auth.signed && Auth.user) return (
-    <header className='flex items-center flex-col relative bg-blue shadow-md sm:flex-row'>
+    <header className='flex items-center flex-col py-2 pl-5 relative bg-blue shadow-md sm:flex-row'>
       <Link to={'/'}>
         <img className='h-auto w-36 sm:flex-none select-none' src={logoImg} alt="Logo MG" />
       </Link>
