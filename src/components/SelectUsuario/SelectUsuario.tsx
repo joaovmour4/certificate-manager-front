@@ -6,6 +6,7 @@ interface props{
   empresa: Empresa
   Usuarios: Array<Usuario>
   responsavel: string
+  idSetor: string
 }
 
 const SelectUsuario = (props: props) => {
@@ -21,7 +22,7 @@ const SelectUsuario = (props: props) => {
       idUsuario: user?.idUsuario
     }
     api
-      .patch(`/empresa/usuario`, data)
+      .patch(`/empresa/usuario?setor=${props.idSetor}`, data)
         .then(() => {
           user && setUser(user.login)
           window.location.reload()
@@ -30,6 +31,10 @@ const SelectUsuario = (props: props) => {
           console.log(err)
         })
   }
+
+  React.useEffect(()=>{
+    setUser(props.responsavel)
+  }, [props])
 
   return (
     <>

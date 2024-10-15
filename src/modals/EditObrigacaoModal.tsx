@@ -26,7 +26,6 @@ interface ResponseData extends AxiosResponse{
 const EditObrigacaoModal = (props: props) => {
   const [obrigacaoNameInput, setObrigacaoNameInput] = React.useState('')
   const [obrigacaoShortNameInput, setObrigacaoShortNameInput] = React.useState('')
-  const [regimeInput, setRegimeInput] = React.useState<number>()
   const [response, setResponse] = React.useState<AxiosResponse>()
   const [showResponseModal, setShowResponseModal] = React.useState(false)
   const [regimes, setRegimes] = React.useState<Array<Regime>>([])

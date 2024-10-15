@@ -23,7 +23,6 @@ interface Data{
 const AddObrigacaoModal = (props: props) => {
   const [obrigacaoNameInput, setObrigacaoNameInput] = React.useState('')
   const [obrigacaoShortNameInput, setObrigacaoShortNameInput] = React.useState('')
-  const [regimeInput, setRegimeInput] = React.useState<number>()
   const [response, setResponse] = React.useState<AxiosResponse>()
   const [showResponseModal, setShowResponseModal] = React.useState(false)
   const [regimes, setRegimes] = React.useState<Array<Regime>>([])
@@ -31,15 +30,10 @@ const AddObrigacaoModal = (props: props) => {
   const [excecoes, setExcecoes] = React.useState<Array<Excecao>>([])
   const [selectedExcecoes, setSelectedExcecoes] = React.useState<Array<Excecao>>([])
 
-  const handleRegime = (event: React.ChangeEvent<HTMLSelectElement>) =>{
-    setRegimeInput(Number(event.target.value))
-  }
-
   const handleSubmit = ()=>{
     var data: Data = {
       name: obrigacaoNameInput,
       shortName: obrigacaoShortNameInput,
-      idRegime: regimeInput,
       regimes: JSON.stringify(selectedRegimes.map(regime => regime.idRegime)),
       idSetor: Number(props.idSetor),
       excecoes: JSON.stringify(selectedExcecoes.map(excecao => excecao.idExcecao))

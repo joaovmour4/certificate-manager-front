@@ -24,6 +24,7 @@ const SelectUserTable = (props: props) => {
                                 empresa={empresa}
                                 Usuarios={props.Usuarios}
                                 responsavel={empresa.SetorEmpresas[0].Usuario?empresa.SetorEmpresas[0].Usuario?.login:'default'}
+                                idSetor={props.setor}
                             />
                         </td>
                     </tr>

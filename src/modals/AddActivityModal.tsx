@@ -4,6 +4,8 @@ import { AxiosError, AxiosResponse } from "axios";
 import ResponseModal from "./ResponseModal";
 import { Empresa, Obrigacao } from "../components/ActivitiesTable/ActivitiesTable";
 import { Competencia } from "../views/MyActivities";
+import { useAuth } from "../contexts/auth";
+import { useSession } from "../contexts/sessionContext";
 
 interface props{
   setor: string
@@ -11,6 +13,8 @@ interface props{
 }
 
 const AddActivityModal = (props:props) => {
+    const User = useAuth()
+    const Session = useSession()
     const [obrigacoes, setObrigacoes] = React.useState<Array<Obrigacao>>([])
     const [competencias, setCompetencias] = React.useState<Array<Competencia>>([])
     const [competencia, setCompetencia] = React.useState<string>('')
@@ -68,37 +72,36 @@ const AddActivityModal = (props:props) => {
 
       const delayDebounceFn = setTimeout(()=>{
         api
-        .get(`/empresa?filter=all&search=${search}&of=nameEmpresa&o=true`)
-        .then((response: AxiosResponse) =>{
+          .get(`/setor/empresas/${User.user?.cargo !== 'admin' ? User.user?.Setor?.idSetor : Session.searchParams.setor}?search=${search}`)
+          .then((response: AxiosResponse) =>{
             setEmpresas(response.data)
-        })
-        .catch((error: AxiosError)=>{
+          })
+          .catch((error: AxiosError)=>{
             alert(error.message)
-        })
+          })
+        api
+          .get(`/obrigacao/true?filter=all&search=&setor=${props.setor}`)
+          .then(response=>{
+            setObrigacoes(response.data)
+            setObrigacao(String(response.data[0].idObrigacao))
+          })
+          .catch(error=>{
+            console.log(error.message)
+          })
+        api
+          .get('/competencia')
+          .then(response=>{
+            setCompetencias(response.data)
+            setCompetencia(String(response.data[response.data.length-1].idCompetencia))
+          })
+          .catch(error=>{
+            console.log(error.message)
+          })
       }, 300)
-
-      api
-        .get(`/obrigacao/true?filter=all&search=&setor=${props.setor}`)
-        .then(response=>{
-          setObrigacoes(response.data)
-          setObrigacao(String(response.data[0].idObrigacao))
-        })
-        .catch(error=>{
-          console.log(error.message)
-        })
-      api
-        .get('/competencia')
-        .then(response=>{
-          setCompetencias(response.data)
-          setCompetencia(String(response.data[response.data.length-1].idCompetencia))
-        })
-        .catch(error=>{
-          console.log(error.message)
-        })
 
       return ()=> clearTimeout(delayDebounceFn)
 
-    }, [props, search])
+    }, [props, search, User, Session])
     
     return (
         <>
@@ -113,41 +116,43 @@ const AddActivityModal = (props:props) => {
                     <label className="block text-black text-start text-sm font-bold mb-1 pl-1">
                       Empresa
                     </label>
-                    {!empresa &&
-                      <input 
-                        onChange={handleSearchEmpresa} 
-                        type="text"
-                        className="w-full py-1 px-3 rounded-sm shadow focus:outline-none"
-                      />
-                    }
-                    {empresa &&
-                      <div className="w-full py-1 px-3 bg-white rounded-sm shadow focus:outline-none">
-                        <div className="flex flex-row justify-between items-center max-w-[100%] rounded-sm px-1 bg-blue-table">
-                          <p className="truncate">{empresas.find(reg => reg.idEmpresa === Number(empresa))?.nameEmpresa}</p>
-                          <img onClick={() => setEmpresa('')} className='h-5 bg-red-500 rounded-sm cursor-pointer' alt='' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABQElEQVR4nO2ZQWrDMBBFfZQucpIESvZRsrCbs3fRM4RAEnglpKYO2CCPNaOR0d8ZjP5/GslI46apqqqqWpWADRAy+odnhqWDfADfwAM4J0sX738C7sCPGGYA0csUhn+IXjIY4PgXfqjnc6eS/N27m/A+ppoV9cqg5WkJg7aXBYzZhKFoZL6EUTDMsQ+TG2eDSBkgO0SKIG4glgRyByEJ5hZiTkD3EDFBi4GIOOxlOXwu0sTsl1GJGTDlQKwGhDUsLaAtfrOzhs8vr/v9WNCvwTu+YYiAcA/DDAi3MAgg3MHwamOKIDzdDsNSCA/39TBh3JXUQQmpIXL0tIIWhGWXMQA3TQiLvu9hAqJNll4bhvHldBe39tPcNFvJYJ/A1aoSEZW5ADvpYD2MKcQIjBxiMNg+88/QFtjm8q+qqqpqVPQL08n6GKXmFcYAAAAASUVORK5CYII="/>
+                    <div className="relative">
+                      {!empresa &&
+                        <input 
+                          onChange={handleSearchEmpresa} 
+                          type="text"
+                          className="w-full py-1 px-3 rounded-sm shadow focus:outline-none"
+                        />
+                      }
+                      {empresa &&
+                        <div className="w-full py-1 px-3 bg-white rounded-sm shadow focus:outline-none">
+                          <div className="flex flex-row shadow justify-between items-center max-w-[100%] rounded-sm px-1 bg-blue-table">
+                            <p className="truncate">{empresas.find(reg => reg.idEmpresa === Number(empresa))?.nameEmpresa}</p>
+                            <img onClick={() => setEmpresa('')} className='h-5 bg-red-500 rounded-sm cursor-pointer' alt='' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAABQElEQVR4nO2ZQWrDMBBFfZQucpIESvZRsrCbs3fRM4RAEnglpKYO2CCPNaOR0d8ZjP5/GslI46apqqqqWpWADRAy+odnhqWDfADfwAM4J0sX738C7sCPGGYA0csUhn+IXjIY4PgXfqjnc6eS/N27m/A+ppoV9cqg5WkJg7aXBYzZhKFoZL6EUTDMsQ+TG2eDSBkgO0SKIG4glgRyByEJ5hZiTkD3EDFBi4GIOOxlOXwu0sTsl1GJGTDlQKwGhDUsLaAtfrOzhs8vr/v9WNCvwTu+YYiAcA/DDAi3MAgg3MHwamOKIDzdDsNSCA/39TBh3JXUQQmpIXL0tIIWhGWXMQA3TQiLvu9hAqJNll4bhvHldBe39tPcNFvJYJ/A1aoSEZW5ADvpYD2MKcQIjBxiMNg+88/QFtjm8q+qqqpqVPQL08n6GKXmFcYAAAAASUVORK5CYII="/>
+                          </div>
                         </div>
-                      </div>
-                    }
-                    {showSearchModal && 
-                      <div className="absolute bg-white shadow">
-                        {!empresas.length &&
-                          <p className="py-1 px-3 text-gray-500 italic">A busca não retornou empresas.</p>
-                        }
-                        <ul>
-                          {empresas.map(empresa=>{
-                            return(
-                              <li 
-                                className="py-1 px-3 hover:bg-slate-200 cursor-pointer"
-                                onClick={handleSelectEmpresa}
-                                value={empresa.idEmpresa}
-                              >
-                                {empresa.nameEmpresa}
-                              </li>
-                            )
-                          })}
-                        </ul>
-                      </div>
-                    }
+                      }
+                      {showSearchModal && 
+                        <div className="absolute z-10 w-full max-h-56 overflow-y-scroll bg-white shadow">
+                          {!empresas.length &&
+                            <p className="py-1 px-3 text-gray-500 italic">A busca não retornou empresas.</p>
+                          }
+                          <ul>
+                            {empresas.map(empresa=>{
+                              return(
+                                <li 
+                                  className="py-1 px-3 hover:bg-slate-200 cursor-pointer"
+                                  onClick={handleSelectEmpresa}
+                                  value={empresa.idEmpresa}
+                                >
+                                  {empresa.nameEmpresa}
+                                </li>
+                              )
+                            })}
+                          </ul>
+                        </div>
+                      }
+                    </div>
                     <label className="block text-black text-start text-sm font-bold mb-1 pl-1">
                       Competência
                     </label>
