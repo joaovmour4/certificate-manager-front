@@ -2,6 +2,7 @@ import React from "react";
 import { status } from "../components/TaskCheckbox/TaskCheckbox";
 import api from "../services/api";
 import { useAuth } from "../contexts/auth";
+import { useSession } from "../contexts/sessionContext";
 
 interface props{
     idEmpresa: number
@@ -14,14 +15,17 @@ interface props{
 
 const TaskConfirmModal = (props:props) => {
     const Auth = useAuth()
+    const Session = useSession()
     const [statusSM, setStatusSM] = React.useState<boolean>(false)
 
     function handleSubmit() {
+      console.log(Session.searchParams.competencia.idCompetencia)
 
       api
         .post(`/user/atividade/${props.status.pendente ? '' : 'cancelarAtividade'}`, {
           idEmpresa: props.idEmpresa,
           idAtividade: props.idAtividade,
+          idCompetencia: Session.searchParams.competencia.idCompetencia,
           idUsuario: Auth.user?.idUsuario,
           statusAtividade: statusSM ? 'SM' : 'OK'
         })
