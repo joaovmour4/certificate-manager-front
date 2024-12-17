@@ -95,7 +95,8 @@ interface OrderType{
 
 const ActivitiesTable = (props: props) => {
   const Auth = React.useContext(AuthContext)
-  const {searchParams, setSearchParams} = useSession()
+  const {searchParams, setSearchParams, filterParams} = useSession()
+  var { filter } = useSession()
   const [empresas, setEmpresas] = React.useState<Array<Empresa> | null>()
   const [tasks, setTasks] = React.useState<Array<Obrigacao> | null>()
   const [usuarios, setUsuarios] = React.useState<Array<Usuario>>([])
@@ -136,6 +137,29 @@ const ActivitiesTable = (props: props) => {
     })
   }
 
+  filter = () => {
+    const updateData = async () => {
+      try{
+        props.setLoading(true)
+        const [empresasResponse, tasksResponse, usuariosResponse] = await Promise.all([
+          api.get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}&setor=${searchParams.setor}&of=${order.field}&o=${order.ascending}&uf=${filterParams.usersFilter.map(user => `${user.idUsuario}`).join(',')}`),
+          api.get(`/obrigacao/competencia?mes=${props.competencia.mes}&ano=${props.competencia.ano}&filter=all&search=&setor=${props.setor}`),
+          api.get('/user?setor=all&search=')
+        ]);
+        setEmpresas(empresasResponse.data.empresas);
+        setTasks(tasksResponse.data);
+        setUsuarios(usuariosResponse.data);
+      }
+      catch (err) {
+        console.log(err)
+      }
+      finally {
+        props.setLoading(false)
+      }
+    } 
+    updateData()
+  }
+
   React.useEffect(() => {  
     setIsActual(
       String(props.competencia.mes) === String(new Date().getMonth()) && 
@@ -145,7 +169,7 @@ const ActivitiesTable = (props: props) => {
     const updateData = async () => {
       try{
         const [empresasResponse, tasksResponse, usuariosResponse] = await Promise.all([
-          api.get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}&setor=${searchParams.setor}&of=${order.field}&o=${order.ascending}`),
+          api.get(`/empresas/${props.filter}?nameEmpresa=${props.search}&mes=${props.competencia.mes}&ano=${props.competencia.ano}&user=${Auth.user?.idUsuario}&setor=${searchParams.setor}&of=${order.field}&o=${order.ascending}&uf=${filterParams.usersFilter.map(user => `${user.idUsuario}`).join(',')}`),
           api.get(`/obrigacao/competencia?mes=${props.competencia.mes}&ano=${props.competencia.ano}&filter=all&search=&setor=${props.setor}`),
           api.get('/user?setor=all&search=')
         ]);
@@ -169,7 +193,7 @@ const ActivitiesTable = (props: props) => {
       clearTimeout(delayDebounceFn)
     }
 
-  }, [Auth.user, props, isActual, order, searchParams.setor])
+  }, [Auth.user, props, isActual, order, searchParams.setor, filterParams.usersFilter])
 
   if(props.loading)
     return(
@@ -186,7 +210,7 @@ const ActivitiesTable = (props: props) => {
   if(empresas?.length === 0)
     return(
       <p className='text-center text-gray-500 italic'>
-        Não há empresas cadastradas para o seu usuário.
+        Não há empresas cadastradas para o seu usuário ou com os filtros selecionados.
       </p>
     )
 

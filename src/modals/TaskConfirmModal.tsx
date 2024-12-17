@@ -19,8 +19,6 @@ const TaskConfirmModal = (props:props) => {
     const [statusSM, setStatusSM] = React.useState<boolean>(false)
 
     function handleSubmit() {
-      console.log(Session.searchParams.competencia.idCompetencia)
-
       api
         .post(`/user/atividade/${props.status.pendente ? '' : 'cancelarAtividade'}`, {
           idEmpresa: props.idEmpresa,
@@ -30,7 +28,8 @@ const TaskConfirmModal = (props:props) => {
           statusAtividade: statusSM ? 'SM' : 'OK'
         })
         .then((response) => {
-          window.location.reload()
+          // window.location.reload()
+          // props.setStatus(prevStatus => {...prevStatus, pendente: !prevStatus.pendente})
           console.log(response)
         })
         .catch((error) => {
