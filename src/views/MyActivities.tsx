@@ -8,7 +8,9 @@ import { useAuth } from '../contexts/auth'
 import { Setor } from '../App'
 import AddActivityModal from '../modals/AddActivityModal'
 import addActivityImg from '../img/adicionar-lista.png'
-import { SessionContextData, useSession } from '../contexts/sessionContext'
+import { SearchParams, SessionContextData, useSession } from '../contexts/sessionContext'
+import FilterButton from '../components/FilterButton/FilterButton'
+
 interface Competencia{
     idCompetencia: number
     mes: string
@@ -18,7 +20,7 @@ interface Competencia{
 
 const MyActivities = () => {
     const Auth = useAuth()
-    const {searchParams, setSearchParams} = useSession()
+    const {searchParams, setSearchParams, clearFilters} = useSession()
     const [search, setSearch] = React.useState('')
     const [filter, setFilter] = React.useState('all')
     const [competencias, setCompetencias] = React.useState<Array<Competencia>>([])
@@ -36,6 +38,7 @@ const MyActivities = () => {
                 setor: event.target.value
             }
         })
+        clearFilters()
     }
     const handleAddActivityModal = () => {
         setShowAddActivityModal(true)
@@ -49,11 +52,16 @@ const MyActivities = () => {
                 setCompetencias(response.data)
                 if(searchParams.competencia)
                     setCompetencia(searchParams.competencia)
-                else
+                else{
                     setCompetencia(response.data.find((arrayElement: Competencia) => 
                         Number(arrayElement.mes) === actualDate.getMonth() && 
                         Number(arrayElement.ano) === actualDate.getFullYear()
                     ))
+                    setSearchParams((prevState: SearchParams) => {return {
+                        ...prevState,
+                        competencia
+                    }})
+                }
             })
             .catch(err =>{
                 console.log(err.message)
@@ -91,6 +99,7 @@ const MyActivities = () => {
                             </select>
                         </div>
                     }
+                    <FilterButton />
                 </div>
                 <div className='flex flex-row gap-5'>
                     <button onClick={handleAddActivityModal} 
@@ -108,15 +117,16 @@ const MyActivities = () => {
                     />} 
                 </div>
             </div>
-            {competencia &&
-            <ActivitiesTable
-                filter={filter}
-                search={search}
-                competencia={competencia}
-                setor={setor}
-                loading={loading}
-                setLoading={setLoading}
-            />
+            {React.useMemo(() => 
+                competencia && 
+                <ActivitiesTable
+                    filter={filter}
+                    search={search}
+                    competencia={competencia}
+                    setor={setor}
+                    loading={loading}
+                    setLoading={setLoading}
+                />, [filter, search, competencia, setor, loading, setLoading])
             }
             {showAddActivityModal &&
                 <AddActivityModal 

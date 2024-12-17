@@ -1,7 +1,8 @@
-import React from "react";
+import React, { RefObject } from "react";
 import { status } from "../components/TaskCheckbox/TaskCheckbox";
 import api from "../services/api";
 import { useAuth } from "../contexts/auth";
+import { useSession } from "../contexts/sessionContext";
 
 interface props{
     idEmpresa: number
@@ -10,24 +11,33 @@ interface props{
     status: status
     setStatus: Function
     setShowModal: Function
+    checkboxRef: RefObject<HTMLInputElement>
 }
 
 const TaskConfirmModal = (props:props) => {
     const Auth = useAuth()
+    const Session = useSession()
     const [statusSM, setStatusSM] = React.useState<boolean>(false)
 
     function handleSubmit() {
-
       api
         .post(`/user/atividade/${props.status.pendente ? '' : 'cancelarAtividade'}`, {
           idEmpresa: props.idEmpresa,
           idAtividade: props.idAtividade,
+          idCompetencia: Session.searchParams.competencia.idCompetencia,
           idUsuario: Auth.user?.idUsuario,
           statusAtividade: statusSM ? 'SM' : 'OK'
         })
         .then((response) => {
-          window.location.reload()
-          console.log(response)
+          // window.location.reload()
+          // props.setStatus(prevStatus => {...prevStatus, pendente: !prevStatus.pendente})
+          const checked = Boolean(response.data.updateAtividade.status)
+          if(props.checkboxRef.current)
+            props.checkboxRef.current.checked = checked
+          props.setStatus({
+            pendente: !checked,
+            date: new Date(response.data.updateAtividade.dataRealizacao)
+          })
         })
         .catch((error) => {
           console.log(error.response)
