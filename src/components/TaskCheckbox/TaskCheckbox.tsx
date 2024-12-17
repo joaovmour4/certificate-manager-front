@@ -27,6 +27,7 @@ interface status{
 }
 
 const TaskCheckbox = (props: props) => {
+    const checkboxRef = React.useRef<HTMLInputElement>(null)
     const [status, setStatus] = React.useState<status>({
         pendente: props.realizacaoAtividade ? false:true, 
         date: props.realizacaoAtividade ? new Date(Date.parse(props.realizacaoAtividade)) : new Date(),
@@ -62,14 +63,20 @@ const TaskCheckbox = (props: props) => {
 
     return (
         <div className='flex flex-col justify-center align-middle'>
-            <input onChange={handleCheck}
+            <input ref={checkboxRef} onChange={handleCheck}
                 className={`place-self-center ${disabled && 'opacity-30'}`} 
                 disabled={disabled} 
                 type="checkbox" 
                 checked={!status.pendente} 
                 name={props.name}
             />
-            <label className='whitespace-nowrap text-[10px]/[10px] text-slate-500'>{status.pendente ? '' : `${props.status} - ${status.date.getDate()}/${status.date.getMonth()+1}`}</label>
+            <label className='whitespace-nowrap text-[10px]/[10px] text-slate-500'>
+            {status.pendente 
+                ? '' 
+                : props.status 
+                ? `${props.status} - ${status.date.getDate()}/${status.date.getMonth() + 1}` 
+                : `${status.date.getDate()}/${status.date.getMonth() + 1}`}
+            </label>
             {showModal && 
             <TaskConfirmModal 
                 idEmpresa={props.idEmpresa}
@@ -78,6 +85,7 @@ const TaskCheckbox = (props: props) => {
                 status={status} 
                 setStatus={setStatus} 
                 setShowModal={setShowModal}
+                checkboxRef={checkboxRef}
             />
             }
         </div>

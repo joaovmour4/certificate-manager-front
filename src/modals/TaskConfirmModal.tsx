@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import { status } from "../components/TaskCheckbox/TaskCheckbox";
 import api from "../services/api";
 import { useAuth } from "../contexts/auth";
@@ -11,6 +11,7 @@ interface props{
     status: status
     setStatus: Function
     setShowModal: Function
+    checkboxRef: RefObject<HTMLInputElement>
 }
 
 const TaskConfirmModal = (props:props) => {
@@ -30,7 +31,13 @@ const TaskConfirmModal = (props:props) => {
         .then((response) => {
           // window.location.reload()
           // props.setStatus(prevStatus => {...prevStatus, pendente: !prevStatus.pendente})
-          console.log(response)
+          const checked = Boolean(response.data.updateAtividade.status)
+          if(props.checkboxRef.current)
+            props.checkboxRef.current.checked = checked
+          props.setStatus({
+            pendente: !checked,
+            date: new Date(response.data.updateAtividade.dataRealizacao)
+          })
         })
         .catch((error) => {
           console.log(error.response)

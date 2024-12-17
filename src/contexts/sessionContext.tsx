@@ -1,31 +1,34 @@
-import React, { MouseEventHandler } from 'react'
+import React from 'react'
 import { Usuario } from '../components/ActivitiesTable/ActivitiesTable'
 import api from '../services/api'
 
 interface SessionContextData{
-    searchParams: {
-        setor: string
-        order: {
-            field: string
-            ascending: boolean
-        },
-        competencia: {
-            idCompetencia: number
-            mes: string
-            ano: string
-        }
-    }
+    searchParams: SearchParams
     filterParams: {
         usersFilter: Array<Usuario>
     }
     usuarios: Array<Usuario>
+    filteredUsers: Array<Usuario>
     setSearchParams: Function
     setFilterParams: Function
+    setFilteredUsers: Function
     clearFilters: () => void
-    filter: undefined | (() => void)
 }
 interface props{
     children: React.ReactNode
+}
+
+interface SearchParams {
+    setor: string
+    order: {
+        field: string
+        ascending: boolean
+    },
+    competencia: {
+        idCompetencia: number
+        mes: string
+        ano: string
+    }
 }
 
 const Context = React.createContext<SessionContextData>({} as SessionContextData)
@@ -54,12 +57,11 @@ export const SessionProvider: React.FC<props> = ({ children }: props) => {
         }
     })
     const [usuarios, setUsuarios] = React.useState<Array<Usuario>>([])
+    const [filteredUsers, setFilteredUsers] = React.useState<Array<Usuario>>([])
 
     const clearFilters = () => {
         setFilterParams({usersFilter: []})
     }
-
-    var filter;
 
     React.useEffect(()=>{
         localStorage.setItem('activitiesSearchParams', JSON.stringify(searchParams))
@@ -80,12 +82,13 @@ export const SessionProvider: React.FC<props> = ({ children }: props) => {
                 setSearchParams, 
                 setFilterParams,
                 clearFilters,
-                filter
+                filteredUsers,
+                setFilteredUsers
             }}>
             {children}
         </Context.Provider>
     )
 }
 
-export type { SessionContextData }
+export type { SessionContextData, SearchParams }
 export default Context

@@ -3,28 +3,24 @@ import { Usuario } from '../../ActivitiesTable/ActivitiesTable'
 import { useSession } from '../../../contexts/sessionContext'
 
 const UserFilter = () => {
-    const [usuariosFiltrados, setUsuariosFiltrados] = React.useState<Array<Usuario>>([])
-    const { filterParams, setFilterParams, usuarios } = useSession()
+    // const [usuariosFiltrados, setUsuariosFiltrados] = React.useState<Array<Usuario>>([])
+    const { usuarios, filterParams, filteredUsers, setFilteredUsers } = useSession()
 
     function verifyUserInArray (array: Array<Usuario>, user: Usuario){
         return array.some(item => item.username === user.username)
     }
         
-    React.useMemo(()=>{
-        setUsuariosFiltrados(filterParams.usersFilter)
-    }, [filterParams.usersFilter])
+    React.useEffect(()=>{
+        setFilteredUsers(filterParams.usersFilter)
+    }, [filterParams.usersFilter, setFilteredUsers])
 
-    React.useEffect(()=> {
-        const func = () => {
-            setFilterParams({
-                usersFilter: usuariosFiltrados
-            })
+    const userHandler = (usuario: Usuario) => {
+        if(verifyUserInArray(filteredUsers, usuario)){
+            setFilteredUsers(filteredUsers.filter(prevArray => prevArray.username !== usuario.username))
+        }else{
+            setFilteredUsers((prevState: Array<Usuario>) => [...prevState, usuario])
         }
-        const delayDebounceFn = setTimeout(func, 1000)
-        return () => {
-            clearTimeout(delayDebounceFn)
-        }
-    }, [usuariosFiltrados, setFilterParams])
+    }
 
     return (
         <div className='overflow-y-auto scrollbar scrollbar-thin py-1'>
@@ -35,15 +31,14 @@ const UserFilter = () => {
                         <div className='flex gap-x-1 pr-3 py-0.5 font-thin'>
                             <input 
                                 onChange={()=>{
-                                    verifyUserInArray(usuariosFiltrados, usuario) ?
-                                    setUsuariosFiltrados(usuariosFiltrados.filter(prevArray => prevArray.username !== usuario.username))
-                                    :
-                                    setUsuariosFiltrados(prevState => [...prevState, usuario])
+                                    userHandler(usuario)
                                 }} 
                                 type="checkbox" 
                                 name={usuario.username} 
                                 id={usuario.username}
-                                checked={verifyUserInArray(usuariosFiltrados, usuario)}
+                                checked={
+                                    verifyUserInArray(filteredUsers, usuario)
+                                }
                             />
                             <label htmlFor={usuario.username}>
                                 {usuario.username}

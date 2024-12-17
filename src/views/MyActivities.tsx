@@ -1,5 +1,5 @@
 import React from 'react'
-import ActivitiesTable, { Usuario } from '../components/ActivitiesTable/ActivitiesTable'
+import ActivitiesTable from '../components/ActivitiesTable/ActivitiesTable'
 import SearchBar from '../components/searchBar/SearchBar'
 import api from '../services/api'
 import { AxiosResponse } from 'axios'
@@ -8,7 +8,7 @@ import { useAuth } from '../contexts/auth'
 import { Setor } from '../App'
 import AddActivityModal from '../modals/AddActivityModal'
 import addActivityImg from '../img/adicionar-lista.png'
-import { SessionContextData, useSession } from '../contexts/sessionContext'
+import { SearchParams, SessionContextData, useSession } from '../contexts/sessionContext'
 import FilterButton from '../components/FilterButton/FilterButton'
 
 interface Competencia{
@@ -52,11 +52,16 @@ const MyActivities = () => {
                 setCompetencias(response.data)
                 if(searchParams.competencia)
                     setCompetencia(searchParams.competencia)
-                else
+                else{
                     setCompetencia(response.data.find((arrayElement: Competencia) => 
                         Number(arrayElement.mes) === actualDate.getMonth() && 
                         Number(arrayElement.ano) === actualDate.getFullYear()
                     ))
+                    setSearchParams((prevState: SearchParams) => {return {
+                        ...prevState,
+                        competencia
+                    }})
+                }
             })
             .catch(err =>{
                 console.log(err.message)
